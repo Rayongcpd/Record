@@ -546,7 +546,9 @@
         async function fetchAllRecords() {
             try {
                 showLoading(true);
-                const response = await fetch(`${SCRIPT_URL}?action=getAll`);
+                const response = await fetch(`${SCRIPT_URL}?action=getAll`, {
+                    redirect: 'follow'
+                });
                 const result = await response.json();
 
                 if (result.success) {
@@ -572,7 +574,7 @@
         async function createRecord(recordData) {
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                redirect: 'follow',
                 body: JSON.stringify({ action: 'create', record: recordData })
             });
             return await response.json();
@@ -584,7 +586,7 @@
         async function updateRecord(recordData) {
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                redirect: 'follow',
                 body: JSON.stringify({ action: 'update', record: recordData })
             });
             return await response.json();
@@ -596,7 +598,7 @@
         async function deleteRecordApi(id) {
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                redirect: 'follow',
                 body: JSON.stringify({ action: 'delete', id: id })
             });
             return await response.json();
