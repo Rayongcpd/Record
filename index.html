@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="th" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบทะเบียนคุมระเบียบข้อบังคับสหกรณ์</title>
+    <meta name="description" content="ระบบบันทึกและติดตามระเบียบ/ข้อบังคับของสหกรณ์ กลุ่มจัดตั้งและส่งเสริมสหกรณ์">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Sarabun', sans-serif;
+        }
+
+        .gradient-header {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 50%, #3d7ab5 100%);
+        }
+
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .table-row:hover {
+            background-color: #f0f7ff;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-complete {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-processing {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+        }
+
+        .loading-overlay {
+            background: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+
+<body class="h-full bg-gray-50">
+    <div id="app" class="h-full w-full overflow-auto">
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="fixed inset-0 z-[100] flex items-center justify-center loading-overlay hidden">
+            <div class="text-center">
+                <svg class="w-12 h-12 animate-spin text-blue-600 mx-auto" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                    </path>
+                </svg>
+                <p class="mt-2 text-gray-600">กำลังโหลด...</p>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="gradient-header text-white py-6 px-4 shadow-lg">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex items-center gap-3">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                    </svg>
+                    <div>
+                        <h1 class="text-2xl font-bold">ระบบทะเบียนคุมระเบียบข้อบังคับสหกรณ์</h1>
+                        <p class="text-blue-100 text-sm">กลุ่มจัดตั้งและส่งเสริมสหกรณ์</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 py-6">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white rounded-xl p-4 card-shadow border-l-4 border-blue-500">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">รายการทั้งหมด</p>
+                            <p id="stat-total" class="text-2xl font-bold text-gray-800">0</p>
+                        </div>
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-4 card-shadow border-l-4 border-yellow-500">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">รอดำเนินการ</p>
+                            <p id="stat-pending" class="text-2xl font-bold text-gray-800">0</p>
+                        </div>
+                        <div class="bg-yellow-100 p-3 rounded-full">
+                            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-4 card-shadow border-l-4 border-green-500">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">ดำเนินการแล้ว</p>
+                            <p id="stat-complete" class="text-2xl font-bold text-gray-800">0</p>
+                        </div>
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-4 card-shadow border-l-4 border-purple-500">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">กำลังดำเนินการ</p>
+                            <p id="stat-processing" class="text-2xl font-bold text-gray-800">0</p>
+                        </div>
+                        <div class="bg-purple-100 p-3 rounded-full">
+                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add New Button -->
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">ทะเบียนคุมระเบียบ/ข้อบังคับ</h2>
+                <button id="btn-add-new"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    เพิ่มรายการใหม่
+                </button>
+            </div>
+
+            <!-- Filter -->
+            <div class="bg-white rounded-xl p-4 card-shadow mb-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">ค้นหาสหกรณ์</label>
+                        <input type="text" id="filter-search" placeholder="พิมพ์ชื่อสหกรณ์..."
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">ประเภทเอกสาร</label>
+                        <select id="filter-type"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">ทั้งหมด</option>
+                            <option value="ระเบียบ">ระเบียบ</option>
+                            <option value="ข้อบังคับ">ข้อบังคับ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">สถานะ</label>
+                        <select id="filter-status"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">ทั้งหมด</option>
+                            <option value="รอดำเนินการ">รอดำเนินการ</option>
+                            <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                            <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button id="btn-clear-filter"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">ล้างตัวกรอง</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="bg-white rounded-xl card-shadow overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ลำดับ</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ชื่อสหกรณ์</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ประเภท</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">หัวข้อ</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">รับจากสหกรณ์</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ส่งกลับสหกรณ์</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">วันทำการ<br>(สหกรณ์)
+                                </th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">รับจากฝ่ายบริหาร
+                                </th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">กลุ่มดำเนินการเสร็จ
+                                </th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">วันทำการ<br>(กลุ่ม)
+                                </th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">สถานะ</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body" class="divide-y divide-gray-100">
+                            <tr>
+                                <td colspan="12" class="px-4 py-12 text-center text-gray-500">
+                                    <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                        </path>
+                                    </svg>
+                                    <p>กำลังโหลดข้อมูล...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Summary Section -->
+            <div id="summary-section" class="mt-6 bg-white rounded-xl p-6 card-shadow hidden">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                    </svg>
+                    สรุปทะเบียนคุม
+                </h3>
+                <div id="summary-content" class="space-y-4"></div>
+            </div>
+        </main>
+
+        <!-- Add/Edit Modal -->
+        <div id="modal" class="fixed inset-0 z-50 hidden">
+            <div class="modal-backdrop absolute inset-0" id="modal-backdrop"></div>
+            <div class="relative flex items-center justify-center min-h-full p-4">
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
+                    <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl">
+                        <h2 id="modal-title" class="text-xl font-semibold text-gray-800">เพิ่มรายการใหม่</h2>
+                        <button id="btn-close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <form id="form-record" class="p-6 space-y-4">
+                        <input type="hidden" id="record-id">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อสหกรณ์ <span
+                                        class="text-red-500">*</span></label>
+                                <input type="text" id="input-coop-name" required
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="เช่น สหกรณ์ออมทรัพย์ครูจังหวัด...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทเอกสาร <span
+                                        class="text-red-500">*</span></label>
+                                <select id="input-doc-type" required
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">เลือกประเภท</option>
+                                    <option value="ระเบียบ">ระเบียบ</option>
+                                    <option value="ข้อบังคับ">ข้อบังคับ</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">หัวข้อ <span
+                                        class="text-red-500">*</span></label>
+                                <input type="text" id="input-topic" required
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="เช่น ว่าด้วยการให้เงินกู้">
+                            </div>
+                        </div>
+
+                        <div class="border-t border-gray-200 pt-4">
+                            <h4 class="font-medium text-gray-800 mb-3 flex items-center gap-2">
+                                <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-sm">1</span>
+                                การรับ-ส่งหนังสือสหกรณ์
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700 mb-1">วันที่รับหนังสือจากสหกรณ์</label>
+                                    <input type="date" id="input-receive-coop"
+                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700 mb-1">วันที่ส่งหนังสือกลับสหกรณ์</label>
+                                    <input type="date" id="input-send-coop"
+                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                            </div>
+                            <div id="coop-days-info" class="mt-2 text-sm text-blue-600 hidden"></div>
+                        </div>
+
+                        <div class="border-t border-gray-200 pt-4">
+                            <h4 class="font-medium text-gray-800 mb-3 flex items-center gap-2">
+                                <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-sm">2</span>
+                                การดำเนินการของกลุ่มจัดตั้งฯ
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700 mb-1">วันที่รับจากฝ่ายบริหารฯ</label>
+                                    <input type="date" id="input-receive-admin"
+                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700 mb-1">วันที่กลุ่มดำเนินการเสร็จ</label>
+                                    <input type="date" id="input-group-complete"
+                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                            </div>
+                            <div id="group-days-info" class="mt-2 text-sm text-green-600 hidden"></div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">สถานะ</label>
+                            <select id="input-status"
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="รอดำเนินการ">รอดำเนินการ</option>
+                                <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                                <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">หมายเหตุ</label>
+                            <textarea id="input-notes" rows="2"
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="รายละเอียดเพิ่มเติม..."></textarea>
+                        </div>
+
+                        <div class="flex gap-3 pt-4 border-t border-gray-200">
+                            <button type="button" id="btn-cancel"
+                                class="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">ยกเลิก</button>
+                            <button type="submit" id="btn-save"
+                                class="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium flex items-center justify-center gap-2">
+                                <span>บันทึก</span>
+                                <svg id="save-spinner" class="w-5 h-5 animate-spin hidden" fill="none"
+                                    viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                        stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Confirmation -->
+        <div id="delete-modal" class="fixed inset-0 z-50 hidden">
+            <div class="modal-backdrop absolute inset-0"></div>
+            <div class="relative flex items-center justify-center min-h-full p-4">
+                <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 relative">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                </path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">ยืนยันการลบ</h3>
+                        <p class="text-gray-600 mb-6">คุณต้องการลบรายการนี้หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้</p>
+                        <div class="flex gap-3">
+                            <button id="btn-cancel-delete"
+                                class="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">ยกเลิก</button>
+                            <button id="btn-confirm-delete"
+                                class="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium flex items-center justify-center gap-2">
+                                <span>ลบ</span>
+                                <svg id="delete-spinner" class="w-5 h-5 animate-spin hidden" fill="none"
+                                    viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                        stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast -->
+        <div id="toast"
+            class="fixed bottom-4 right-4 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+            <div class="bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
+                <svg id="toast-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span id="toast-message">บันทึกสำเร็จ</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== CONFIG ====================
+        // 🔴 สำคัญ: เปลี่ยน URL นี้เป็น Web App URL ของคุณหลังจาก Deploy
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygBTVqnvvc7cTwf8YIQCQpJ5xLKU7Z4TEuycKCcQP4UPfo6uXeONMUBwMxRRhD7C6xtQ/exec';
+
+        // Thai Public Holidays 2024-2026 (สำหรับคำนวณวันทำการใน Frontend)
+        const PUBLIC_HOLIDAYS = [
+            // 2024
+            '2024-01-01', '2024-01-02', '2024-02-26', '2024-04-06', '2024-04-08',
+            '2024-04-13', '2024-04-14', '2024-04-15', '2024-04-16', '2024-05-01',
+            '2024-05-04', '2024-05-06', '2024-05-22', '2024-06-03', '2024-07-20',
+            '2024-07-21', '2024-07-22', '2024-07-28', '2024-07-29', '2024-08-12',
+            '2024-10-13', '2024-10-14', '2024-10-23', '2024-12-05', '2024-12-10',
+            '2024-12-31',
+            // 2025
+            '2025-01-01', '2025-02-14', '2025-04-06', '2025-04-07', '2025-04-13',
+            '2025-04-14', '2025-04-15', '2025-05-01', '2025-05-04', '2025-05-11',
+            '2025-05-12', '2025-06-03', '2025-07-10', '2025-07-28', '2025-08-12',
+            '2025-10-13', '2025-10-23', '2025-12-05', '2025-12-10', '2025-12-31',
+            // 2026
+            '2026-01-01', '2026-01-02', '2026-02-04', '2026-04-06', '2026-04-13',
+            '2026-04-14', '2026-04-15', '2026-05-01', '2026-05-04', '2026-05-11',
+            '2026-06-03', '2026-07-09', '2026-07-28', '2026-08-12', '2026-10-13',
+            '2026-10-23', '2026-12-05', '2026-12-10', '2026-12-31'
+        ];
+
+        // ==================== STATE ====================
+        let allRecords = [];
+        let recordToDelete = null;
+        let isEditing = false;
+
+        // ==================== UTILITY FUNCTIONS ====================
+
+        /**
+         * Calculate working days between two dates
+         * Excludes weekends (Sat/Sun) and Thai public holidays
+         */
+        function calculateWorkingDays(startDate, endDate) {
+            if (!startDate || !endDate) return null;
+
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+
+            if (start > end) return null;
+
+            let workingDays = 0;
+            const current = new Date(start);
+
+            while (current <= end) {
+                const dayOfWeek = current.getDay();
+                const dateStr = current.toISOString().split('T')[0];
+
+                // Skip weekends (0 = Sunday, 6 = Saturday) and public holidays
+                if (dayOfWeek !== 0 && dayOfWeek !== 6 && !PUBLIC_HOLIDAYS.includes(dateStr)) {
+                    workingDays++;
+                }
+
+                current.setDate(current.getDate() + 1);
+            }
+
+            return workingDays;
+        }
+
+        /**
+         * Format date string to Thai format
+         */
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+
+        /**
+         * Show/hide loading overlay
+         */
+        function showLoading(show = true) {
+            const overlay = document.getElementById('loading-overlay');
+            if (show) {
+                overlay.classList.remove('hidden');
+            } else {
+                overlay.classList.add('hidden');
+            }
+        }
+
+        /**
+         * Show toast notification
+         */
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            const toastIcon = document.getElementById('toast-icon');
+
+            toastMessage.textContent = message;
+
+            if (type === 'error') {
+                toastIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
+                toast.querySelector('div').classList.remove('bg-gray-800');
+                toast.querySelector('div').classList.add('bg-red-600');
+            } else {
+                toastIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
+                toast.querySelector('div').classList.remove('bg-red-600');
+                toast.querySelector('div').classList.add('bg-gray-800');
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // ==================== API FUNCTIONS ====================
+
+        /**
+         * Fetch all records from backend
+         */
+        async function fetchAllRecords() {
+            try {
+                showLoading(true);
+                const response = await fetch(`${SCRIPT_URL}?action=getAll`);
+                const result = await response.json();
+
+                if (result.success) {
+                    allRecords = result.data;
+                    applyFiltersAndRender();
+                    updateStats();
+                    updateSummary();
+                } else {
+                    showToast('เกิดข้อผิดพลาดในการโหลดข้อมูล: ' + result.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error fetching records:', error);
+                showToast('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้', 'error');
+                renderEmptyState();
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        /**
+         * Create new record
+         */
+        async function createRecord(recordData) {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'create', record: recordData })
+            });
+            return await response.json();
+        }
+
+        /**
+         * Update existing record
+         */
+        async function updateRecord(recordData) {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'update', record: recordData })
+            });
+            return await response.json();
+        }
+
+        /**
+         * Delete record
+         */
+        async function deleteRecordApi(id) {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'delete', id: id })
+            });
+            return await response.json();
+        }
+
+        // ==================== UI FUNCTIONS ====================
+
+        function showModal() {
+            document.getElementById('modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideModal() {
+            document.getElementById('modal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function showDeleteModal(record) {
+            recordToDelete = record;
+            document.getElementById('delete-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideDeleteModal() {
+            recordToDelete = null;
+            document.getElementById('delete-modal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function updateCoopDaysInfo() {
+            const startDate = document.getElementById('input-receive-coop').value;
+            const endDate = document.getElementById('input-send-coop').value;
+            const infoDiv = document.getElementById('coop-days-info');
+
+            if (startDate && endDate) {
+                const days = calculateWorkingDays(startDate, endDate);
+                if (days !== null) {
+                    infoDiv.textContent = `📅 จำนวนวันทำการ: ${days} วัน (ไม่นับวันหยุดราชการและเสาร์-อาทิตย์)`;
+                    infoDiv.classList.remove('hidden');
+                } else {
+                    infoDiv.classList.add('hidden');
+                }
+            } else {
+                infoDiv.classList.add('hidden');
+            }
+        }
+
+        function updateGroupDaysInfo() {
+            const startDate = document.getElementById('input-receive-admin').value;
+            const endDate = document.getElementById('input-group-complete').value;
+            const infoDiv = document.getElementById('group-days-info');
+
+            if (startDate && endDate) {
+                const days = calculateWorkingDays(startDate, endDate);
+                if (days !== null) {
+                    infoDiv.textContent = `📅 กลุ่มใช้เวลาดำเนินการ: ${days} วันทำการ`;
+                    infoDiv.classList.remove('hidden');
+                } else {
+                    infoDiv.classList.add('hidden');
+                }
+            } else {
+                infoDiv.classList.add('hidden');
+            }
+        }
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const saveBtn = document.getElementById('btn-save');
+            const spinner = document.getElementById('save-spinner');
+            saveBtn.disabled = true;
+            spinner.classList.remove('hidden');
+
+            const recordData = {
+                cooperative_name: document.getElementById('input-coop-name').value.trim(),
+                document_type: document.getElementById('input-doc-type').value,
+                document_topic: document.getElementById('input-topic').value.trim(),
+                receive_from_coop_date: document.getElementById('input-receive-coop').value || '',
+                send_back_to_coop_date: document.getElementById('input-send-coop').value || '',
+                receive_from_admin_date: document.getElementById('input-receive-admin').value || '',
+                group_complete_date: document.getElementById('input-group-complete').value || '',
+                status: document.getElementById('input-status').value,
+                notes: document.getElementById('input-notes').value.trim()
+            };
+
+            const recordId = document.getElementById('record-id').value;
+
+            try {
+                let result;
+                if (isEditing && recordId) {
+                    recordData.id = recordId;
+                    result = await updateRecord(recordData);
+                } else {
+                    result = await createRecord(recordData);
+                }
+
+                if (result && result.success) {
+                    showToast(isEditing ? 'แก้ไขรายการสำเร็จ' : 'เพิ่มรายการสำเร็จ', 'success');
+                    hideModal();
+                    await fetchAllRecords();
+                } else {
+                    showToast('เกิดข้อผิดพลาด: ' + (result.error || 'กรุณาลองใหม่'), 'error');
+                }
+            } catch (err) {
+                console.error('Error saving record:', err);
+                showToast('เกิดข้อผิดพลาด กรุณาลองใหม่', 'error');
+            }
+
+            saveBtn.disabled = false;
+            spinner.classList.add('hidden');
+        }
+
+        function editRecord(record) {
+            isEditing = true;
+            document.getElementById('modal-title').textContent = 'แก้ไขรายการ';
+            document.getElementById('record-id').value = record.id;
+            document.getElementById('input-coop-name').value = record.cooperative_name || '';
+            document.getElementById('input-doc-type').value = record.document_type || '';
+            document.getElementById('input-topic').value = record.document_topic || '';
+            document.getElementById('input-receive-coop').value = record.receive_from_coop_date || '';
+            document.getElementById('input-send-coop').value = record.send_back_to_coop_date || '';
+            document.getElementById('input-receive-admin').value = record.receive_from_admin_date || '';
+            document.getElementById('input-group-complete').value = record.group_complete_date || '';
+            document.getElementById('input-status').value = record.status || 'รอดำเนินการ';
+            document.getElementById('input-notes').value = record.notes || '';
+
+            updateCoopDaysInfo();
+            updateGroupDaysInfo();
+            showModal();
+        }
+
+        async function confirmDelete() {
+            if (!recordToDelete) return;
+
+            const deleteBtn = document.getElementById('btn-confirm-delete');
+            const spinner = document.getElementById('delete-spinner');
+            deleteBtn.disabled = true;
+            spinner.classList.remove('hidden');
+
+            try {
+                const result = await deleteRecordApi(recordToDelete.id);
+                if (result && result.success) {
+                    showToast('ลบรายการสำเร็จ', 'success');
+                    hideDeleteModal();
+                    await fetchAllRecords();
+                } else {
+                    showToast('เกิดข้อผิดพลาดในการลบ: ' + (result.error || ''), 'error');
+                }
+            } catch (err) {
+                console.error('Error deleting record:', err);
+                showToast('เกิดข้อผิดพลาดในการลบ', 'error');
+            }
+
+            deleteBtn.disabled = false;
+            spinner.classList.add('hidden');
+        }
+
+        function applyFiltersAndRender() {
+            const searchTerm = document.getElementById('filter-search').value.toLowerCase();
+            const typeFilter = document.getElementById('filter-type').value;
+            const statusFilter = document.getElementById('filter-status').value;
+
+            let filtered = allRecords.filter(record => {
+                const matchSearch = !searchTerm ||
+                    (record.cooperative_name || '').toLowerCase().includes(searchTerm) ||
+                    (record.document_topic || '').toLowerCase().includes(searchTerm);
+                const matchType = !typeFilter || record.document_type === typeFilter;
+                const matchStatus = !statusFilter || record.status === statusFilter;
+                return matchSearch && matchType && matchStatus;
+            });
+
+            // Sort by created_at descending
+            filtered.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+
+            renderTable(filtered);
+        }
+
+        function clearFilters() {
+            document.getElementById('filter-search').value = '';
+            document.getElementById('filter-type').value = '';
+            document.getElementById('filter-status').value = '';
+            applyFiltersAndRender();
+        }
+
+        function renderEmptyState() {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = `
+        <tr>
+          <td colspan="12" class="px-4 py-12 text-center text-gray-500">
+            <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            <p>ยังไม่มีรายการ กดปุ่ม "เพิ่มรายการใหม่" เพื่อเริ่มต้น</p>
+          </td>
+        </tr>
+      `;
+        }
+
+        function renderTable(records) {
+            const tbody = document.getElementById('table-body');
+
+            if (records.length === 0) {
+                tbody.innerHTML = `
+          <tr>
+            <td colspan="12" class="px-4 py-12 text-center text-gray-500">
+              <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              <p>ไม่พบรายการที่ตรงกับเงื่อนไข</p>
+            </td>
+          </tr>
+        `;
+                return;
+            }
+
+            tbody.innerHTML = records.map((record, index) => {
+                const coopDays = calculateWorkingDays(record.receive_from_coop_date, record.send_back_to_coop_date);
+                const groupDays = calculateWorkingDays(record.receive_from_admin_date, record.group_complete_date);
+
+                let statusClass = 'status-pending';
+                if (record.status === 'ดำเนินการแล้ว') statusClass = 'status-complete';
+                else if (record.status === 'กำลังดำเนินการ') statusClass = 'status-processing';
+
+                return `
+          <tr class="table-row" data-id="${record.id}">
+            <td class="px-4 py-3 text-sm text-gray-600">${index + 1}</td>
+            <td class="px-4 py-3 text-sm font-medium text-gray-800">${record.cooperative_name || '-'}</td>
+            <td class="px-4 py-3 text-sm">
+              <span class="px-2 py-1 rounded ${record.document_type === 'ระเบียบ' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'}">
+                ${record.document_type || '-'}
+              </span>
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-600">${record.document_topic || '-'}</td>
+            <td class="px-4 py-3 text-sm text-gray-600">${formatDate(record.receive_from_coop_date)}</td>
+            <td class="px-4 py-3 text-sm text-gray-600">${formatDate(record.send_back_to_coop_date)}</td>
+            <td class="px-4 py-3 text-sm text-center font-semibold ${coopDays !== null ? 'text-blue-600' : 'text-gray-400'}">${coopDays !== null ? coopDays + ' วัน' : '-'}</td>
+            <td class="px-4 py-3 text-sm text-gray-600">${formatDate(record.receive_from_admin_date)}</td>
+            <td class="px-4 py-3 text-sm text-gray-600">${formatDate(record.group_complete_date)}</td>
+            <td class="px-4 py-3 text-sm text-center font-semibold ${groupDays !== null ? 'text-green-600' : 'text-gray-400'}">${groupDays !== null ? groupDays + ' วัน' : '-'}</td>
+            <td class="px-4 py-3 text-sm">
+              <span class="px-2 py-1 rounded text-xs font-medium ${statusClass}">${record.status || '-'}</span>
+            </td>
+            <td class="px-4 py-3 text-sm">
+              <div class="flex gap-1">
+                <button onclick="editRecord(allRecords.find(r => r.id === '${record.id}'))" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition-colors" title="แก้ไข">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                  </svg>
+                </button>
+                <button onclick="showDeleteModal(allRecords.find(r => r.id === '${record.id}'))" class="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors" title="ลบ">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+            }).join('');
+        }
+
+        function updateStats() {
+            const total = allRecords.length;
+            const pending = allRecords.filter(r => r.status === 'รอดำเนินการ').length;
+            const complete = allRecords.filter(r => r.status === 'ดำเนินการแล้ว').length;
+            const processing = allRecords.filter(r => r.status === 'กำลังดำเนินการ').length;
+
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-pending').textContent = pending;
+            document.getElementById('stat-complete').textContent = complete;
+            document.getElementById('stat-processing').textContent = processing;
+        }
+
+        function updateSummary() {
+            const summarySection = document.getElementById('summary-section');
+            const summaryContent = document.getElementById('summary-content');
+
+            if (allRecords.length === 0) {
+                summarySection.classList.add('hidden');
+                return;
+            }
+
+            summarySection.classList.remove('hidden');
+
+            // Group by cooperative
+            const groupedByCooperative = {};
+            allRecords.forEach(record => {
+                const coopName = record.cooperative_name || 'ไม่ระบุชื่อ';
+                if (!groupedByCooperative[coopName]) {
+                    groupedByCooperative[coopName] = {
+                        ระเบียบ: [],
+                        ข้อบังคับ: []
+                    };
+                }
+                if (record.document_type === 'ระเบียบ' || record.document_type === 'ข้อบังคับ') {
+                    groupedByCooperative[coopName][record.document_type].push(record);
+                }
+            });
+
+            let html = '';
+            Object.keys(groupedByCooperative).sort().forEach(coopName => {
+                const docs = groupedByCooperative[coopName];
+                const totalDocs = docs['ระเบียบ'].length + docs['ข้อบังคับ'].length;
+
+                html += `
+          <div class="border border-gray-200 rounded-lg p-4">
+            <h4 class="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm font-bold">${totalDocs}</span>
+              ${coopName}
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        `;
+
+                if (docs['ระเบียบ'].length > 0) {
+                    html += `
+            <div class="bg-blue-50 rounded-lg p-3">
+              <h5 class="font-medium text-blue-800 mb-2">📋 ระเบียบ (${docs['ระเบียบ'].length})</h5>
+              <ul class="space-y-1 text-sm text-blue-700">
+                ${docs['ระเบียบ'].map(d => `<li>• ${d.document_topic || 'ไม่ระบุหัวข้อ'}</li>`).join('')}
+              </ul>
+            </div>
+          `;
+                }
+
+                if (docs['ข้อบังคับ'].length > 0) {
+                    html += `
+            <div class="bg-purple-50 rounded-lg p-3">
+              <h5 class="font-medium text-purple-800 mb-2">📜 ข้อบังคับ (${docs['ข้อบังคับ'].length})</h5>
+              <ul class="space-y-1 text-sm text-purple-700">
+                ${docs['ข้อบังคับ'].map(d => `<li>• ${d.document_topic || 'ไม่ระบุหัวข้อ'}</li>`).join('')}
+              </ul>
+            </div>
+          `;
+                }
+
+                html += `
+            </div>
+          </div>
+        `;
+            });
+
+            summaryContent.innerHTML = html;
+        }
+
+        // ==================== EVENT LISTENERS ====================
+
+        function setupEventListeners() {
+            // Add new button
+            document.getElementById('btn-add-new').addEventListener('click', () => {
+                isEditing = false;
+                document.getElementById('modal-title').textContent = 'เพิ่มรายการใหม่';
+                document.getElementById('form-record').reset();
+                document.getElementById('record-id').value = '';
+                document.getElementById('coop-days-info').classList.add('hidden');
+                document.getElementById('group-days-info').classList.add('hidden');
+                showModal();
+            });
+
+            // Modal close buttons
+            document.getElementById('btn-close-modal').addEventListener('click', hideModal);
+            document.getElementById('btn-cancel').addEventListener('click', hideModal);
+            document.getElementById('modal-backdrop').addEventListener('click', hideModal);
+
+            // Form submit
+            document.getElementById('form-record').addEventListener('submit', handleFormSubmit);
+
+            // Date change listeners for auto-calculation
+            ['input-receive-coop', 'input-send-coop'].forEach(id => {
+                document.getElementById(id).addEventListener('change', updateCoopDaysInfo);
+            });
+
+            ['input-receive-admin', 'input-group-complete'].forEach(id => {
+                document.getElementById(id).addEventListener('change', updateGroupDaysInfo);
+            });
+
+            // Filters
+            document.getElementById('filter-search').addEventListener('input', applyFiltersAndRender);
+            document.getElementById('filter-type').addEventListener('change', applyFiltersAndRender);
+            document.getElementById('filter-status').addEventListener('change', applyFiltersAndRender);
+            document.getElementById('btn-clear-filter').addEventListener('click', clearFilters);
+
+            // Delete modal
+            document.getElementById('btn-cancel-delete').addEventListener('click', hideDeleteModal);
+            document.getElementById('btn-confirm-delete').addEventListener('click', confirmDelete);
+        }
+
+        // ==================== INITIALIZE APP ====================
+
+        async function initApp() {
+            setupEventListeners();
+
+            // Check if SCRIPT_URL is configured
+            if (SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
+                showToast('⚠️ กรุณาตั้งค่า SCRIPT_URL ก่อนใช้งาน', 'error');
+                renderEmptyState();
+                return;
+            }
+
+            await fetchAllRecords();
+        }
+
+        // Start the app
+        initApp();
+    </script>
+</body>
+
+</html>
