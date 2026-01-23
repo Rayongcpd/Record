@@ -220,6 +220,7 @@
                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">วันทำการ<br>(กลุ่ม)
                                 </th>
                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">สถานะ</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ไฟล์แนบ</th>
                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">จัดการ</th>
                             </tr>
                         </thead>
@@ -413,6 +414,77 @@
                                 placeholder="รายละเอียดเพิ่มเติม..."></textarea>
                         </div>
 
+                        <!-- File Attachment Section -->
+                        <div class="border-t border-gray-200 pt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                📎 ไฟล์แนบ
+                            </label>
+                            <div id="attachment-container">
+                                <!-- Existing Attachment -->
+                                <div id="current-attachment"
+                                    class="hidden mb-3 p-3 bg-gray-50 rounded-lg flex items-center justify-between border border-gray-200">
+                                    <div class="flex items-center gap-2 overflow-hidden">
+                                        <svg class="w-5 h-5 text-blue-600 flex-shrink-0" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13">
+                                            </path>
+                                        </svg>
+                                        <a id="attachment-link" href="#" target="_blank"
+                                            class="text-blue-600 hover:underline truncate"></a>
+                                    </div>
+                                    <button type="button" id="btn-remove-attachment"
+                                        class="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50 transition-colors"
+                                        title="ลบไฟล์">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                            </path>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <!-- Drop zone -->
+                                <div id="file-drop-zone"
+                                    class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer">
+                                    <div id="drop-zone-content">
+                                        <svg class="w-10 h-10 mx-auto text-gray-400 mb-2" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                            </path>
+                                        </svg>
+                                        <p class="text-sm text-gray-600">ลากไฟล์มาวางที่นี่ หรือ <span
+                                                class="text-blue-600 font-medium">คลิกเพื่อเลือกไฟล์</span></p>
+                                        <p class="text-xs text-gray-400 mt-1">รองรับ: PDF, JPG, PNG, DOC, DOCX
+                                            (ขนาดไม่เกิน 10MB)</p>
+                                    </div>
+                                    <div id="selected-file-display" class="hidden">
+                                        <p class="text-sm font-medium text-gray-800 break-all" id="selected-file-name">
+                                        </p>
+                                        <p class="text-xs text-gray-500 mt-1" id="selected-file-size"></p>
+                                        <button type="button" id="btn-cancel-upload"
+                                            class="mt-2 text-xs text-red-600 hover:text-red-800 underline">ยกเลิก</button>
+                                    </div>
+                                    <input type="file" id="file-input" class="hidden"
+                                        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                                </div>
+
+                                <!-- Progress bar -->
+                                <div id="upload-progress" class="hidden mt-3">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-xs font-medium text-blue-700">กำลังอัพโหลด...</span>
+                                        <span id="progress-text" class="text-xs font-medium text-blue-700">0%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div id="progress-bar"
+                                            class="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                                            style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="flex gap-3 pt-4 border-t border-gray-200">
                             <button type="button" id="btn-cancel"
                                 class="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">ยกเลิก</button>
@@ -513,6 +585,8 @@
         let filteredRecords = [];
         let recordToDelete = null;
         let isEditing = false;
+        let selectedFile = null;
+        let currentAttachment = null;
 
         // Pagination state
         let currentPage = 1;
@@ -788,6 +862,36 @@
             return await response.json();
         }
 
+        /**
+         * Upload file
+         */
+        async function uploadFileApi(fileData, fileName, mimeType, cooperativeName) {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                redirect: 'follow',
+                body: JSON.stringify({
+                    action: 'uploadFile',
+                    fileData,
+                    fileName,
+                    mimeType,
+                    cooperativeName
+                })
+            });
+            return await response.json();
+        }
+
+        /**
+         * Delete file
+         */
+        async function deleteFileApi(fileId) {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                redirect: 'follow',
+                body: JSON.stringify({ action: 'deleteFile', fileId })
+            });
+            return await response.json();
+        }
+
         // ==================== UI FUNCTIONS ====================
 
         function showModal() {
@@ -856,22 +960,66 @@
             saveBtn.disabled = true;
             spinner.classList.remove('hidden');
 
-            const recordData = {
-                cooperative_name: document.getElementById('input-coop-name').value.trim(),
-                document_type: document.getElementById('input-doc-type').value,
-                document_topic: document.getElementById('input-topic').value.trim(),
-                receive_from_coop_date: document.getElementById('input-receive-coop').value || '',
-                send_back_to_coop_date: document.getElementById('input-send-coop').value || '',
-                receive_from_admin_date: document.getElementById('input-receive-admin').value || '',
-                group_complete_date: document.getElementById('input-group-complete').value || '',
-                status: document.getElementById('input-status').value,
-                notes: document.getElementById('input-notes').value.trim()
-            };
-
-            const recordId = document.getElementById('record-id').value;
+            const coopName = document.getElementById('input-coop-name').value.trim();
 
             try {
+                // Initialize record data
+                const recordData = {
+                    cooperative_name: coopName,
+                    document_type: document.getElementById('input-doc-type').value,
+                    document_topic: document.getElementById('input-topic').value.trim(),
+                    receive_from_coop_date: document.getElementById('input-receive-coop').value || '',
+                    send_back_to_coop_date: document.getElementById('input-send-coop').value || '',
+                    receive_from_admin_date: document.getElementById('input-receive-admin').value || '',
+                    group_complete_date: document.getElementById('input-group-complete').value || '',
+                    status: document.getElementById('input-status').value,
+                    notes: document.getElementById('input-notes').value.trim()
+                };
+
+                // Handle file upload if exists
+                if (selectedFile) {
+                    showLoading(true); // Ensure loading is shown
+
+                    // Convert file to Base64
+                    const fileReader = new FileReader();
+                    const base64Promise = new Promise((resolve, reject) => {
+                        fileReader.onload = () => resolve(fileReader.result.split(',')[1]);
+                        fileReader.onerror = reject;
+                        fileReader.readAsDataURL(selectedFile);
+                    });
+
+                    const base64Data = await base64Promise;
+
+                    // Show progress UI (simulated)
+                    document.getElementById('upload-progress').classList.remove('hidden');
+                    document.getElementById('progress-bar').style.width = '100%';
+                    document.getElementById('progress-text').textContent = 'กำลังอัพโหลด...';
+
+                    // Upload to Drive
+                    const uploadResult = await uploadFileApi(base64Data, selectedFile.name, selectedFile.type, coopName);
+
+                    if (uploadResult.success) {
+                        // Add attachment info to record
+                        recordData.attachment_file_id = uploadResult.data.fileId;
+                        recordData.attachment_file_name = uploadResult.data.fileName;
+                        recordData.attachment_file_url = uploadResult.data.fileUrl;
+
+                        // If we had a previous file and we are editing, we might want to delete it?
+                        // For now, let's just replace the reference.
+                        // Future improvement: delete old file if replaced.
+                    } else {
+                        throw new Error('Upload failed: ' + uploadResult.error);
+                    }
+                } else if (currentAttachment) {
+                    // Keep existing attachment info
+                    recordData.attachment_file_id = currentAttachment.id;
+                    recordData.attachment_file_name = currentAttachment.name;
+                    recordData.attachment_file_url = currentAttachment.url;
+                }
+
+                const recordId = document.getElementById('record-id').value;
                 let result;
+
                 if (isEditing && recordId) {
                     recordData.id = recordId;
                     result = await updateRecord(recordData);
@@ -888,11 +1036,13 @@
                 }
             } catch (err) {
                 console.error('Error saving record:', err);
-                showToast('เกิดข้อผิดพลาด กรุณาลองใหม่', 'error');
+                showToast('เกิดข้อผิดพลาด: ' + err.message, 'error');
+            } finally {
+                saveBtn.disabled = false;
+                spinner.classList.add('hidden');
+                document.getElementById('upload-progress').classList.add('hidden');
+                showLoading(false);
             }
-
-            saveBtn.disabled = false;
-            spinner.classList.add('hidden');
         }
 
         function editRecord(record) {
@@ -907,10 +1057,25 @@
             document.getElementById('input-receive-admin').value = record.receive_from_admin_date || '';
             document.getElementById('input-group-complete').value = record.group_complete_date || '';
             document.getElementById('input-status').value = record.status || 'รอดำเนินการ';
-            document.getElementById('input-notes').value = record.notes || '';
-
             updateCoopDaysInfo();
             updateGroupDaysInfo();
+
+            // Handle Attachment
+            selectedFile = null;
+            resetFileUploadUI();
+
+            if (record.attachment_file_id) {
+                currentAttachment = {
+                    id: record.attachment_file_id,
+                    name: record.attachment_file_name,
+                    url: record.attachment_file_url
+                };
+                showCurrentAttachment(currentAttachment);
+            } else {
+                currentAttachment = null;
+                document.getElementById('current-attachment').classList.add('hidden');
+            }
+
             showModal();
         }
 
@@ -1096,6 +1261,15 @@
               <span class="px-2 py-1 rounded text-xs font-medium ${statusClass}">${record.status || '-'}</span>
             </td>
             <td class="px-4 py-3 text-sm">
+                ${record.attachment_file_url ?
+                        `<a href="${record.attachment_file_url}" target="_blank" class="text-blue-600 hover:text-blue-800 flex items-center gap-1 group">
+                        <svg class="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                        เปิดไฟล์
+                    </a>` :
+                        '<span class="text-gray-400">-</span>'
+                    }
+            </td>
+            <td class="px-4 py-3 text-sm">
               <div class="flex gap-1">
                 <button onclick="editRecord(allRecords.find(r => r.id === '${record.id}'))" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition-colors" title="แก้ไข">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1208,6 +1382,13 @@
                 document.getElementById('record-id').value = '';
                 document.getElementById('coop-days-info').classList.add('hidden');
                 document.getElementById('group-days-info').classList.add('hidden');
+
+                // Reset file upload
+                selectedFile = null;
+                currentAttachment = null;
+                resetFileUploadUI();
+                document.getElementById('current-attachment').classList.add('hidden');
+
                 showModal();
             });
 
@@ -1247,6 +1428,118 @@
             // Delete modal
             document.getElementById('btn-cancel-delete').addEventListener('click', hideDeleteModal);
             document.getElementById('btn-confirm-delete').addEventListener('click', confirmDelete);
+
+            // File Upload Listeners
+            setupFileUploadListeners();
+        }
+
+        function setupFileUploadListeners() {
+            const dropZone = document.getElementById('file-drop-zone');
+            const fileInput = document.getElementById('file-input');
+            const btnCancelUpload = document.getElementById('btn-cancel-upload');
+            const btnRemoveAttachment = document.getElementById('btn-remove-attachment');
+
+            // Handling drag and drop events
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            dropZone.addEventListener('dragenter', () => dropZone.classList.add('border-blue-500', 'bg-blue-50'));
+            dropZone.addEventListener('dragover', () => dropZone.classList.add('border-blue-500', 'bg-blue-50'));
+            dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-blue-500', 'bg-blue-50'));
+            dropZone.addEventListener('drop', (e) => {
+                dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFiles(files);
+            });
+
+            // Click to select
+            dropZone.addEventListener('click', (e) => {
+                if (e.target !== btnCancelUpload) fileInput.click();
+            });
+
+            fileInput.addEventListener('change', function () {
+                handleFiles(this.files);
+            });
+
+            btnCancelUpload.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectedFile = null;
+                fileInput.value = '';
+                resetFileUploadUI();
+            });
+
+            btnRemoveAttachment.addEventListener('click', async () => {
+                if (confirm('คุณต้องการลบไฟล์แนบนี้หรือไม่?')) {
+                    if (currentAttachment && currentAttachment.id) {
+                        // Optional: Call API to delete file from Drive immediately
+                        // For now we just remove reference
+                    }
+                    currentAttachment = null;
+                    document.getElementById('current-attachment').classList.add('hidden');
+                    document.getElementById('file-drop-zone').classList.remove('hidden');
+                }
+            });
+        }
+
+        function handleFiles(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                // Validate file size (10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    showToast('ขนาดไฟล์ต้องไม่เกิน 10MB', 'error');
+                    return;
+                }
+
+                selectedFile = file;
+                displaySelectedFile(file);
+            }
+        }
+
+        function displaySelectedFile(file) {
+            const dropZoneContent = document.getElementById('drop-zone-content');
+            const fileDisplay = document.getElementById('selected-file-display');
+            const fileName = document.getElementById('selected-file-name');
+            const fileSize = document.getElementById('selected-file-size');
+
+            dropZoneContent.classList.add('hidden');
+            fileDisplay.classList.remove('hidden');
+
+            fileName.textContent = file.name;
+            fileSize.textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+        }
+
+        function resetFileUploadUI() {
+            const dropZoneContent = document.getElementById('drop-zone-content');
+            const fileDisplay = document.getElementById('selected-file-display');
+            const fileInput = document.getElementById('file-input');
+
+            dropZoneContent.classList.remove('hidden');
+            fileDisplay.classList.add('hidden');
+            fileInput.value = '';
+
+            // If we have an existing attachment, hide dropzone
+            if (currentAttachment) {
+                document.getElementById('file-drop-zone').classList.add('hidden');
+            } else {
+                document.getElementById('file-drop-zone').classList.remove('hidden');
+            }
+        }
+
+        function showCurrentAttachment(attachment) {
+            const container = document.getElementById('current-attachment');
+            const link = document.getElementById('attachment-link');
+
+            link.textContent = attachment.name;
+            link.href = attachment.url;
+            container.classList.remove('hidden');
+            document.getElementById('file-drop-zone').classList.add('hidden');
         }
 
         // ==================== INITIALIZE APP ====================
