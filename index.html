@@ -240,6 +240,60 @@
                 </div>
             </div>
 
+            <!-- Pagination -->
+            <div id="pagination-container"
+                class="mt-4 bg-white rounded-xl p-4 card-shadow flex flex-col sm:flex-row items-center justify-between gap-4 hidden">
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <span>แสดง:</span>
+                    <select id="page-size"
+                        class="px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <span>รายการต่อหน้า</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="pagination-info" class="text-sm text-gray-600 mr-2">รายการ 1-10 จาก 100</span>
+                    <button id="btn-first-page"
+                        class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="หน้าแรก">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <button id="btn-prev-page"
+                        class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="ก่อนหน้า">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <span class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg font-medium text-sm">
+                        หน้า <span id="current-page">1</span> / <span id="total-pages">1</span>
+                    </span>
+                    <button id="btn-next-page"
+                        class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="ถัดไป">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                            </path>
+                        </svg>
+                    </button>
+                    <button id="btn-last-page"
+                        class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="หน้าสุดท้าย">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
             <!-- Summary Section -->
             <div id="summary-section" class="mt-6 bg-white rounded-xl p-6 card-shadow hidden">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
@@ -456,8 +510,13 @@
 
         // ==================== STATE ====================
         let allRecords = [];
+        let filteredRecords = [];
         let recordToDelete = null;
         let isEditing = false;
+
+        // Pagination state
+        let currentPage = 1;
+        let pageSize = 10;
 
         // ==================== COOPERATIVE NAMES ====================
         const COOP_NAMES = [
@@ -883,7 +942,7 @@
             const typeFilter = document.getElementById('filter-type').value;
             const statusFilter = document.getElementById('filter-status').value;
 
-            let filtered = allRecords.filter(record => {
+            filteredRecords = allRecords.filter(record => {
                 const matchSearch = !searchTerm ||
                     (record.cooperative_name || '').toLowerCase().includes(searchTerm) ||
                     (record.document_topic || '').toLowerCase().includes(searchTerm);
@@ -893,9 +952,79 @@
             });
 
             // Sort by created_at descending
-            filtered.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+            filteredRecords.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
 
-            renderTable(filtered);
+            // Reset to first page when filters change
+            currentPage = 1;
+
+            renderTableWithPagination();
+        }
+
+        // ==================== PAGINATION FUNCTIONS ====================
+
+        function renderTableWithPagination() {
+            const totalRecords = filteredRecords.length;
+            const totalPages = Math.ceil(totalRecords / pageSize);
+
+            // Ensure currentPage is within bounds
+            if (currentPage > totalPages) currentPage = totalPages || 1;
+            if (currentPage < 1) currentPage = 1;
+
+            // Calculate start and end indices
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = Math.min(startIndex + pageSize, totalRecords);
+
+            // Get records for current page
+            const pageRecords = filteredRecords.slice(startIndex, endIndex);
+
+            // Render table with page records (pass startIndex for correct numbering)
+            renderTable(pageRecords, startIndex);
+
+            // Update pagination UI
+            updatePaginationUI(totalRecords, totalPages, startIndex, endIndex);
+        }
+
+        function updatePaginationUI(totalRecords, totalPages, startIndex, endIndex) {
+            const paginationContainer = document.getElementById('pagination-container');
+
+            if (totalRecords === 0) {
+                paginationContainer.classList.add('hidden');
+                return;
+            }
+
+            paginationContainer.classList.remove('hidden');
+
+            // Update info text
+            document.getElementById('pagination-info').textContent =
+                `รายการ ${startIndex + 1}-${endIndex} จาก ${totalRecords}`;
+
+            // Update page numbers
+            document.getElementById('current-page').textContent = currentPage;
+            document.getElementById('total-pages').textContent = totalPages;
+
+            // Update button states
+            const btnFirst = document.getElementById('btn-first-page');
+            const btnPrev = document.getElementById('btn-prev-page');
+            const btnNext = document.getElementById('btn-next-page');
+            const btnLast = document.getElementById('btn-last-page');
+
+            btnFirst.disabled = currentPage === 1;
+            btnPrev.disabled = currentPage === 1;
+            btnNext.disabled = currentPage === totalPages;
+            btnLast.disabled = currentPage === totalPages;
+        }
+
+        function goToPage(page) {
+            const totalPages = Math.ceil(filteredRecords.length / pageSize);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderTableWithPagination();
+        }
+
+        function changePageSize(newSize) {
+            pageSize = parseInt(newSize);
+            currentPage = 1; // Reset to first page
+            renderTableWithPagination();
         }
 
         function clearFilters() {
@@ -919,7 +1048,7 @@
       `;
         }
 
-        function renderTable(records) {
+        function renderTable(records, startIndex = 0) {
             const tbody = document.getElementById('table-body');
 
             if (records.length === 0) {
@@ -946,7 +1075,7 @@
 
                 return `
           <tr class="table-row" data-id="${record.id}">
-            <td class="px-4 py-3 text-sm text-gray-600">${index + 1}</td>
+            <td class="px-4 py-3 text-sm text-gray-600">${startIndex + index + 1}</td>
             <td class="px-4 py-3 text-sm font-medium text-gray-800">${record.cooperative_name || '-'}</td>
             <td class="px-4 py-3 text-sm">
               <span class="px-2 py-1 rounded ${record.document_type === 'ระเบียบ' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'}">
@@ -1101,6 +1230,16 @@
             document.getElementById('filter-type').addEventListener('change', applyFiltersAndRender);
             document.getElementById('filter-status').addEventListener('change', applyFiltersAndRender);
             document.getElementById('btn-clear-filter').addEventListener('click', clearFilters);
+
+            // Pagination
+            document.getElementById('page-size').addEventListener('change', (e) => changePageSize(e.target.value));
+            document.getElementById('btn-first-page').addEventListener('click', () => goToPage(1));
+            document.getElementById('btn-prev-page').addEventListener('click', () => goToPage(currentPage - 1));
+            document.getElementById('btn-next-page').addEventListener('click', () => goToPage(currentPage + 1));
+            document.getElementById('btn-last-page').addEventListener('click', () => {
+                const totalPages = Math.ceil(filteredRecords.length / pageSize);
+                goToPage(totalPages);
+            });
 
             // Delete modal
             document.getElementById('btn-cancel-delete').addEventListener('click', hideDeleteModal);
