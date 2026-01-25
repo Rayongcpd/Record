@@ -121,225 +121,448 @@
             </div>
         </header>
 
-        <!-- Main Content -->
-        <main class="max-w-7xl mx-auto px-4 py-6">
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div class="bg-white rounded-xl p-4 card-shadow border-l-4 border-blue-500">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 text-sm">รายการทั้งหมด</p>
-                            <p id="stat-total" class="text-2xl font-bold text-gray-800">0</p>
-                        </div>
-                        <div class="bg-blue-100 p-3 rounded-full">
-                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex space-x-8 overflow-x-auto">
+                    <button onclick="switchView('dashboard')"
+                        class="nav-item whitespace-nowrap border-b-2 border-blue-600 text-blue-600 py-4 px-1 text-sm font-medium transition-colors"
+                        id="nav-dashboard">
+                        <span class="flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                                </path>
+                            </svg>
+                            หน้าหลัก
+                        </span>
+                    </button>
+                    <button onclick="switchView('daily-ops')"
+                        class="nav-item whitespace-nowrap border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-4 px-1 text-sm font-medium transition-colors"
+                        id="nav-daily-ops">
+                        <span class="flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+                                </path>
+                            </svg>
+                            บันทึกปฏิบัติงาน
+                        </span>
+                    </button>
+                    <button onclick="switchView('registry')"
+                        class="nav-item whitespace-nowrap border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-4 px-1 text-sm font-medium transition-colors"
+                        id="nav-registry">
+                        <span class="flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                 </path>
                             </svg>
-                        </div>
-                    </div>
+                            ทะเบียนคุม
+                        </span>
+                    </button>
                 </div>
-                <div class="bg-white rounded-xl p-4 card-shadow border-l-4 border-yellow-500">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 text-sm">รอดำเนินการ</p>
-                            <p id="stat-pending" class="text-2xl font-bold text-gray-800">0</p>
-                        </div>
-                        <div class="bg-yellow-100 p-3 rounded-full">
-                            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 py-6">
+
+            <!-- DASHBOARD VIEW -->
+            <div id="view-dashboard" class="space-y-6">
+                <!-- Dashboard content will be injected by JS -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Left: Daily Stats -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white rounded-xl p-4 card-shadow border-l-4 border-green-500">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 text-sm">ดำเนินการแล้ว</p>
-                            <p id="stat-complete" class="text-2xl font-bold text-gray-800">0</p>
-                        </div>
-                        <div class="bg-green-100 p-3 rounded-full">
-                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white rounded-xl p-4 card-shadow border-l-4 border-purple-500">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 text-sm">กำลังดำเนินการ</p>
-                            <p id="stat-processing" class="text-2xl font-bold text-gray-800">0</p>
-                        </div>
-                        <div class="bg-purple-100 p-3 rounded-full">
-                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
                                 </path>
                             </svg>
+                            สรุปการปฏิบัติงานวันนี้
+                        </h3>
+                        <div id="dashboard-daily-content" class="bg-white rounded-xl p-6 card-shadow min-h-[200px]">
+                            <p class="text-gray-500 text-center py-8">กำลังโหลดข้อมูล...</p>
+                        </div>
+                    </div>
+
+                    <!-- Right: Registry Stats -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                                </path>
+                            </svg>
+                            สรุปทะเบียนคุม
+                        </h3>
+                        <div id="dashboard-registry-stats" class="grid grid-cols-2 gap-4">
+                            <!-- Injected by JS -->
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Add New Button -->
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold text-gray-800">ทะเบียนคุมระเบียบ/ข้อบังคับ</h2>
-                <button id="btn-add-new"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    เพิ่มรายการใหม่
-                </button>
-            </div>
-
-            <!-- Filter -->
-            <div class="bg-white rounded-xl p-4 card-shadow mb-4">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-1">ค้นหาสหกรณ์</label>
-                        <input type="text" id="filter-search" placeholder="พิมพ์ชื่อสหกรณ์..."
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-1">ประเภทเอกสาร</label>
-                        <select id="filter-type"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">ทั้งหมด</option>
-                            <option value="ระเบียบ">ระเบียบ</option>
-                            <option value="ข้อบังคับ">ข้อบังคับ</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-1">สถานะ</label>
-                        <select id="filter-status"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">ทั้งหมด</option>
-                            <option value="รอดำเนินการ">รอดำเนินการ</option>
-                            <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
-                            <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
-                        </select>
-                    </div>
-                    <div class="flex items-end">
-                        <button id="btn-clear-filter"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">ล้างตัวกรอง</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Table -->
-            <div class="bg-white rounded-xl card-shadow overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gray-50 border-b border-gray-200">
-                            <tr>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ลำดับ</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ชื่อสหกรณ์</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ประเภท</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">หัวข้อ</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">รับจากสหกรณ์</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ส่งกลับสหกรณ์</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">วันทำการ<br>(สหกรณ์)
-                                </th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">รับจากฝ่ายบริหาร
-                                </th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">กลุ่มดำเนินการเสร็จ
-                                </th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">วันทำการ<br>(กลุ่ม)
-                                </th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">สถานะ</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ไฟล์แนบ</th>
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">จัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-body" class="divide-y divide-gray-100">
-                            <tr>
-                                <td colspan="12" class="px-4 py-12 text-center text-gray-500">
-                                    <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                        </path>
-                                    </svg>
-                                    <p>กำลังโหลดข้อมูล...</p>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Pagination -->
-            <div id="pagination-container"
-                class="mt-4 bg-white rounded-xl p-4 card-shadow flex flex-col sm:flex-row items-center justify-between gap-4 hidden">
-                <div class="flex items-center gap-2 text-sm text-gray-600">
-                    <span>แสดง:</span>
-                    <select id="page-size"
-                        class="px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                    <span>รายการต่อหน้า</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span id="pagination-info" class="text-sm text-gray-600 mr-2">รายการ 1-10 จาก 100</span>
-                    <button id="btn-first-page"
-                        class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                        title="หน้าแรก">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
-                        </svg>
-                    </button>
-                    <button id="btn-prev-page"
-                        class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                        title="ก่อนหน้า">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+            <!-- DAILY OPS VIEW -->
+            <div id="view-daily-ops" class="hidden space-y-6">
+                <!-- Header & Actions -->
+                <div class="flex justify-between items-center bg-white p-4 rounded-xl card-shadow">
+                    <h2 class="text-xl font-bold text-gray-800">บันทึกการปฏิบัติงานประจำวัน</h2>
+                    <button onclick="openDailyOpModal()"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
                             </path>
                         </svg>
+                        บันทึกงานใหม่
                     </button>
-                    <span class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg font-medium text-sm">
-                        หน้า <span id="current-page">1</span> / <span id="total-pages">1</span>
-                    </span>
-                    <button id="btn-next-page"
-                        class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                        title="ถัดไป">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
-                            </path>
-                        </svg>
-                    </button>
-                    <button id="btn-last-page"
-                        class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                        title="หน้าสุดท้าย">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
-                        </svg>
-                    </button>
+                </div>
+
+                <!-- Daily Ops Content -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- List of Ops -->
+                    <div class="lg:col-span-3">
+                        <div class="bg-white rounded-xl card-shadow overflow-hidden">
+                            <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+                                <h3 class="font-semibold text-gray-700">รายการปฏิบัติงานล่าสุด</h3>
+                                <input type="date" id="daily-filter-date"
+                                    class="border border-gray-300 rounded px-2 py-1 text-sm">
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left text-sm text-gray-600 font-medium">เวลา</th>
+                                            <th class="px-4 py-3 text-left text-sm text-gray-600 font-medium">กิจกรรม
+                                            </th>
+                                            <th class="px-4 py-3 text-left text-sm text-gray-600 font-medium">สถานที่
+                                            </th>
+                                            <th class="px-4 py-3 text-left text-sm text-gray-600 font-medium">สถานะ</th>
+                                            <th class="px-4 py-3 text-left text-sm text-gray-600 font-medium">จัดการ
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="daily-ops-table-body" class="divide-y divide-gray-100">
+                                        <tr>
+                                            <td colspan="5" class="p-4 text-center text-gray-500">
+                                                เลือกวันที่เพื่อดูข้อมูล</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Summary Section -->
-            <div id="summary-section" class="mt-6 bg-white rounded-xl p-6 card-shadow hidden">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                        </path>
-                    </svg>
-                    สรุปทะเบียนคุม
-                </h3>
-                <div id="summary-content" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-            </div>
+            <!-- REGISTRY VIEW (Existing Content Wrapped) -->
+            <div id="view-registry" class="hidden">
+                <!-- Stats Cards -->
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white rounded-xl p-4 card-shadow border-l-4 border-blue-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">รายการทั้งหมด</p>
+                                <p id="stat-total" class="text-2xl font-bold text-gray-800">0</p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-full">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl p-4 card-shadow border-l-4 border-yellow-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">รอดำเนินการ</p>
+                                <p id="stat-pending" class="text-2xl font-bold text-gray-800">0</p>
+                            </div>
+                            <div class="bg-yellow-100 p-3 rounded-full">
+                                <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl p-4 card-shadow border-l-4 border-green-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">ดำเนินการแล้ว</p>
+                                <p id="stat-complete" class="text-2xl font-bold text-gray-800">0</p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-full">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl p-4 card-shadow border-l-4 border-purple-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">กำลังดำเนินการ</p>
+                                <p id="stat-processing" class="text-2xl font-bold text-gray-800">0</p>
+                            </div>
+                            <div class="bg-purple-100 p-3 rounded-full">
+                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add New Button -->
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-800">ทะเบียนคุมระเบียบ/ข้อบังคับ</h2>
+                    <button id="btn-add-new"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
+                            </path>
+                        </svg>
+                        เพิ่มรายการใหม่
+                    </button>
+                </div>
+
+                <!-- Filter -->
+                <div class="bg-white rounded-xl p-4 card-shadow mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">ค้นหาสหกรณ์</label>
+                            <input type="text" id="filter-search" placeholder="พิมพ์ชื่อสหกรณ์..."
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">ประเภทเอกสาร</label>
+                            <select id="filter-type"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">ทั้งหมด</option>
+                                <option value="ระเบียบ">ระเบียบ</option>
+                                <option value="ข้อบังคับ">ข้อบังคับ</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">สถานะ</label>
+                            <select id="filter-status"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">ทั้งหมด</option>
+                                <option value="รอดำเนินการ">รอดำเนินการ</option>
+                                <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                                <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button id="btn-clear-filter"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">ล้างตัวกรอง</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="bg-white rounded-xl card-shadow overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ลำดับ</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ชื่อสหกรณ์</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ประเภท</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">หัวข้อ</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">รับจากสหกรณ์
+                                    </th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ส่งกลับสหกรณ์
+                                    </th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                                        วันทำการ<br>(สหกรณ์)
+                                    </th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">รับจากฝ่ายบริหาร
+                                    </th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                                        กลุ่มดำเนินการเสร็จ
+                                    </th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                                        วันทำการ<br>(กลุ่ม)
+                                    </th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">สถานะ</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ไฟล์แนบ</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">จัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body" class="divide-y divide-gray-100">
+                                <tr>
+                                    <td colspan="12" class="px-4 py-12 text-center text-gray-500">
+                                        <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                            </path>
+                                        </svg>
+                                        <p>กำลังโหลดข้อมูล...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div id="pagination-container"
+                    class="mt-4 bg-white rounded-xl p-4 card-shadow flex flex-col sm:flex-row items-center justify-between gap-4 hidden">
+                    <div class="flex items-center gap-2 text-sm text-gray-600">
+                        <span>แสดง:</span>
+                        <select id="page-size"
+                            class="px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <span>รายการต่อหน้า</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span id="pagination-info" class="text-sm text-gray-600 mr-2">รายการ 1-10 จาก 100</span>
+                        <button id="btn-first-page"
+                            class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            title="หน้าแรก">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <button id="btn-prev-page"
+                            class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            title="ก่อนหน้า">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7">
+                                </path>
+                            </svg>
+                        </button>
+                        <span class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg font-medium text-sm">
+                            หน้า <span id="current-page">1</span> / <span id="total-pages">1</span>
+                        </span>
+                        <button id="btn-next-page"
+                            class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            title="ถัดไป">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                                </path>
+                            </svg>
+                        </button>
+                        <button id="btn-last-page"
+                            class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            title="หน้าสุดท้าย">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Summary Section -->
+                <div id="summary-section" class="mt-6 bg-white rounded-xl p-6 card-shadow hidden">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
+                        สรุปทะเบียนคุม
+                    </h3>
+                    <div id="summary-content" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                </div>
+            </div> <!-- End view-registry -->
         </main>
+
+        <!-- Daily Ops Modal -->
+        <div id="daily-ops-modal" class="fixed inset-0 z-50 hidden">
+            <div class="modal-backdrop absolute inset-0"></div>
+            <div class="relative flex items-center justify-center min-h-full p-4">
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg relative">
+                    <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl">
+                        <h2 id="daily-modal-title" class="text-xl font-semibold text-gray-800">บันทึกงานใหม่</h2>
+                        <button onclick="closeDailyOpModal()"
+                            class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <form id="form-daily-op" class="p-6 space-y-4">
+                        <input type="hidden" id="daily-id">
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">วันที่ <span
+                                    class="text-red-500">*</span></label>
+                            <input type="date" id="daily-date" required
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">เวลา <span
+                                    class="text-red-500">*</span></label>
+                            <input type="time" id="daily-time" required
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">กิจกรรม <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text" id="daily-activity" required placeholder="เช่น ตรวจสอบระเบียบ..."
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">สถานที่ <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text" id="daily-location" required placeholder="เช่น สหกรณ์..."
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">สถานะ</label>
+                            <select id="daily-status"
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <option value="รอดำเนินการ">รอดำเนินการ</option>
+                                <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                                <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">หมายเหตุ</label>
+                            <textarea id="daily-notes" rows="2"
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+
+                        <div class="flex gap-3 pt-4 border-t border-gray-200">
+                            <button type="button" onclick="closeDailyOpModal()"
+                                class="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium">ยกเลิก</button>
+                            <button type="submit" id="btn-save-daily"
+                                class="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium flex items-center justify-center gap-2">
+                                <span>บันทึก</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
         <!-- Add/Edit Modal -->
         <div id="modal" class="fixed inset-0 z-50 hidden">
@@ -614,18 +837,284 @@
 
         // ==================== STATE ====================
         let allRecords = [];
+        let allDailyOps = []; // New state for Daily Operations
         let filteredRecords = [];
         let recordToDelete = null;
         let isEditing = false;
+        let isDailyEditing = false; // New state for Daily Edit
         let selectedFile = null;
         let currentAttachment = null;
+        let currentView = 'dashboard';
 
         // Pagination state
         let currentPage = 1;
         let pageSize = 10;
 
-        // ==================== COOPERATIVE NAMES ====================
-        const COOP_NAMES = [
+        // ==================== NAVIGATION & VIEW LOGIC ====================
+
+        function switchView(viewName) {
+            // Hide all views
+            ['dashboard', 'daily-ops', 'registry'].forEach(v => {
+                document.getElementById(`view-${v}`).classList.add('hidden');
+                document.getElementById(`nav-${v}`).classList.replace('text-blue-600', 'text-gray-500');
+                document.getElementById(`nav-${v}`).classList.replace('border-blue-600', 'border-transparent');
+            });
+
+            // Show selected view
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            const navBtn = document.getElementById(`nav-${viewName}`);
+            navBtn.classList.replace('text-gray-500', 'text-blue-600');
+            navBtn.classList.replace('border-transparent', 'border-blue-600');
+
+            currentView = viewName;
+
+            // Load data if needed
+            if (viewName === 'dashboard') {
+                renderDashboard();
+            } else if (viewName === 'daily-ops' && allDailyOps.length === 0) {
+                fetchDailyOps();
+            } else if (viewName === 'registry' && allRecords.length === 0) {
+                fetchAllRecords();
+            }
+        }
+
+        // ==================== DAILY OPS LOGIC ====================
+
+        async function fetchDailyOps() {
+            try {
+                showLoading(true);
+                const response = await fetch(`${SCRIPT_URL}?action=getDailyOps`, { redirect: 'follow' });
+                const result = await response.json();
+
+                if (result.success) {
+                    allDailyOps = result.data;
+                    renderDailyOpsTable();
+                    renderDashboard(); // Refresh dashboard if data changed
+                } else {
+                    showToast('โหลดข้อมูลงานประจำวันไม่สำเร็จ', 'error');
+                }
+            } catch (error) {
+                console.error('Error fetching daily ops:', error);
+                showToast('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function renderDailyOpsTable() {
+            const tbody = document.getElementById('daily-ops-table-body');
+            const filterDate = document.getElementById('daily-filter-date').value;
+
+            let displayData = allDailyOps;
+            if (filterDate) {
+                displayData = allDailyOps.filter(op => op.date === filterDate);
+            }
+
+            // Sort by Date DESC, Time DESC
+            displayData.sort((a, b) => {
+                if (a.date !== b.date) return new Date(b.date) - new Date(a.date);
+                return b.time.localeCompare(a.time);
+            });
+
+            if (displayData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-500">ไม่พบข้อมูล</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = displayData.map(op => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-3 text-sm text-gray-800">
+                        <div class="font-medium">${formatDate(op.date)}</div>
+                        <div class="text-xs text-gray-500">${op.time}</div>
+                    </td>
+                    <td class="px-4 py-3 text-sm text-gray-800">${op.activity}</td>
+                    <td class="px-4 py-3 text-sm text-gray-600">${op.location}</td>
+                    <td class="px-4 py-3 text-sm">
+                        <span class="px-2 py-1 rounded text-xs font-medium ${getStatusColor(op.status)}">
+                            ${op.status}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-sm">
+                        <button onclick='editDailyOp(${JSON.stringify(op).replace(/'/g, "&#39;")})' class="text-blue-600 hover:underline mr-2">แก้ไข</button>
+                        <button onclick="deleteDailyOp('${op.id}')" class="text-red-600 hover:underline">ลบ</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function getStatusColor(status) {
+            switch (status) {
+                case 'ดำเนินการแล้ว': return 'bg-green-100 text-green-700';
+                case 'กำลังดำเนินการ': return 'bg-blue-100 text-blue-700';
+                default: return 'bg-yellow-100 text-yellow-700';
+            }
+        }
+
+        function openDailyOpModal() {
+            isDailyEditing = false;
+            document.getElementById('daily-modal-title').textContent = 'บันทึกงานใหม่';
+            document.getElementById('form-daily-op').reset();
+            document.getElementById('daily-id').value = '';
+
+            // Set default date/time
+            const now = new Date();
+            document.getElementById('daily-date').value = now.toISOString().split('T')[0];
+
+            // Format HH:mm
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('daily-time').value = `${hours}:${minutes}`;
+
+            document.getElementById('daily-ops-modal').classList.remove('hidden');
+        }
+
+        function closeDailyOpModal() {
+            document.getElementById('daily-ops-modal').classList.add('hidden');
+        }
+
+        function editDailyOp(op) {
+            isDailyEditing = true;
+            document.getElementById('daily-modal-title').textContent = 'แก้ไขงาน';
+            document.getElementById('daily-id').value = op.id;
+            document.getElementById('daily-date').value = op.date;
+            document.getElementById('daily-time').value = op.time;
+            document.getElementById('daily-activity').value = op.activity;
+            document.getElementById('daily-location').value = op.location;
+            document.getElementById('daily-status').value = op.status;
+            document.getElementById('daily-notes').value = op.notes || '';
+            document.getElementById('daily-ops-modal').classList.remove('hidden');
+        }
+
+        async function handleDailyOpSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save-daily');
+            btn.disabled = true;
+            btn.textContent = 'กำลงบันทึก...';
+
+            const record = {
+                id: document.getElementById('daily-id').value,
+                date: document.getElementById('daily-date').value,
+                time: document.getElementById('daily-time').value,
+                activity: document.getElementById('daily-activity').value,
+                location: document.getElementById('daily-location').value,
+                status: document.getElementById('daily-status').value,
+                notes: document.getElementById('daily-notes').value
+            };
+
+            const action = isDailyEditing ? 'updateDailyOp' : 'createDailyOp';
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    body: JSON.stringify({ action, record })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast('บันทึกสำเร็จ');
+                    closeDailyOpModal();
+                    fetchDailyOps();
+                } else {
+                    showToast('บันทึกไม่สำเร็จ: ' + result.error, 'error');
+                }
+            } catch (error) {
+                console.error(error);
+                showToast('เกิดข้อผิดพลาด', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'บันทึก';
+            }
+        }
+
+        async function deleteDailyOp(id) {
+            if (!confirm('ยืนยันการลบข้อมูล?')) return;
+
+            try {
+                showLoading(true);
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    body: JSON.stringify({ action: 'deleteDailyOp', id })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    showToast('ลบข้อมูลสำเร็จ');
+                    fetchDailyOps();
+                } else {
+                    showToast('ลบไม่สำเร็จ: ' + result.error, 'error');
+                }
+            } catch (error) {
+                showToast('เกิดข้อผิดพลาด', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ==================== DASHBOARD LOGIC ====================
+
+        function renderDashboard() {
+            // Daily Stats
+            const today = new Date().toISOString().split('T')[0];
+            const todayOps = allDailyOps.filter(op => op.date === today);
+
+            const dailyContainer = document.getElementById('dashboard-daily-content');
+            if (todayOps.length === 0) {
+                dailyContainer.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full py-8 text-gray-400">
+                        <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <p>ไม่มีรายการปฏิบัติงานวันนี้</p>
+                    </div>
+                `;
+            } else {
+                dailyContainer.innerHTML = `
+                    <div class="space-y-3">
+                        ${todayOps.map(op => `
+                            <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                                <div class="w-14 text-center">
+                                    <div class="text-sm font-bold text-gray-800">${op.time}</div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="text-sm font-semibold text-gray-800">${op.activity}</div>
+                                    <div class="text-xs text-gray-500 flex items-center gap-1">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                        ${op.location}
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="px-2 py-1 rounded-full text-[10px] whitespace-nowrap ${getStatusColor(op.status)}">${op.status}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // Registry Stats
+            const total = allRecords.length;
+            const pending = allRecords.filter(r => r.status === 'รอดำเนินการ').length;
+            const process = allRecords.filter(r => r.status === 'กำลังดำเนินการ').length;
+            const done = allRecords.filter(r => r.status === 'ดำเนินการแล้ว').length;
+
+            document.getElementById('dashboard-registry-stats').innerHTML = `
+                <div class="bg-blue-50 p-4 rounded-xl text-center">
+                    <div class="text-2xl font-bold text-blue-700">${total}</div>
+                    <div class="text-xs text-blue-500">ทั้งหมด</div>
+                </div>
+                <div class="bg-yellow-50 p-4 rounded-xl text-center">
+                    <div class="text-2xl font-bold text-yellow-700">${pending}</div>
+                    <div class="text-xs text-yellow-500">รอดำเนินการ</div>
+                </div>
+                <div class="bg-indigo-50 p-4 rounded-xl text-center">
+                    <div class="text-2xl font-bold text-indigo-700">${process}</div>
+                    <div class="text-xs text-indigo-500">กำลังดำเนินการ</div>
+                </div>
+                <div class="bg-green-50 p-4 rounded-xl text-center">
+                    <div class="text-2xl font-bold text-green-700">${done}</div>
+                    <div class="text-xs text-green-500">ดำเนินการแล้ว</div>
+                </div>
+            `;
+        } const COOP_NAMES = [
             'สหกรณ์กองทุนสวนยางบ้านสหมิตร จำกัด',
             'สหกรณ์การเกษตรเมืองระยอง จำกัด',
             'สหกรณ์การเกษตรศรีเมืองระยอง จำกัด',
@@ -1543,6 +2032,7 @@
 
             // Form submit
             document.getElementById('form-record').addEventListener('submit', handleFormSubmit);
+            document.getElementById('form-daily-op').addEventListener('submit', handleDailyOpSubmit); // NEW
 
             // Date change listeners for auto-calculation and synchronization
             document.getElementById('input-receive-coop').addEventListener('change', updateCoopDaysInfo);
@@ -1568,6 +2058,9 @@
             document.getElementById('filter-type').addEventListener('change', applyFiltersAndRender);
             document.getElementById('filter-status').addEventListener('change', applyFiltersAndRender);
             document.getElementById('btn-clear-filter').addEventListener('click', clearFilters);
+
+            // Daily Ops Filters
+            document.getElementById('daily-filter-date').addEventListener('change', renderDailyOpsTable);
 
             // Pagination
             document.getElementById('page-size').addEventListener('change', (e) => changePageSize(e.target.value));
@@ -1701,17 +2194,17 @@
         async function initApp() {
             setupEventListeners();
 
-            // Check if SCRIPT_URL is configured
-            if (SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
-                showToast('⚠️ กรุณาตั้งค่า SCRIPT_URL ก่อนใช้งาน', 'error');
-                renderEmptyState();
-                return;
-            }
-
             // Initialize cooperative names datalist
             initCoopNamesList();
 
-            await fetchAllRecords();
+            // Load initial data
+            await Promise.all([
+                fetchAllRecords(),
+                fetchDailyOps()
+            ]);
+
+            // Set default view to Dashboard
+            switchView('dashboard');
         }
 
         // Start the app
