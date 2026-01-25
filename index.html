@@ -23,9 +23,10 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
 
-        .table-row:hover {
+        /* Removed generic hover to allow specific status hovers */
+        /* .table-row:hover {
             background-color: #f0f7ff;
-        }
+        } */
 
         .status-pending {
             background: #fef3c7;
@@ -53,6 +54,37 @@
 
         .loading-overlay {
             background: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Status Row Styles */
+        .row-pending {
+            background-color: #fffbeb;
+            /* yellow-50 */
+        }
+
+        .row-pending:hover {
+            background-color: #fef3c7;
+            /* yellow-100 */
+        }
+
+        .row-processing {
+            background-color: #eff6ff;
+            /* blue-50 */
+        }
+
+        .row-processing:hover {
+            background-color: #dbeafe;
+            /* blue-100 */
+        }
+
+        .row-complete {
+            background-color: #f0fdf4;
+            /* green-50 */
+        }
+
+        .row-complete:hover {
+            background-color: #dcfce7;
+            /* green-100 */
         }
     </style>
 </head>
@@ -1326,12 +1358,17 @@
                 if (record.status === 'ดำเนินการแล้ว') statusClass = 'status-complete';
                 else if (record.status === 'กำลังดำเนินการ') statusClass = 'status-processing';
 
+                let rowClass = '';
+                if (record.status === 'ดำเนินการแล้ว') rowClass = 'row-complete';
+                else if (record.status === 'กำลังดำเนินการ') rowClass = 'row-processing';
+                else rowClass = 'row-pending';
+
                 return `
-          <tr class="table-row" data-id="${record.id}">
+          <tr class="table-row ${rowClass} transition-colors" data-id="${record.id}">
             <td class="px-4 py-3 text-sm text-gray-600">${startIndex + index + 1}</td>
             <td class="px-4 py-3 text-sm font-medium text-gray-800">${record.cooperative_name || '-'}</td>
             <td class="px-4 py-3 text-sm">
-              <span class="px-2 py-1 rounded ${record.document_type === 'ระเบียบ' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'}">
+              <span class="px-2 py-1 rounded ${record.document_type === 'ระเบียบ' ? 'bg-white text-blue-700 border border-blue-200' : 'bg-white text-purple-700 border border-purple-200'}">
                 ${record.document_type || '-'}
               </span>
             </td>
@@ -1343,7 +1380,7 @@
             <td class="px-4 py-3 text-sm text-gray-600">${formatDate(record.group_complete_date)}</td>
             <td class="px-4 py-3 text-sm text-center font-semibold ${groupDays !== null ? 'text-green-600' : 'text-gray-400'}">${groupDays !== null ? groupDays + ' วัน' : '-'}</td>
             <td class="px-4 py-3 text-sm">
-              <span class="px-2 py-1 rounded text-xs font-medium ${statusClass}">${record.status || '-'}</span>
+              <span class="px-2 py-1 rounded text-xs font-medium ${statusClass} shadow-sm border border-opacity-20 border-gray-400">${record.status || '-'}</span>
             </td>
             <td class="px-4 py-3 text-sm">
                 ${record.attachment_file_url ?
@@ -1356,20 +1393,20 @@
             </td>
             <td class="px-4 py-3 text-sm">
               <div class="flex gap-1">
-                <button onclick="editRecord(allRecords.find(r => r.id === '${record.id}'))" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition-colors" title="แก้ไข">
+                <button onclick="editRecord(allRecords.find(r => r.id === '${record.id}'))" class="p-1.5 text-blue-600 hover:bg-blue-200 rounded transition-colors bg-white/50" title="แก้ไข">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                   </svg>
                 </button>
-                <button onclick="showDeleteModal(allRecords.find(r => r.id === '${record.id}'))" class="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors" title="ลบ">
+                <button onclick="showDeleteModal(allRecords.find(r => r.id === '${record.id}'))" class="p-1.5 text-red-600 hover:bg-red-200 rounded transition-colors bg-white/50" title="ลบ">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                   </svg>
                 </button>
               </div>
             </td>
-          </tr>
-        `;
+          </tr >
+                    `;
             }).join('');
         }
 
@@ -1417,7 +1454,7 @@
                 const totalDocs = docs['ระเบียบ'].length + docs['ข้อบังคับ'].length;
 
                 html += `
-          <div class="border border-gray-200 rounded-lg p-4">
+                    < div class="border border-gray-200 rounded-lg p-4" >
             <h4 class="font-semibold text-gray-800 mb-3 flex items-center gap-2">
               <span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm font-bold">${totalDocs}</span>
               ${coopName}
@@ -1449,7 +1486,7 @@
 
                 html += `
             </div>
-          </div>
+          </div >
         `;
             });
 
