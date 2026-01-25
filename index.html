@@ -1399,7 +1399,7 @@
             // Group by cooperative
             const groupedByCooperative = {};
             allRecords.forEach(record => {
-                const coopName = (record.cooperative_name || 'ไม่ระบุชื่อ').trim();
+                const coopName = (record.cooperative_name || 'ไม่ระบุชื่อ').replace(/\s+/g, ' ').trim();
                 if (!groupedByCooperative[coopName]) {
                     groupedByCooperative[coopName] = {
                         ระเบียบ: [],
