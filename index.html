@@ -1400,13 +1400,23 @@
             // Form submit
             document.getElementById('form-record').addEventListener('submit', handleFormSubmit);
 
-            // Date change listeners for auto-calculation
-            ['input-receive-coop', 'input-send-coop'].forEach(id => {
-                document.getElementById(id).addEventListener('change', updateCoopDaysInfo);
+            // Date change listeners for auto-calculation and synchronization
+            document.getElementById('input-receive-coop').addEventListener('change', updateCoopDaysInfo);
+
+            document.getElementById('input-send-coop').addEventListener('change', function () {
+                updateCoopDaysInfo();
+                // Sync to Group Completed Date
+                document.getElementById('input-group-complete').value = this.value;
+                updateGroupDaysInfo();
             });
 
-            ['input-receive-admin', 'input-group-complete'].forEach(id => {
-                document.getElementById(id).addEventListener('change', updateGroupDaysInfo);
+            document.getElementById('input-receive-admin').addEventListener('change', updateGroupDaysInfo);
+
+            document.getElementById('input-group-complete').addEventListener('change', function () {
+                updateGroupDaysInfo();
+                // Sync to Returned to Cooperative Date
+                document.getElementById('input-send-coop').value = this.value;
+                updateCoopDaysInfo();
             });
 
             // Filters
