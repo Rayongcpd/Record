@@ -334,22 +334,22 @@
                                     placeholder="พิมพ์เพื่อค้นหาชื่อสหกรณ์..." autocomplete="off">
                                 <datalist id="coop-names-list"></datalist>
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทเอกสาร <span
-                                        class="text-red-500">*</span></label>
-                                <select id="input-doc-type" required
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                    <option value="">เลือกประเภท</option>
-                                    <option value="ระเบียบ">ระเบียบ</option>
-                                    <option value="ข้อบังคับ">ข้อบังคับ</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">หัวข้อ <span
-                                        class="text-red-500">*</span></label>
-                                <input type="text" id="input-topic" required
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                    placeholder="เช่น ว่าด้วยการให้เงินกู้">
+                            <div class="md:col-span-2">
+                                <div class="flex items-center justify-between mb-2">
+                                    <label class="block text-sm font-medium text-gray-700">รายการเอกสาร <span
+                                            class="text-red-500">*</span></label>
+                                    <button type="button" id="btn-add-doc-item"
+                                        class="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 4v16m8-8H4"></path>
+                                        </svg>
+                                        เพิ่มรายการ
+                                    </button>
+                                </div>
+                                <div id="doc-items-container" class="space-y-3">
+                                    <!-- Dynamic rows will be here -->
+                                </div>
                             </div>
                         </div>
 
@@ -839,6 +839,18 @@
         }
 
         /**
+         * Create multiple records
+         */
+        async function createRecordBatch(records) {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                redirect: 'follow',
+                body: JSON.stringify({ action: 'createBatch', records: records })
+            });
+            return await response.json();
+        }
+
+        /**
          * Update existing record
          */
         async function updateRecord(recordData) {
@@ -893,6 +905,40 @@
         }
 
         // ==================== UI FUNCTIONS ====================
+
+        function createDocItemRow(type = '', topic = '') {
+            const div = document.createElement('div');
+            div.className = 'doc-item-row grid grid-cols-1 md:grid-cols-2 gap-4 p-3 bg-gray-50 rounded-lg border border-gray-200 relative';
+            div.innerHTML = `
+                <div>
+                     <label class="block text-xs font-medium text-gray-500 mb-1">ประเภทเอกสาร</label>
+                     <select class="doc-type w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                        <option value="">เลือกประเภท</option>
+                        <option value="ระเบียบ" ${type === 'ระเบียบ' ? 'selected' : ''}>ระเบียบ</option>
+                        <option value="ข้อบังคับ" ${type === 'ข้อบังคับ' ? 'selected' : ''}>ข้อบังคับ</option>
+                     </select>
+                </div>
+                <div>
+                     <label class="block text-xs font-medium text-gray-500 mb-1">หัวข้อ</label>
+                     <input type="text" class="doc-topic w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="ระบุหัวข้อ" value="${topic}" required>
+                </div>
+                <button type="button" class="btn-remove-doc-item absolute -top-2 -right-2 bg-red-100 text-red-500 rounded-full p-1 shadow-sm hover:bg-red-200 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            `;
+
+            // Remove button event
+            div.querySelector('.btn-remove-doc-item').addEventListener('click', () => {
+                const container = document.getElementById('doc-items-container');
+                if (container.children.length > 1) {
+                    div.remove();
+                } else {
+                    showToast('ต้องมีรายการเอกสารอย่างน้อย 1 รายการ', 'error');
+                }
+            });
+
+            return div;
+        }
 
         function showModal() {
             document.getElementById('modal').classList.remove('hidden');
@@ -963,11 +1009,9 @@
             const coopName = document.getElementById('input-coop-name').value.trim();
 
             try {
-                // Initialize record data
-                const recordData = {
+                // Initialize common record data
+                const baseRecordData = {
                     cooperative_name: coopName,
-                    document_type: document.getElementById('input-doc-type').value,
-                    document_topic: document.getElementById('input-topic').value.trim(),
                     receive_from_coop_date: document.getElementById('input-receive-coop').value || '',
                     send_back_to_coop_date: document.getElementById('input-send-coop').value || '',
                     receive_from_admin_date: document.getElementById('input-receive-admin').value || '',
@@ -975,6 +1019,18 @@
                     status: document.getElementById('input-status').value,
                     notes: document.getElementById('input-notes').value.trim()
                 };
+
+                // Gather Document Items
+                const docItems = document.querySelectorAll('.doc-item-row');
+                const recordsToSave = [];
+
+                docItems.forEach(row => {
+                    recordsToSave.push({
+                        ...baseRecordData,
+                        document_type: row.querySelector('.doc-type').value,
+                        document_topic: row.querySelector('.doc-topic').value.trim()
+                    });
+                });
 
                 // Handle file upload if exists
                 if (selectedFile) {
@@ -999,10 +1055,10 @@
                     const uploadResult = await uploadFileApi(base64Data, selectedFile.name, selectedFile.type, coopName);
 
                     if (uploadResult.success) {
-                        // Add attachment info to record
-                        recordData.attachment_file_id = uploadResult.data.fileId;
-                        recordData.attachment_file_name = uploadResult.data.fileName;
-                        recordData.attachment_file_url = uploadResult.data.fileUrl;
+                        // Add attachment info to base record data
+                        baseRecordData.attachment_file_id = uploadResult.data.fileId;
+                        baseRecordData.attachment_file_name = uploadResult.data.fileName;
+                        baseRecordData.attachment_file_url = uploadResult.data.fileUrl;
 
                         // If we had a previous file and we are editing, we might want to delete it?
                         // For now, let's just replace the reference.
@@ -1020,11 +1076,32 @@
                 const recordId = document.getElementById('record-id').value;
                 let result;
 
+                // Handle Attachment for ALL records
+                // If creating multiple records, they all get the same attachment reference
+                recordsToSave.forEach(record => {
+                    if (selectedFile) {
+                        record.attachment_file_id = baseRecordData.attachment_file_id;
+                        record.attachment_file_name = baseRecordData.attachment_file_name;
+                        record.attachment_file_url = baseRecordData.attachment_file_url;
+                    } else if (currentAttachment) {
+                        record.attachment_file_id = currentAttachment.id;
+                        record.attachment_file_name = currentAttachment.name;
+                        record.attachment_file_url = currentAttachment.url;
+                    }
+                });
+
                 if (isEditing && recordId) {
+                    // Edit Mode: Update single record (take the first item, as edit mode forces 1 item)
+                    const recordData = recordsToSave[0];
                     recordData.id = recordId;
                     result = await updateRecord(recordData);
                 } else {
-                    result = await createRecord(recordData);
+                    // Create Mode: Batch or Single
+                    if (recordsToSave.length > 1) {
+                        result = await createRecordBatch(recordsToSave);
+                    } else {
+                        result = await createRecord(recordsToSave[0]);
+                    }
                 }
 
                 if (result && result.success) {
@@ -1050,8 +1127,16 @@
             document.getElementById('modal-title').textContent = 'แก้ไขรายการ';
             document.getElementById('record-id').value = record.id;
             document.getElementById('input-coop-name').value = record.cooperative_name || '';
-            document.getElementById('input-doc-type').value = record.document_type || '';
-            document.getElementById('input-topic').value = record.document_topic || '';
+
+            // Setup Doc Items for Edit
+            const container = document.getElementById('doc-items-container');
+            container.innerHTML = '';
+            container.appendChild(createDocItemRow(record.document_type || '', record.document_topic || ''));
+
+            // Hide Add/Remove buttons in Edit Mode
+            document.getElementById('btn-add-doc-item').classList.add('hidden');
+            container.querySelectorAll('.btn-remove-doc-item').forEach(btn => btn.classList.add('hidden'));
+
             document.getElementById('input-receive-coop').value = record.receive_from_coop_date || '';
             document.getElementById('input-send-coop').value = record.send_back_to_coop_date || '';
             document.getElementById('input-receive-admin').value = record.receive_from_admin_date || '';
@@ -1390,6 +1475,18 @@
                 document.getElementById('current-attachment').classList.add('hidden');
 
                 showModal();
+
+                // Initialize Doc Items for New Record
+                const container = document.getElementById('doc-items-container');
+                container.innerHTML = '';
+                container.appendChild(createDocItemRow()); // Add one empty row
+                document.getElementById('btn-add-doc-item').classList.remove('hidden');
+            });
+
+            // Add Doc Item Button
+            document.getElementById('btn-add-doc-item').addEventListener('click', () => {
+                const container = document.getElementById('doc-items-container');
+                container.appendChild(createDocItemRow());
             });
 
             // Modal close buttons
