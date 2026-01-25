@@ -1422,14 +1422,14 @@
               <span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm font-bold">${totalDocs}</span>
               ${coopName}
             </h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 gap-4">
         `;
 
                 if (docs['ระเบียบ'].length > 0) {
                     html += `
             <div class="bg-blue-50 rounded-lg p-3">
               <h5 class="font-medium text-blue-800 mb-2">📋 ระเบียบ (${docs['ระเบียบ'].length})</h5>
-              <ul class="space-y-1 text-sm text-blue-700">
+              <ul class="space-y-1 text-sm text-blue-700 break-words">
                 ${docs['ระเบียบ'].map(d => `<li>• ${d.document_topic || 'ไม่ระบุหัวข้อ'}</li>`).join('')}
               </ul>
             </div>
@@ -1440,7 +1440,7 @@
                     html += `
             <div class="bg-purple-50 rounded-lg p-3">
               <h5 class="font-medium text-purple-800 mb-2">📜 ข้อบังคับ (${docs['ข้อบังคับ'].length})</h5>
-              <ul class="space-y-1 text-sm text-purple-700">
+              <ul class="space-y-1 text-sm text-purple-700 break-words">
                 ${docs['ข้อบังคับ'].map(d => `<li>• ${d.document_topic || 'ไม่ระบุหัวข้อ'}</li>`).join('')}
               </ul>
             </div>
