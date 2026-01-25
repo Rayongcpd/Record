@@ -1380,7 +1380,7 @@
             <td class="px-4 py-3 text-sm text-gray-600">${formatDate(record.group_complete_date)}</td>
             <td class="px-4 py-3 text-sm text-center font-semibold ${groupDays !== null ? 'text-green-600' : 'text-gray-400'}">${groupDays !== null ? groupDays + ' วัน' : '-'}</td>
             <td class="px-4 py-3 text-sm">
-              <span class="px-2 py-1 rounded text-xs font-medium ${statusClass} shadow-sm border border-opacity-20 border-gray-400">${record.status || '-'}</span>
+              <span class="px-2 py-1 rounded text-xs font-medium whitespace-nowrap ${statusClass} shadow-sm border border-opacity-20 border-gray-400">${record.status || '-'}</span>
             </td>
             <td class="px-4 py-3 text-sm">
                 ${record.attachment_file_url ?
