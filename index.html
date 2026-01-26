@@ -990,7 +990,7 @@
                 <tr class="hover:bg-gray-50">
                     <td class="px-4 py-3 text-sm text-gray-800">
                         <div class="font-medium">${formatDate(op.date)}</div>
-                        <div class="text-xs text-gray-500">${op.time}</div>
+                        <div class="text-xs text-gray-500">${formatTime(op.time)}</div>
                     </td>
                     <td class="px-4 py-3 text-sm text-gray-800">${op.activity}</td>
                     <td class="px-4 py-3 text-sm text-gray-600">${op.location}</td>
@@ -1116,6 +1116,21 @@
             }
         }
 
+        function formatTime(timeStr) {
+            if (!timeStr) return '-';
+            // Check if it's an ISO string (contains T)
+            if (typeof timeStr === 'string' && timeStr.includes('T')) {
+                try {
+                    const date = new Date(timeStr);
+                    return date.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', hour12: false });
+                } catch (e) {
+                    return timeStr.substring(0, 5);
+                }
+            }
+            // Fallback for simple time strings "HH:mm"
+            return String(timeStr).substring(0, 5);
+        }
+
         // ==================== DASHBOARD LOGIC ====================
 
         function renderDashboard() {
@@ -1153,7 +1168,7 @@
                                     <div class="flex items-center gap-3 mt-1 text-sm text-gray-500">
                                         <div class="flex items-center gap-1">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                            ${op.time} น.
+                                            ${formatTime(op.time)} น.
                                         </div>
                                         <div class="flex items-center gap-1 truncate">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
