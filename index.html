@@ -1461,7 +1461,7 @@
                 if (opDate < today || opDate > nextWeek) return false;
 
                 // 2. Time Check (Only for Today)
-                if (opDate.getTime() === today.getTime() && op.time) {
+                if (opDate.toDateString() === today.toDateString() && op.time) {
                     const [h, m] = op.time.split(':').map(Number);
                     const opActiveTime = new Date(opDate);
                     opActiveTime.setHours(h, m, 0, 0);
