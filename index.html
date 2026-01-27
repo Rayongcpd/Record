@@ -1444,8 +1444,9 @@
 
         function renderDashboard() {
             // --- 1. Upcoming Alerts Logic (Next 7 Days) ---
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+            const now = new Date(); // Current specific time
+            const today = new Date(now);
+            today.setHours(0, 0, 0, 0); // Midnight today
 
             const nextWeek = new Date(today);
             nextWeek.setDate(today.getDate() + 7);
@@ -1454,9 +1455,22 @@
                 if (!op.date) return false;
                 // Parse date purely as YYYY-MM-DD local
                 const parts = op.date.split('-');
-                const opDate = new Date(parts[0], parts[1] - 1, parts[2]); // Local midnight
+                const opDate = new Date(parts[0], parts[1] - 1, parts[2]); // Local midnight of the op
 
-                return opDate >= today && opDate <= nextWeek;
+                // 1. Basic Date Check
+                if (opDate < today || opDate > nextWeek) return false;
+
+                // 2. Time Check (Only for Today)
+                if (opDate.getTime() === today.getTime() && op.time) {
+                    const [h, m] = op.time.split(':').map(Number);
+                    const opActiveTime = new Date(opDate);
+                    opActiveTime.setHours(h, m, 0, 0);
+
+                    // If exact time has passed, don't show
+                    if (opActiveTime < now) return false;
+                }
+
+                return true;
             }).sort((a, b) => new Date(a.date) - new Date(b.date));
 
             const alertContainer = document.getElementById('dashboard-alerts');
