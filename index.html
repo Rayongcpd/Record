@@ -1459,7 +1459,66 @@
         // ==================== DASHBOARD LOGIC ====================
 
         function renderDashboard() {
-            // Recent Ops (Top 5)
+            // --- 1. Upcoming Alerts Logic (Next 7 Days) ---
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const nextWeek = new Date(today);
+            nextWeek.setDate(today.getDate() + 7);
+
+            const upcomingOps = allDailyOps.filter(op => {
+                if (!op.date) return false;
+                const opDate = new Date(op.date);
+                opDate.setHours(0, 0, 0, 0);
+                return opDate >= today && opDate <= nextWeek;
+            }).sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            const alertContainer = document.getElementById('dashboard-alerts');
+            if (upcomingOps.length > 0) {
+                alertContainer.innerHTML = `
+                    <div class="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-r-lg shadow-sm">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-orange-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                                </svg>
+                            </div>
+                            <div class="ml-3 w-full">
+                                <h3 class="text-sm font-medium text-orange-800">
+                                    กิจกรรมที่กำลังจะมาถึง (7 วันล่วงหน้า)
+                                </h3>
+                                <div class="mt-2 text-sm text-orange-700 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                                    ${upcomingOps.map(op => {
+                    const opDate = new Date(op.date);
+                    const diffTime = opDate - today;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    let dayText = '';
+                    if (diffDays === 0) dayText = 'วันนี้';
+                    else if (diffDays === 1) dayText = 'พรุ่งนี้';
+                    else dayText = `อีก ${diffDays} วัน`;
+
+                    return `
+                                        <div class="bg-white/60 p-2 rounded border border-orange-100 flex items-center justify-between cursor-pointer hover:bg-white transition-colors" onclick='switchView("daily-ops");'>
+                                            <div class="truncate pr-2">
+                                                <span class="font-bold mr-1">[${dayText}]</span>
+                                                ${op.activity}
+                                            </div>
+                                            <span class="text-xs bg-orange-200 text-orange-800 px-1.5 py-0.5 rounded ml-2 whitespace-nowrap">
+                                                ${formatDateShort(op.date).day} ${formatDateShort(op.date).month}
+                                            </span>
+                                        </div>`;
+                }).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                alertContainer.classList.remove('hidden');
+            } else {
+                alertContainer.classList.add('hidden');
+            }
+
+            // --- 2. Recent Ops (Top 5) ---
             // Sort by Date DESC, Time DESC
             const sortedOps = [...allDailyOps].sort((a, b) => {
                 if (a.date !== b.date) return new Date(b.date) - new Date(a.date);
