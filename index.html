@@ -806,6 +806,57 @@
             </div>
         </div>
 
+        <!-- View Details Modal -->
+        <div id="view-details-modal" class="fixed inset-0 z-50 hidden">
+            <div class="modal-backdrop absolute inset-0 bg-gray-900 bg-opacity-50 transition-opacity"
+                onclick="closeViewDetailsModal()"></div>
+            <div class="relative flex items-center justify-center min-h-full p-4 pointer-events-none">
+                <div
+                    class="bg-white rounded-2xl shadow-2xl w-full max-w-md relative overflow-hidden pointer-events-auto transform transition-all scale-100">
+                    <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4 flex justify-between items-center">
+                        <h3 class="text-lg font-bold text-white">รายละเอียดกิจกรรม</h3>
+                        <button onclick="closeViewDetailsModal()"
+                            class="text-blue-100 hover:text-white transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div>
+                            <p class="text-xs text-gray-500 mb-1">กิจกรรม</p>
+                            <p id="view-activity" class="text-lg font-semibold text-gray-800"></p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 mb-1">รายละเอียดเพิ่มเติม</p>
+                            <div id="view-details"
+                                class="bg-gray-50 rounded-lg p-3 text-sm text-gray-700 min-h-[60px] whitespace-pre-wrap">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-xs text-gray-500 mb-1">วันที่-เวลา</p>
+                                <p id="view-datetime" class="text-sm font-medium text-gray-800"></p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 mb-1">สถานที่</p>
+                                <p id="view-location" class="text-sm font-medium text-gray-800"></p>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 mb-1">สถานะ</p>
+                            <span id="view-status" class="inline-block px-2 py-1 rounded text-xs font-medium"></span>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-6 py-3 flex justify-end">
+                        <button onclick="closeViewDetailsModal()"
+                            class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-sm font-medium transition-colors">ปิด</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Toast -->
         <div id="toast"
             class="fixed bottom-4 right-4 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
