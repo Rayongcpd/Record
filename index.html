@@ -1023,7 +1023,7 @@
 
         function switchView(viewName) {
             // Hide all views
-            ['dashboard', 'daily-ops', 'registry'].forEach(v => {
+            ['dashboard', 'daily-ops', 'registry', 'calendar'].forEach(v => {
                 document.getElementById(`view-${v}`).classList.add('hidden');
                 document.getElementById(`nav-${v}`).classList.replace('text-blue-600', 'text-gray-500');
                 document.getElementById(`nav-${v}`).classList.replace('border-blue-600', 'border-transparent');
