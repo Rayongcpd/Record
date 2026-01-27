@@ -1457,17 +1457,27 @@
                 const parts = op.date.split('-');
                 const opDate = new Date(parts[0], parts[1] - 1, parts[2]); // Local midnight of the op
 
-                // 1. Basic Date Check
-                if (opDate < today || opDate > nextWeek) return false;
+                // 1. Skip past dates entirely
+                if (opDate < today) return false;
 
-                // 2. Time Check (Only for Today)
-                if (opDate.toDateString() === today.toDateString() && op.time) {
-                    const [h, m] = op.time.split(':').map(Number);
-                    const opActiveTime = new Date(opDate);
-                    opActiveTime.setHours(h, m, 0, 0);
+                // 2. Skip future dates beyond next week
+                if (opDate > nextWeek) return false;
 
-                    // If exact time has passed, don't show
-                    if (opActiveTime < now) return false;
+                // 3. For Today's events, check time
+                if (opDate.toDateString() === today.toDateString()) {
+                    // If no time recorded, hide it (assume it already happened)
+                    if (!op.time) return false;
+
+                    // Parse time - handle both "HH:MM" and "HH:MM:SS" formats
+                    const timeParts = String(op.time).split(':');
+                    const h = parseInt(timeParts[0], 10) || 0;
+                    const m = parseInt(timeParts[1], 10) || 0;
+
+                    // Create datetime for the scheduled activity
+                    const opActiveTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0, 0);
+
+                    // If the scheduled time has passed, don't show
+                    if (opActiveTime <= now) return false;
                 }
 
                 return true;
