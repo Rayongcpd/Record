@@ -1477,10 +1477,21 @@
                     // If no time recorded, hide it (assume it already happened)
                     if (!op.time) return false;
 
-                    // Parse time - handle both "HH:MM" and "HH:MM:SS" formats
-                    const timeParts = String(op.time).split(':');
-                    const h = parseInt(timeParts[0], 10) || 0;
-                    const m = parseInt(timeParts[1], 10) || 0;
+                    // Parse time - handle ISO datetime or simple "HH:MM" format
+                    let h = 0, m = 0;
+                    const timeStr = String(op.time);
+
+                    if (timeStr.includes('T')) {
+                        // ISO datetime format (e.g., 1899-12-30T10:30:00.000Z)
+                        const tempDate = new Date(timeStr);
+                        h = tempDate.getHours();
+                        m = tempDate.getMinutes();
+                    } else {
+                        // Simple "HH:MM" or "HH:MM:SS" format
+                        const timeParts = timeStr.split(':');
+                        h = parseInt(timeParts[0], 10) || 0;
+                        m = parseInt(timeParts[1], 10) || 0;
+                    }
 
                     // Create datetime for the scheduled activity
                     const opActiveTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0, 0);
