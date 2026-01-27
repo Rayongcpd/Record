@@ -196,25 +196,8 @@
                         <h2 class="text-3xl font-bold mb-2">ยินดีต้อนรับกลับ,</h2>
                         <p class="text-blue-100 text-lg mb-6">ระบบทะเบียนคุมระเบียบข้อบังคับสหกรณ์ พร้อมใช้งาน</p>
 
-                        <div class="flex flex-wrap gap-4">
-                            <button onclick="switchView('daily-ops'); openDailyOpModal()"
-                                class="bg-white text-blue-600 px-6 py-2.5 rounded-lg font-semibold shadow-md hover:bg-blue-50 hover:shadow-lg transition-all flex items-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4v16m8-8H4"></path>
-                                </svg>
-                                บันทึกงานใหม่
-                            </button>
-                            <button onclick="switchView('registry'); showModal()"
-                                class="bg-indigo-500 bg-opacity-30 border border-white/30 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-opacity-40 transition-all flex items-center gap-2 backdrop-blur-sm">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                    </path>
-                                </svg>
-                                เพิ่มทะเบียนคุม
-                            </button>
-                        </div>
+                        <!-- Buttons moved to Calendar View -->
+                        <div class="hidden"></div>
                     </div>
                 </div>
 
@@ -1209,29 +1192,51 @@
         }
 
         function openCalendarModal(dateStr, events) {
-            if (!events || events.length === 0) return;
-
             const date = new Date(dateStr);
             const thaiDate = date.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
             document.getElementById('calendar-modal-date').textContent = thaiDate;
 
             const content = document.getElementById('calendar-modal-content');
-            content.innerHTML = events.map(event => `
-                <div class="p-3 rounded-lg border border-gray-100 hover:shadow-sm transition-shadow ${event.bgColor.replace('100', '50')}">
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="w-2 h-2 rounded-full ${event.bgColor.replace('bg-', 'bg-').replace('100', '500')}"></span>
-                        <h4 class="font-bold text-gray-800 text-sm">${event.title}</h4>
-                    </div>
-                    ${event.isDailyOp ?
-                    `<p class="text-xs text-gray-600 ml-4">${event.data.time ? formatTime(event.data.time) + ' น. ' : ''}${event.data.location || ''}</p>
-                         ${event.data.activity_details ? `<p class="text-xs text-gray-500 ml-4 mt-1 line-clamp-2">${event.data.activity_details}</p>` : ''}`
-                    :
-                    `<p class="text-xs text-gray-600 ml-4">${event.data.document_type || ''} - ${event.data.document_topic || ''}</p>
-                         <p class="text-xs text-gray-500 ml-4">สถานะ: ${event.data.status}</p>`
-                }
-                </div>
-            `).join('');
 
+            let html = '';
+
+            if (events && events.length > 0) {
+                html = events.map(event => `
+                    <div class="p-3 rounded-lg border border-gray-100 hover:shadow-sm transition-shadow ${event.bgColor.replace('100', '50')}">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="w-2 h-2 rounded-full ${event.bgColor.replace('bg-', 'bg-').replace('100', '500')}"></span>
+                            <h4 class="font-bold text-gray-800 text-sm">${event.title}</h4>
+                        </div>
+                        ${event.isDailyOp ?
+                        `<p class="text-xs text-gray-600 ml-4">${event.data.time ? formatTime(event.data.time) + ' น. ' : ''}${event.data.location || ''}</p>
+                             ${event.data.activity_details ? `<p class="text-xs text-gray-500 ml-4 mt-1 line-clamp-2">${event.data.activity_details}</p>` : ''}`
+                        :
+                        `<p class="text-xs text-gray-600 ml-4">${event.data.document_type || ''} - ${event.data.document_topic || ''}</p>
+                             <p class="text-xs text-gray-500 ml-4">สถานะ: ${event.data.status}</p>`
+                    }
+                    </div>
+                `).join('');
+            } else {
+                html = `<div class="text-center text-gray-400 py-4 text-sm">ไม่มีรายการในวันนี้</div>`;
+            }
+
+            // Add Buttons
+            html += `
+                <div class="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-2">
+                    <button onclick="closeCalendarModal(); switchView('daily-ops'); openDailyOpModal('${dateStr}')" 
+                        class="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm font-medium">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        เพิ่มบันทึกปฏิบัติงาน
+                    </button>
+                    <button onclick="closeCalendarModal(); switchView('registry'); openNewRegistryModal('${dateStr}')" 
+                        class="w-full py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 text-sm font-medium">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        เพิ่มทะเบียนคุม
+                    </button>
+                </div>
+            `;
+
+            content.innerHTML = html;
             document.getElementById('calendar-modal').classList.remove('hidden');
         }
 
@@ -1314,7 +1319,7 @@
             }
         }
 
-        function openDailyOpModal() {
+        function openDailyOpModal(dateStr = null) {
             isDailyEditing = false;
             document.getElementById('daily-modal-title').textContent = 'บันทึกงานใหม่';
             document.getElementById('form-daily-op').reset();
@@ -1322,7 +1327,8 @@
 
             // Set default date/time
             const now = new Date();
-            document.getElementById('daily-date').value = now.toISOString().split('T')[0];
+            // Use provided dateStr or Today
+            document.getElementById('daily-date').value = dateStr || now.toISOString().split('T')[0];
 
             // Format HH:mm
             const hours = String(now.getHours()).padStart(2, '0');
@@ -1912,6 +1918,34 @@
             return div;
         }
 
+        function openNewRegistryModal(dateStr = null) {
+            isEditing = false;
+            document.getElementById('modal-title').textContent = 'เพิ่มรายการใหม่';
+            document.getElementById('form-record').reset();
+            document.getElementById('record-id').value = '';
+            document.getElementById('coop-days-info').classList.add('hidden');
+            document.getElementById('group-days-info').classList.add('hidden');
+
+            // Reset file upload
+            selectedFile = null;
+            currentAttachment = null;
+            resetFileUploadUI();
+            document.getElementById('current-attachment').classList.add('hidden');
+
+            // Pre-fill date if provided
+            if (dateStr) {
+                document.getElementById('input-receive-coop').value = dateStr;
+            }
+
+            showModal();
+
+            // Initialize Doc Items for New Record
+            const container = document.getElementById('doc-items-container');
+            container.innerHTML = '';
+            container.appendChild(createDocItemRow()); // Add one empty row
+            document.getElementById('btn-add-doc-item').classList.remove('hidden');
+        }
+
         function showModal() {
             document.getElementById('modal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
@@ -2437,28 +2471,7 @@
 
         function setupEventListeners() {
             // Add new button
-            document.getElementById('btn-add-new').addEventListener('click', () => {
-                isEditing = false;
-                document.getElementById('modal-title').textContent = 'เพิ่มรายการใหม่';
-                document.getElementById('form-record').reset();
-                document.getElementById('record-id').value = '';
-                document.getElementById('coop-days-info').classList.add('hidden');
-                document.getElementById('group-days-info').classList.add('hidden');
-
-                // Reset file upload
-                selectedFile = null;
-                currentAttachment = null;
-                resetFileUploadUI();
-                document.getElementById('current-attachment').classList.add('hidden');
-
-                showModal();
-
-                // Initialize Doc Items for New Record
-                const container = document.getElementById('doc-items-container');
-                container.innerHTML = '';
-                container.appendChild(createDocItemRow()); // Add one empty row
-                document.getElementById('btn-add-doc-item').classList.remove('hidden');
-            });
+            document.getElementById('btn-add-new').addEventListener('click', () => openNewRegistryModal());
 
             // Add Doc Item Button
             document.getElementById('btn-add-doc-item').addEventListener('click', () => {
