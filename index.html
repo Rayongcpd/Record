@@ -1092,14 +1092,29 @@
                 const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
                 const dayEvents = events[dateStr] || [];
                 const isToday = isDateToday(dateStr);
+                const isHoliday = PUBLIC_HOLIDAYS.includes(dateStr);
 
                 const dayDiv = document.createElement('div');
-                dayDiv.className = `bg-white min-h-[100px] p-2 hover:bg-gray-50 transition-colors cursor-pointer border-t-2 ${isToday ? 'border-blue-500' : 'border-transparent'}`;
+
+                // Styling: Highlighting holidays
+                let borderClass = 'border-transparent';
+                if (isToday) borderClass = 'border-blue-500';
+                else if (isHoliday) borderClass = 'border-red-200 bg-red-50/30';
+
+                dayDiv.className = `bg-white min-h-[100px] p-2 hover:bg-gray-50 transition-colors cursor-pointer border-t-2 ${borderClass}`;
                 dayDiv.onclick = () => openCalendarModal(dateStr, dayEvents);
+
+                // Date Number Style
+                let dateNumberClass = 'text-gray-700';
+                if (isToday) dateNumberClass = 'text-blue-600 bg-blue-100 rounded-full w-6 h-6 flex items-center justify-center';
+                else if (isHoliday) dateNumberClass = 'text-red-600 font-bold';
 
                 let html = `
                     <div class="flex justify-between items-start mb-1">
-                        <span class="font-bold text-sm ${isToday ? 'text-blue-600 bg-blue-100 rounded-full w-6 h-6 flex items-center justify-center' : 'text-gray-700'}">${i}</span>
+                        <span class="font-bold text-sm ${dateNumberClass}">
+                            ${i} 
+                            ${isHoliday && !isToday ? '<span class="text-[10px] font-normal ml-1 bg-red-100 text-red-600 px-1 rounded">วันหยุด</span>' : ''}
+                        </span>
                         ${dayEvents.length > 0 ? `<span class="text-xs text-gray-400 font-medium">${dayEvents.length} รายการ</span>` : ''}
                     </div>
                     <div class="space-y-1">
