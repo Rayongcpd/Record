@@ -188,7 +188,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                     <!-- Left: Recent Operations (Wider) -->
                     <div class="lg:col-span-7 space-y-4">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
                             <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">
                                 <span class="bg-blue-100 p-2 rounded-lg text-blue-600">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -198,8 +198,17 @@
                                 </span>
                                 การปฏิบัติงานล่าสุด
                             </h3>
-                            <button onclick="switchView('daily-ops')"
-                                class="text-sm text-blue-600 hover:text-blue-800 font-medium hover:underline">ดูทั้งหมด</button>
+                            <div class="flex items-center gap-2">
+                                <select id="dashboard-time-filter" onchange="renderDashboard()"
+                                    class="text-sm border border-gray-300 rounded-lg px-3 py-1.5 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="all">ทั้งหมด</option>
+                                    <option value="week">สัปดาห์นี้</option>
+                                    <option value="month" selected>เดือนนี้</option>
+                                    <option value="year">ปีนี้</option>
+                                </select>
+                                <button onclick="switchView('daily-ops')"
+                                    class="text-sm text-blue-600 hover:text-blue-800 font-medium hover:underline">ดูทั้งหมด</button>
+                            </div>
                         </div>
 
                         <div id="dashboard-daily-content"
@@ -1552,24 +1561,99 @@
                 alertContainer.classList.add('hidden');
             }
 
-            // --- 2. Recent Ops (Top 5) ---
+            // --- 2. Recent Ops with Time Filter ---
+            const timeFilter = document.getElementById('dashboard-time-filter')?.value || 'month';
+
+            // Calculate filter date ranges
+            const filterStartDate = new Date(today);
+            const filterEndDate = new Date(today);
+            filterEndDate.setHours(23, 59, 59, 999);
+
+            switch (timeFilter) {
+                case 'week':
+                    // Start from Sunday of this week
+                    const dayOfWeek = today.getDay();
+                    filterStartDate.setDate(today.getDate() - dayOfWeek);
+                    filterStartDate.setHours(0, 0, 0, 0);
+                    // End at Saturday
+                    filterEndDate.setDate(filterStartDate.getDate() + 6);
+                    break;
+                case 'month':
+                    // Start from 1st of this month
+                    filterStartDate.setDate(1);
+                    filterStartDate.setHours(0, 0, 0, 0);
+                    // End at last day of month
+                    filterEndDate.setMonth(filterEndDate.getMonth() + 1, 0);
+                    break;
+                case 'year':
+                    // Start from Jan 1 of this year
+                    filterStartDate.setMonth(0, 1);
+                    filterStartDate.setHours(0, 0, 0, 0);
+                    // End at Dec 31
+                    filterEndDate.setMonth(11, 31);
+                    break;
+                case 'all':
+                default:
+                    // No filter - show all
+                    filterStartDate.setFullYear(1900);
+                    filterEndDate.setFullYear(9999);
+                    break;
+            }
+
+            // Filter and sort ops
+            const filteredOps = allDailyOps.filter(op => {
+                if (!op.date) return false;
+
+                // Parse date as YYYY-MM-DD local
+                const parts = op.date.split('-');
+                let year = parseInt(parts[0], 10);
+                const month = parseInt(parts[1], 10) - 1;
+                const day = parseInt(parts[2], 10);
+
+                // Convert Buddhist Era to CE if needed
+                if (year > 2100) {
+                    year = year - 543;
+                }
+
+                const opDate = new Date(year, month, day);
+                return opDate >= filterStartDate && opDate <= filterEndDate;
+            });
+
             // Sort by Date DESC, Time DESC
-            const sortedOps = [...allDailyOps].sort((a, b) => {
+            const sortedOps = filteredOps.sort((a, b) => {
                 if (a.date !== b.date) return new Date(b.date) - new Date(a.date);
-                return b.time.localeCompare(a.time);
-            }).slice(0, 5); // Take top 5
+                return (b.time || '').localeCompare(a.time || '');
+            }).slice(0, 10); // Take top 10 for filtered view
 
             const dailyContainer = document.getElementById('dashboard-daily-content');
+
+            // Generate filter period text
+            let filterPeriodText = '';
+            switch (timeFilter) {
+                case 'week': filterPeriodText = 'สัปดาห์นี้'; break;
+                case 'month': filterPeriodText = 'เดือนนี้'; break;
+                case 'year': filterPeriodText = 'ปีนี้'; break;
+                default: filterPeriodText = 'ทั้งหมด'; break;
+            }
+
             if (sortedOps.length === 0) {
                 dailyContainer.innerHTML = `
                     <div class="flex flex-col items-center justify-center py-12 text-gray-300">
                         <svg class="w-16 h-16 mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                        <p class="text-lg font-medium">ยังไม่มีรายการปฏิบัติงาน</p>
-                        <p class="text-sm">เริ่มบันทึกงานโดยกดปุ่ม "บันทึกงานใหม่"</p>
+                        <p class="text-lg font-medium text-gray-500">${timeFilter === 'all' ? 'ยังไม่มีรายการปฏิบัติงาน' : `ไม่มีรายการปฏิบัติงาน${filterPeriodText}`}</p>
+                        <p class="text-sm text-gray-400">${timeFilter === 'all' ? 'เริ่มบันทึกงานโดยกดปุ่ม "บันทึกงานใหม่"' : 'ลองเลือกช่วงเวลาอื่น หรือบันทึกงานใหม่'}</p>
                     </div>
                 `;
             } else {
+                // Summary info
+                const summaryInfo = filteredOps.length > 10
+                    ? `<div class="text-xs text-gray-500 mb-3 flex items-center justify-between px-2">
+                        <span>แสดง 10 จาก ${filteredOps.length} รายการ${timeFilter !== 'all' ? ` (${filterPeriodText})` : ''}</span>
+                       </div>`
+                    : (timeFilter !== 'all' ? `<div class="text-xs text-gray-500 mb-3 px-2">${filteredOps.length} รายการใน${filterPeriodText}</div>` : '');
+
                 dailyContainer.innerHTML = `
+                    ${summaryInfo}
                     <div class="space-y-3">
                         ${sortedOps.map(op => `
                             <div class="group flex items-start gap-4 p-4 bg-gray-50 hover:bg-white rounded-xl border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer" onclick='viewDailyOpDetails(${JSON.stringify(op).replace(/'/g, "&#39;")})'>
