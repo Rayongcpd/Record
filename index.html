@@ -1455,7 +1455,16 @@
                 if (!op.date) return false;
                 // Parse date purely as YYYY-MM-DD local
                 const parts = op.date.split('-');
-                const opDate = new Date(parts[0], parts[1] - 1, parts[2]); // Local midnight of the op
+                let year = parseInt(parts[0], 10);
+                const month = parseInt(parts[1], 10) - 1;
+                const day = parseInt(parts[2], 10);
+
+                // If year is in Buddhist Era (> 2100), convert to CE
+                if (year > 2100) {
+                    year = year - 543;
+                }
+
+                const opDate = new Date(year, month, day); // Local midnight of the op
 
                 // 1. Skip past dates entirely
                 if (opDate < today) return false;
