@@ -944,6 +944,9 @@
                         </span>
                     </td>
                     <td class="px-4 py-3 text-sm">
+                        <button onclick='viewDailyOpDetails(${JSON.stringify(op).replace(/'/g, "&#39;")})' class="text-gray-500 hover:text-blue-600 hover:underline mr-2" title="ดูรายละเอียด">
+                            <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        </button>
                         <button onclick='editDailyOp(${JSON.stringify(op).replace(/'/g, "&#39;")})' class="text-blue-600 hover:underline mr-2">แก้ไข</button>
                         <button onclick="deleteDailyOp('${op.id}')" class="text-red-600 hover:underline">ลบ</button>
                     </td>
@@ -980,6 +983,23 @@
 
         function closeDailyOpModal() {
             document.getElementById('daily-ops-modal').classList.add('hidden');
+        }
+
+        function viewDailyOpDetails(op) {
+            document.getElementById('view-activity').textContent = op.activity || '-';
+            document.getElementById('view-details').textContent = op.activity_details || '-';
+            document.getElementById('view-datetime').textContent = `${formatDate(op.date)} เวลา ${formatTime(op.time)} น.`;
+            document.getElementById('view-location').textContent = op.location || '-';
+
+            const statusSpan = document.getElementById('view-status');
+            statusSpan.className = `inline-block px-2 py-1 rounded text-xs font-medium ${getStatusColor(op.status)}`;
+            statusSpan.textContent = op.status;
+
+            document.getElementById('view-details-modal').classList.remove('hidden');
+        }
+
+        function closeViewDetailsModal() {
+            document.getElementById('view-details-modal').classList.add('hidden');
         }
 
         function editDailyOp(op) {
@@ -1101,7 +1121,7 @@
                 dailyContainer.innerHTML = `
                     <div class="space-y-3">
                         ${sortedOps.map(op => `
-                            <div class="group flex items-start gap-4 p-4 bg-gray-50 hover:bg-white rounded-xl border border-gray-100 hover:shadow-md transition-all duration-200">
+                            <div class="group flex items-start gap-4 p-4 bg-gray-50 hover:bg-white rounded-xl border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer" onclick='viewDailyOpDetails(${JSON.stringify(op).replace(/'/g, "&#39;")})'>
                                 <div class="flex flex-col items-center min-w-[60px]">
                                     <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">${formatDate(op.date).split('/')[1] || '-'}</div>
                                     <div class="text-xl font-bold text-gray-800">${formatDateShort(op.date).day}</div>
@@ -1110,7 +1130,12 @@
                                 <div class="flex-1 min-w-0">
                                     <div class="flex justify-between items-start">
                                         <h4 class="font-bold text-gray-800 truncate pr-2">${op.activity}</h4>
-                                        <span class="text-xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${getStatusColor(op.status)}">${op.status}</span>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${getStatusColor(op.status)}">${op.status}</span>
+                                            <button class="text-gray-400 hover:text-blue-600 transition-colors" title="ดูรายละเอียด">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="flex items-center gap-3 mt-1 text-sm text-gray-500">
                                         <div class="flex items-center gap-1">
