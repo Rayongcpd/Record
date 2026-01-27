@@ -161,6 +161,18 @@
                             ทะเบียนคุม
                         </span>
                     </button>
+                    <button onclick="switchView('calendar')"
+                        class="nav-item whitespace-nowrap border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-4 px-1 text-sm font-medium transition-colors"
+                        id="nav-calendar">
+                        <span class="flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                </path>
+                            </svg>
+                            ปฏิทิน
+                        </span>
+                    </button>
                 </div>
             </div>
         </nav>
@@ -490,6 +502,103 @@
                     <div id="summary-content" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                 </div>
             </div> <!-- End view-registry -->
+
+            <!-- CALENDAR VIEW -->
+            <div id="view-calendar" class="hidden space-y-6 animate-fade-in">
+                <div class="bg-white rounded-xl card-shadow p-6">
+                    <!-- Calendar Header -->
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                            <span class="bg-indigo-100 p-2 rounded-lg text-indigo-600">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                    </path>
+                                </svg>
+                            </span>
+                            <span id="calendar-month-year">...</span>
+                        </h2>
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeMonth(-1)"
+                                class="p-2 hover:bg-gray-100 rounded-lg text-gray-600 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                            </button>
+                            <button onclick="goToToday()"
+                                class="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-lg font-medium hover:bg-blue-100 transition-colors">
+                                วันนี้
+                            </button>
+                            <button onclick="changeMonth(1)"
+                                class="p-2 hover:bg-gray-100 rounded-lg text-gray-600 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Calendar Grid -->
+                    <div class="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden border border-gray-200">
+                        <!-- Days Header -->
+                        <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">อา.</div>
+                        <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">จ.</div>
+                        <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">อ.</div>
+                        <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">พ.</div>
+                        <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">พฤ.</div>
+                        <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">ศ.</div>
+                        <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">ส.</div>
+
+                        <!-- Calendar Days will be injected here -->
+                        <div id="calendar-grid" class="col-span-7 grid grid-cols-7 gap-px bg-gray-200">
+                            <!-- JS will populate this -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="flex flex-wrap gap-4 text-sm text-gray-600 px-2 justify-center">
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3 h-3 rounded-full bg-blue-500"></span> รับจากสหกรณ์
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3 h-3 rounded-full bg-green-500"></span> ส่งกลับสหกรณ์
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3 h-3 rounded-full bg-orange-500"></span> รับจากฝ่ายบริหาร
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3 h-3 rounded-full bg-purple-500"></span> กลุ่มเสร็จ
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3 h-3 rounded-full bg-gray-500"></span> ปฏิบัติงาน
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar Event Modal -->
+            <div id="calendar-modal" class="fixed inset-0 z-50 hidden">
+                <div class="modal-backdrop absolute inset-0" onclick="closeCalendarModal()"></div>
+                <div class="relative flex items-center justify-center min-h-full p-4">
+                    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md relative max-h-[80vh] overflow-y-auto">
+                        <div
+                            class="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 rounded-t-xl flex justify-between items-center">
+                            <h3 id="calendar-modal-date" class="font-bold text-gray-800 text-lg">รายละเอียด</h3>
+                            <button onclick="closeCalendarModal()" class="text-gray-400 hover:text-gray-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div id="calendar-modal-content" class="p-6 space-y-3">
+                            <!-- Events injected here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
 
         <!-- Daily Ops Modal -->
@@ -935,7 +1044,183 @@
                 fetchDailyOps();
             } else if (viewName === 'registry' && allRecords.length === 0) {
                 fetchAllRecords();
+            } else if (viewName === 'calendar') {
+                // Ensure both data sources are loaded for calendar
+                Promise.all([
+                    allRecords.length === 0 ? fetchAllRecords(false) : Promise.resolve(),
+                    allDailyOps.length === 0 ? fetchDailyOps(false) : Promise.resolve()
+                ]).then(() => {
+                    renderCalendar();
+                });
             }
+        }
+
+        // ==================== CALENDAR LOGIC ====================
+        let currentCalendarDate = new Date();
+
+        function renderCalendar() {
+            const date = currentCalendarDate;
+            const year = date.getFullYear();
+            const month = date.getMonth();
+
+            // Update Header
+            const thaiMonths = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+            document.getElementById('calendar-month-year').textContent = `${thaiMonths[month]} ${year + 543}`;
+
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+
+            // Days from previous month to fill start
+            const startingDay = firstDay.getDay(); // 0 = Sunday
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+
+            // Previous month days
+            for (let i = startingDay - 1; i >= 0; i--) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'bg-white min-h-[100px] p-2 text-gray-400 text-sm opacity-50';
+                dayDiv.textContent = prevMonthLastDay - i;
+                grid.appendChild(dayDiv);
+            }
+
+            // Current month days
+            const events = mapDataToEvents(year, month);
+
+            for (let i = 1; i <= lastDay.getDate(); i++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                const dayEvents = events[dateStr] || [];
+                const isToday = isDateToday(dateStr);
+
+                const dayDiv = document.createElement('div');
+                dayDiv.className = `bg-white min-h-[100px] p-2 hover:bg-gray-50 transition-colors cursor-pointer border-t-2 ${isToday ? 'border-blue-500' : 'border-transparent'}`;
+                dayDiv.onclick = () => openCalendarModal(dateStr, dayEvents);
+
+                let html = `
+                    <div class="flex justify-between items-start mb-1">
+                        <span class="font-bold text-sm ${isToday ? 'text-blue-600 bg-blue-100 rounded-full w-6 h-6 flex items-center justify-center' : 'text-gray-700'}">${i}</span>
+                        ${dayEvents.length > 0 ? `<span class="text-xs text-gray-400 font-medium">${dayEvents.length} รายการ</span>` : ''}
+                    </div>
+                    <div class="space-y-1">
+                `;
+
+                // Show max 3 events preview
+                dayEvents.slice(0, 3).forEach(event => {
+                    html += `
+                        <div class="text-[10px] truncate px-1.5 py-0.5 rounded ${event.bgColor} ${event.textColor}">
+                            ${event.title}
+                        </div>
+                    `;
+                });
+
+                if (dayEvents.length > 3) {
+                    html += `<div class="text-[10px] text-gray-500 pl-1">+ อีก ${dayEvents.length - 3} รายการ</div>`;
+                }
+
+                html += `</div>`;
+                dayDiv.innerHTML = html;
+                grid.appendChild(dayDiv);
+            }
+
+            // Next month days to fill grid (assuming 6 rows max = 42 cells)
+            const totalCells = startingDay + lastDay.getDate();
+            const remainingCells = 42 - totalCells;
+
+            for (let i = 1; i <= remainingCells; i++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'bg-white min-h-[100px] p-2 text-gray-400 text-sm opacity-50';
+                dayDiv.textContent = i;
+                grid.appendChild(dayDiv);
+            }
+        }
+
+        function mapDataToEvents(year, month) {
+            const events = {};
+
+            // 1. Map Registry Data
+            allRecords.forEach(record => {
+                // Receive from Coop (Blue)
+                if (record.receive_from_coop_date) addEvent(events, record.receive_from_coop_date, `รับ: ${record.cooperative_name}`, 'bg-blue-100', 'text-blue-700', record);
+                // Send back to Coop (Green)
+                if (record.send_back_to_coop_date) addEvent(events, record.send_back_to_coop_date, `ส่ง: ${record.cooperative_name}`, 'bg-green-100', 'text-green-700', record);
+                // Receive from Admin (Orange)
+                if (record.receive_from_admin_date) addEvent(events, record.receive_from_admin_date, `บริหาร: ${record.cooperative_name}`, 'bg-orange-100', 'text-orange-700', record);
+                // Group Complete (Purple)
+                if (record.group_complete_date) addEvent(events, record.group_complete_date, `เสร็จ: ${record.cooperative_name}`, 'bg-purple-100', 'text-purple-700', record);
+            });
+
+            // 2. Map Daily Ops Data
+            allDailyOps.forEach(op => {
+                if (op.date) {
+                    addEvent(events, op.date, `งาน: ${op.activity}`, 'bg-gray-100', 'text-gray-700', op, true);
+                }
+            });
+
+            return events;
+        }
+
+        function addEvent(eventsMap, dateStr, title, bgColor, textColor, data, isDailyOp = false) {
+            // Ensure dateStr is valid YYYY-MM-DD
+            if (!dateStr || typeof dateStr !== 'string') return;
+            const cleanDate = dateStr.split('T')[0];
+
+            if (!eventsMap[cleanDate]) {
+                eventsMap[cleanDate] = [];
+            }
+            eventsMap[cleanDate].push({
+                title,
+                bgColor,
+                textColor,
+                data,
+                isDailyOp
+            });
+        }
+
+        function isDateToday(dateStr) {
+            const today = new Date().toISOString().split('T')[0];
+            return dateStr === today;
+        }
+
+        function changeMonth(delta) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        function goToToday() {
+            currentCalendarDate = new Date();
+            renderCalendar();
+        }
+
+        function openCalendarModal(dateStr, events) {
+            if (!events || events.length === 0) return;
+
+            const date = new Date(dateStr);
+            const thaiDate = date.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('calendar-modal-date').textContent = thaiDate;
+
+            const content = document.getElementById('calendar-modal-content');
+            content.innerHTML = events.map(event => `
+                <div class="p-3 rounded-lg border border-gray-100 hover:shadow-sm transition-shadow ${event.bgColor.replace('100', '50')}">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-2 h-2 rounded-full ${event.bgColor.replace('bg-', 'bg-').replace('100', '500')}"></span>
+                        <h4 class="font-bold text-gray-800 text-sm">${event.title}</h4>
+                    </div>
+                    ${event.isDailyOp ?
+                    `<p class="text-xs text-gray-600 ml-4">${event.data.time ? formatTime(event.data.time) + ' น. ' : ''}${event.data.location || ''}</p>
+                         ${event.data.activity_details ? `<p class="text-xs text-gray-500 ml-4 mt-1 line-clamp-2">${event.data.activity_details}</p>` : ''}`
+                    :
+                    `<p class="text-xs text-gray-600 ml-4">${event.data.document_type || ''} - ${event.data.document_topic || ''}</p>
+                         <p class="text-xs text-gray-500 ml-4">สถานะ: ${event.data.status}</p>`
+                }
+                </div>
+            `).join('');
+
+            document.getElementById('calendar-modal').classList.remove('hidden');
+        }
+
+        function closeCalendarModal() {
+            document.getElementById('calendar-modal').classList.add('hidden');
         }
 
         // ==================== DAILY OPS LOGIC ====================
