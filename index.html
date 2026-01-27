@@ -1452,8 +1452,10 @@
 
             const upcomingOps = allDailyOps.filter(op => {
                 if (!op.date) return false;
-                const opDate = new Date(op.date);
-                opDate.setHours(0, 0, 0, 0);
+                // Parse date purely as YYYY-MM-DD local
+                const parts = op.date.split('-');
+                const opDate = new Date(parts[0], parts[1] - 1, parts[2]); // Local midnight
+
                 return opDate >= today && opDate <= nextWeek;
             }).sort((a, b) => new Date(a.date) - new Date(b.date));
 
@@ -1473,9 +1475,13 @@
                                 </h3>
                                 <div class="mt-2 text-sm text-orange-700 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                                     ${upcomingOps.map(op => {
-                    const opDate = new Date(op.date);
+                    // Parse date purely as YYYY-MM-DD local
+                    const parts = op.date.split('-');
+                    const opDate = new Date(parts[0], parts[1] - 1, parts[2]); // Local midnight
+
                     const diffTime = opDate - today;
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); // Use round instead of ceil for clean midnight diffs
+
                     let dayText = '';
                     if (diffDays === 0) dayText = 'วันนี้';
                     else if (diffDays === 1) dayText = 'พรุ่งนี้';
