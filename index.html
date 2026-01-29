@@ -1336,6 +1336,13 @@
             document.getElementById('daily-ops-modal').classList.add('hidden');
         }
 
+        function viewActivityById(id) {
+            const op = allDailyOps.find(o => o.id === id);
+            if (op) {
+                viewDailyOpDetails(op);
+            }
+        }
+
         function viewDailyOpDetails(op) {
             document.getElementById('view-activity').textContent = op.activity || '-';
             document.getElementById('view-details').textContent = op.activity_details || '-';
@@ -1541,7 +1548,7 @@
                     else dayText = `อีก ${diffDays} วัน`;
 
                     return `
-                                        <div class="bg-white/60 p-2 rounded border border-orange-100 flex items-center justify-between cursor-pointer hover:bg-white transition-colors" onclick='switchView("daily-ops");'>
+                                        <div class="bg-white/60 p-2 rounded border border-orange-100 flex items-center justify-between cursor-pointer hover:bg-white transition-colors" onclick="viewActivityById('${op.id}')">
                                             <div class="truncate pr-2">
                                                 <span class="font-bold mr-1">[${dayText}]</span>
                                                 ${op.activity}
