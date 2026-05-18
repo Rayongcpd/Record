@@ -717,6 +717,17 @@
                             </select>
                         </div>
 
+                        <!-- มอบหมายให้ (เฉพาะ Admin) -->
+                        <div id="daily-assigned-container" class="hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                👤 มอบหมายให้ <span class="text-xs text-gray-500 font-normal">(เฉพาะ Admin)</span>
+                            </label>
+                            <select id="daily-assigned-to"
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">-- เลือกเจ้าหน้าที่ --</option>
+                            </select>
+                        </div>
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">หมายเหตุ</label>
                             <textarea id="daily-notes" rows="2"
@@ -831,6 +842,17 @@
                                 <option value="รอดำเนินการ">รอดำเนินการ</option>
                                 <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
                                 <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
+                            </select>
+                        </div>
+
+                        <!-- มอบหมายให้ (เฉพาะ Admin) -->
+                        <div id="registry-assigned-container" class="hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                👤 มอบหมายให้ <span class="text-xs text-gray-500 font-normal">(เฉพาะ Admin)</span>
+                            </label>
+                            <select id="input-assigned-to"
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">-- เลือกเจ้าหน้าที่ --</option>
                             </select>
                         </div>
 
@@ -1114,6 +1136,7 @@
         let currentUser = null;
         let allUsers = [];
         let isUserEditing = false;
+        let staffList = []; // รายชื่อเจ้าหน้าที่สำหรับ Dropdown
 
         // Pagination state
         let currentPage = 1;
@@ -1371,6 +1394,11 @@
 
         // ==================== DAILY OPS LOGIC ====================
 
+        function filterByCurrentUser(records) {
+            if (!currentUser || currentUser.role === 'admin') return records;
+            return records.filter(r => r.created_by === currentUser.email || r.assigned_to === currentUser.email);
+        }
+
         async function fetchDailyOps(showLoadingState = true) {
             try {
                 if (showLoadingState) showLoading(true);
@@ -1379,7 +1407,7 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    allDailyOps = result.data;
+                    allDailyOps = filterByCurrentUser(result.data);
                     renderDailyOpsTable();
                     renderDashboard(); // Refresh dashboard if data changed
                 } else {
@@ -1455,14 +1483,17 @@
 
             // Set default date/time
             const now = new Date();
-            // Use provided dateStr or Today
             document.getElementById('daily-date').value = dateStr || now.toISOString().split('T')[0];
-
-            // Format HH:mm
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             document.getElementById('daily-time').value = `${hours}:${minutes}`;
             document.getElementById('daily-details').value = '';
+
+            // Show assigned_to field for Admin, default to self
+            showAssignedToField(currentUser && currentUser.role === 'admin');
+            if (currentUser && currentUser.role === 'admin') {
+                document.getElementById('daily-assigned-to').value = currentUser.email;
+            }
 
             document.getElementById('daily-ops-modal').classList.remove('hidden');
         }
@@ -1506,6 +1537,13 @@
             document.getElementById('daily-location').value = op.location;
             document.getElementById('daily-status').value = op.status;
             document.getElementById('daily-notes').value = op.notes || '';
+            
+            // Show assigned_to field for Admin
+            showAssignedToField(currentUser && currentUser.role === 'admin');
+            if (currentUser && currentUser.role === 'admin') {
+                document.getElementById('daily-assigned-to').value = op.assigned_to || op.created_by || '';
+            }
+            
             document.getElementById('daily-ops-modal').classList.remove('hidden');
         }
 
@@ -1515,6 +1553,7 @@
             btn.disabled = true;
             btn.textContent = 'กำลงบันทึก...';
 
+            const dailyAssignedEl = document.getElementById('daily-assigned-to');
             const record = {
                 id: document.getElementById('daily-id').value,
                 date: document.getElementById('daily-date').value,
@@ -1523,7 +1562,8 @@
                 activity_details: document.getElementById('daily-details').value,
                 location: document.getElementById('daily-location').value,
                 status: document.getElementById('daily-status').value,
-                notes: document.getElementById('daily-notes').value
+                notes: document.getElementById('daily-notes').value,
+                assigned_to: dailyAssignedEl ? dailyAssignedEl.value : (currentUser ? currentUser.email : '')
             };
 
             const action = isDailyEditing ? 'updateDailyOp' : 'createDailyOp';
@@ -2109,7 +2149,7 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    allRecords = result.data;
+                    allRecords = filterByCurrentUser(result.data);
                     applyFiltersAndRender();
                     updateSummary();
                 } else {
@@ -2257,6 +2297,12 @@
                 document.getElementById('input-receive-coop').value = dateStr;
             }
 
+            // Show assigned_to field for Admin, default to self
+            showAssignedToField(currentUser && currentUser.role === 'admin');
+            if (currentUser && currentUser.role === 'admin') {
+                document.getElementById('input-assigned-to').value = currentUser.email;
+            }
+
             showModal();
 
             // Initialize Doc Items for New Record
@@ -2336,6 +2382,7 @@
 
             try {
                 // Initialize common record data
+                const assignedToEl = document.getElementById('input-assigned-to');
                 const baseRecordData = {
                     cooperative_name: coopName,
                     receive_from_coop_date: document.getElementById('input-receive-coop').value || '',
@@ -2343,7 +2390,8 @@
                     receive_from_admin_date: document.getElementById('input-receive-admin').value || '',
                     group_complete_date: document.getElementById('input-group-complete').value || '',
                     status: document.getElementById('input-status').value,
-                    notes: document.getElementById('input-notes').value.trim()
+                    notes: document.getElementById('input-notes').value.trim(),
+                    assigned_to: assignedToEl ? assignedToEl.value : (currentUser ? currentUser.email : '')
                 };
 
                 // Gather Document Items
@@ -2453,6 +2501,12 @@
             document.getElementById('modal-title').textContent = 'แก้ไขรายการ';
             document.getElementById('record-id').value = record.id;
             document.getElementById('input-coop-name').value = record.cooperative_name || '';
+            
+            // Show assigned_to field for Admin
+            showAssignedToField(currentUser && currentUser.role === 'admin');
+            if (currentUser && currentUser.role === 'admin') {
+                document.getElementById('input-assigned-to').value = record.assigned_to || record.created_by || '';
+            }
 
             // Setup Doc Items for Edit
             const container = document.getElementById('doc-items-container');
@@ -2675,6 +2729,13 @@
             <td class="px-4 py-3 text-sm text-center font-semibold ${groupDays !== null ? 'text-green-600' : 'text-gray-400'}">${groupDays !== null ? groupDays + ' วัน' : '-'}</td>
             <td class="px-4 py-3 text-sm">
               <span class="px-2 py-1 rounded text-xs font-medium whitespace-nowrap ${statusClass} shadow-sm border border-opacity-20 border-gray-400">${record.status || '-'}</span>
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-600">
+                ${record.assigned_to && record.assigned_to !== record.created_by ? `
+                    <span class="text-xs bg-indigo-50 text-indigo-700 px-2 py-1 rounded border border-indigo-200">
+                        ${getStaffName(record.assigned_to)}
+                    </span>
+                ` : '<span class="text-xs text-gray-400">-</span>'}
             </td>
             <td class="px-4 py-3 text-sm">
                 ${record.attachment_file_url ?
@@ -2972,7 +3033,44 @@
         function canManage(record) {
             if (!currentUser) return false;
             if (currentUser.role === 'admin') return true;
-            return record.created_by === currentUser.email;
+            return record.created_by === currentUser.email || record.assigned_to === currentUser.email;
+        }
+
+        async function loadStaffList() {
+            if (!currentUser || currentUser.role !== 'admin') return;
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    body: JSON.stringify({ action: 'getUsers', currentUser })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    staffList = result.data;
+                    populateStaffDropdowns();
+                }
+            } catch (error) {
+                console.error('Error loading staff list:', error);
+            }
+        }
+
+        function populateStaffDropdowns() {
+            const registrySelect = document.getElementById('input-assigned-to');
+            const dailySelect = document.getElementById('daily-assigned-to');
+            
+            if (!registrySelect || !dailySelect) return;
+            
+            const options = staffList.map(u => `<option value="${u.email}">${u.name || u.email}</option>`).join('');
+            
+            registrySelect.innerHTML = '<option value="">-- เลือกเจ้าหน้าที่ --</option>' + options;
+            dailySelect.innerHTML = '<option value="">-- เลือกเจ้าหน้าที่ --</option>' + options;
+        }
+
+        function showAssignedToField(show) {
+            const registryContainer = document.getElementById('registry-assigned-container');
+            const dailyContainer = document.getElementById('daily-assigned-container');
+            if (registryContainer) registryContainer.classList.toggle('hidden', !show);
+            if (dailyContainer) dailyContainer.classList.toggle('hidden', !show);
         }
 
         async function login(e) {
@@ -3201,6 +3299,7 @@
         async function initAppData() {
             setupEventListeners();
             initCoopNamesList();
+            await loadStaffList(); // โหลดรายชื่อเจ้าหน้าที่สำหรับ Dropdown
             await Promise.all([
                 fetchAllRecords(),
                 fetchDailyOps()
