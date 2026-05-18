@@ -474,26 +474,43 @@
                                     class="border border-gray-300 rounded px-2 py-1 text-sm">
                             </div>
                             <div class="overflow-x-auto">
-                                <table class="w-full">
-                                    <thead class="bg-gray-50">
+                                <table class="w-full table-auto border-collapse">
+                                    <thead class="bg-slate-50 border-b border-slate-200">
                                         <tr>
-                                            <th class="px-4 py-3 text-left text-sm text-gray-600 font-medium">เวลา</th>
-                                            <th class="px-4 py-3 text-left text-sm text-gray-600 font-medium">กิจกรรม
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-sm text-gray-600 font-medium">สถานที่
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-sm text-gray-600 font-medium">สถานะ</th>
-                                            <th class="px-4 py-3 text-left text-sm text-gray-600 font-medium">จัดการ
-                                            </th>
+                                            <th class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[40px]"></th>
+                                            <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[150px]">เวลา & วันที่</th>
+                                            <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">กิจกรรม</th>
+                                            <th class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider w-[120px]">สถานะ</th>
+                                            <th class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider w-[120px]">จัดการ</th>
                                         </tr>
                                     </thead>
                                     <tbody id="daily-ops-table-body" class="divide-y divide-gray-100">
                                         <tr>
-                                            <td colspan="5" class="p-4 text-center text-gray-500">
-                                                เลือกวันที่เพื่อดูข้อมูล</td>
+                                            <td colspan="5" class="px-4 py-12 text-center text-gray-500">
+                                                <p>เลือกวันที่เพื่อดูข้อมูลปฏิบัติงาน</p>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
+                            </div>
+                            <!-- Daily Ops Pagination: แถบเปลี่ยนหน้ารายงานสว่างสไตล์ Claude -->
+                            <div id="daily-pagination-container" class="px-4 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-4">
+                                <div class="text-xs text-gray-500 font-medium" id="daily-pagination-info">
+                                    แสดงรายการ 0 จาก 0
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button id="btn-daily-prev" onclick="changeDailyPage(-1)"
+                                        class="px-2.5 py-1.5 border border-[#E8E7E1] rounded-lg hover:bg-white text-xs font-semibold text-gray-600 bg-white/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                        ก่อนหน้า
+                                    </button>
+                                    <span class="text-xs font-bold text-gray-700">
+                                        หน้า <span id="daily-current-page">1</span> / <span id="daily-total-pages">1</span>
+                                    </span>
+                                    <button id="btn-daily-next" onclick="changeDailyPage(1)"
+                                        class="px-2.5 py-1.5 border border-[#E8E7E1] rounded-lg hover:bg-white text-xs font-semibold text-gray-600 bg-white/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                        ถัดไป
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1570,6 +1587,32 @@
             }
         }
 
+        let dailyCurrentPage = 1;
+        const dailyPageSize = 5;
+
+        function changeDailyPage(direction) {
+            dailyCurrentPage += direction;
+            renderDailyOpsTable();
+        }
+
+        function toggleDailyRowDetails(id) {
+            const detailRow = document.getElementById(`daily-detail-row-${id}`);
+            const arrow = document.getElementById(`daily-arrow-${id}`);
+            const mainRow = document.getElementById(`daily-main-row-${id}`);
+            if (detailRow && arrow) {
+                const isOpen = !detailRow.classList.contains('hidden');
+                if (isOpen) {
+                    detailRow.classList.add('hidden');
+                    arrow.classList.remove('rotate-90');
+                    if (mainRow) mainRow.classList.remove('bg-[#FAF9F6]/80');
+                } else {
+                    detailRow.classList.remove('hidden');
+                    arrow.classList.add('rotate-90');
+                    if (mainRow) mainRow.classList.add('bg-[#FAF9F6]/80');
+                }
+            }
+        }
+
         function renderDailyOpsTable() {
             const tbody = document.getElementById('daily-ops-table-body');
             const filterDate = document.getElementById('daily-filter-date').value;
@@ -1585,32 +1628,93 @@
                 return b.time.localeCompare(a.time);
             });
 
-            if (displayData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-500">ไม่พบข้อมูล</td></tr>`;
+            const totalDailyPages = Math.ceil(displayData.length / dailyPageSize) || 1;
+            if (dailyCurrentPage > totalDailyPages) dailyCurrentPage = totalDailyPages;
+
+            const startIndex = (dailyCurrentPage - 1) * dailyPageSize;
+            const paginatedData = displayData.slice(startIndex, startIndex + dailyPageSize);
+
+            // อัปเดตแถบ Pagination
+            document.getElementById('daily-pagination-info').innerText = `แสดงรายการ ${displayData.length > 0 ? startIndex + 1 : 0}-${Math.min(startIndex + dailyPageSize, displayData.length)} จาก ${displayData.length}`;
+            document.getElementById('daily-current-page').innerText = dailyCurrentPage;
+            document.getElementById('daily-total-pages').innerText = totalDailyPages;
+            document.getElementById('btn-daily-prev').disabled = dailyCurrentPage === 1;
+            document.getElementById('btn-daily-next').disabled = dailyCurrentPage === totalDailyPages;
+
+            if (paginatedData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-12 text-center text-gray-500">ไม่พบข้อมูลปฏิบัติงาน</td></tr>`;
                 return;
             }
 
-            tbody.innerHTML = displayData.map(op => `
-                <tr class="hover:bg-gray-50">
-                    <td class="px-4 py-3 text-sm text-gray-800">
-                        <div class="font-medium">${formatDate(op.date)}</div>
-                        <div class="text-xs text-gray-500">${formatTime(op.time)}</div>
+            tbody.innerHTML = paginatedData.map(op => `
+                <!-- Main Row: คลิกแถวเพื่อเปิด-ปิดรายละเอียด -->
+                <tr class="hover:bg-slate-50/80 cursor-pointer transition-colors" onclick="toggleDailyRowDetails('${op.id}')" id="daily-main-row-${op.id}">
+                    <td class="px-4 py-3 text-center text-gray-400 w-[40px]">
+                      <svg id="daily-arrow-${op.id}" class="w-4 h-4 mx-auto transform transition-transform duration-200 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
                     </td>
-                    <td class="px-4 py-3 text-sm text-gray-800">${op.activity}</td>
-                    <td class="px-4 py-3 text-sm text-gray-600">${op.location}</td>
-                    <td class="px-4 py-3 text-sm">
-                        <span class="px-2 py-1 rounded text-xs font-medium ${getStatusColor(op.status)}">
+                    <td class="px-4 py-3 text-sm text-gray-800 whitespace-nowrap">
+                        <div class="font-semibold text-gray-700">${formatTime(op.time)}</div>
+                        <div class="text-xs text-gray-400 mt-0.5">${formatDate(op.date)}</div>
+                    </td>
+                    <td class="px-4 py-3 text-sm font-medium text-gray-800 break-words whitespace-normal">${op.activity}</td>
+                    <td class="px-4 py-3 text-sm text-center">
+                        <span class="px-2.5 py-1 rounded text-xs font-semibold ${getStatusColor(op.status)} shadow-sm border border-opacity-10 border-gray-400 whitespace-nowrap">
                             ${op.status}
                         </span>
                     </td>
-                    <td class="px-4 py-3 text-sm">
-                        <button onclick='viewDailyOpDetails(${JSON.stringify(op).replace(/'/g, "&#39;")})' class="text-gray-500 hover:text-blue-600 hover:underline mr-2" title="ดูรายละเอียด">
-                            <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                        </button>
-                        ${canManage(op) ? `
-                        <button onclick='editDailyOp(${JSON.stringify(op).replace(/'/g, "&#39;")})' class="text-blue-600 hover:underline mr-2">แก้ไข</button>
-                        <button onclick="deleteDailyOp('${op.id}')" class="text-red-600 hover:underline">ลบ</button>
-                        ` : ''}
+                    <td class="px-4 py-3 text-sm text-center" onclick="event.stopPropagation()">
+                        <div class="flex gap-1 justify-center">
+                            <button onclick='viewDailyOpDetails(${JSON.stringify(op).replace(/'/g, "&#39;")})' class="p-1.5 text-gray-500 hover:bg-slate-200 rounded transition-colors bg-white/50" title="ดูรายละเอียด">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            </button>
+                            ${canManage(op) ? `
+                            <button onclick='editDailyOp(${JSON.stringify(op).replace(/'/g, "&#39;")})' class="p-1.5 text-blue-600 hover:bg-blue-200 rounded transition-colors bg-white/50" title="แก้ไข">
+                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                              </svg>
+                            </button>
+                            <button onclick="deleteDailyOp('${op.id}')" class="p-1.5 text-red-600 hover:bg-red-200 rounded transition-colors bg-white/50" title="ลบ">
+                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                              </svg>
+                            </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Detail Row: ข้อมูลสถานที่และโน้ตปฏิบัติงานสไตล์ Claude -->
+                <tr id="daily-detail-row-${op.id}" class="hidden bg-[#FAF9F6]/40 transition-all duration-300">
+                    <td colspan="5" class="px-6 py-4 border-b border-[#E8E7E1] bg-[#FAF9F6]/20">
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                        <!-- Location Info -->
+                        <div class="bg-white p-4 rounded-xl border border-[#E8E7E1] space-y-2.5 shadow-sm">
+                          <h4 class="font-bold text-gray-700 flex items-center gap-2 text-xs uppercase tracking-wider">
+                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            สถานที่ปฏิบัติงาน
+                          </h4>
+                          <p class="text-xs text-gray-600 leading-relaxed font-medium bg-[#FAF9F6] p-2.5 rounded-lg border border-gray-100">
+                            ${op.location || '-'}
+                          </p>
+                        </div>
+
+                        <!-- Notes / Details Info -->
+                        <div class="bg-white p-4 rounded-xl border border-[#E8E7E1] space-y-2.5 shadow-sm">
+                          <h4 class="font-bold text-gray-700 flex items-center gap-2 text-xs uppercase tracking-wider">
+                            <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            รายละเอียด / บันทึกเพิ่มเติม
+                          </h4>
+                          <p class="text-xs text-gray-600 leading-relaxed font-medium bg-[#FAF9F6] p-2.5 rounded-lg border border-gray-100 whitespace-pre-line">
+                            ${op.details || 'ไม่มีรายละเอียดเพิ่มเติม'}
+                          </p>
+                        </div>
+                      </div>
+                      <div class="mt-4 flex justify-between items-center text-[10px] text-gray-400 font-medium px-1">
+                        <span>บันทึกโดย: ${getStaffName(op.assigned_to || op.created_by)}</span>
+                        <span>รหัสปฏิบัติงาน: ${op.id}</span>
+                      </div>
                     </td>
                 </tr>
             `).join('');
@@ -3148,7 +3252,10 @@
             document.getElementById('btn-clear-filter').addEventListener('click', clearFilters);
 
             // Daily Ops Filters
-            document.getElementById('daily-filter-date').addEventListener('change', renderDailyOpsTable);
+            document.getElementById('daily-filter-date').addEventListener('change', () => {
+                dailyCurrentPage = 1;
+                renderDailyOpsTable();
+            });
 
             // Pagination
             document.getElementById('page-size').addEventListener('change', (e) => changePageSize(e.target.value));
