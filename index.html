@@ -366,19 +366,6 @@
                             <h1 id="topbar-title" class="text-base md:text-lg font-bold text-gray-800 leading-tight">หน้าหลัก</h1>
                         </div>
                     </div>
-
-                    <!-- User Profile & Info (Desktop เท่านั้น) -->
-                    <div class="hidden lg:flex items-center gap-4">
-                        <div class="text-right">
-                            <div class="text-sm font-semibold text-gray-800" id="user-name-display">-</div>
-                            <div class="text-xs text-gray-500 font-medium mt-0.5" id="user-role-display">-</div>
-                        </div>
-                        <div class="h-8 w-px bg-[#E8E7E1]"></div>
-                        <button onclick="logout()" class="text-xs font-semibold text-gray-600 hover:text-red-600 bg-white border border-[#E8E7E1] hover:border-red-100 hover:bg-red-50 px-3 py-2 rounded-xl transition-all flex items-center gap-1.5">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                            ออกจากระบบ
-                        </button>
-                    </div>
                 </header>
 
                 <!-- Scrollable Main Workspace Area -->
@@ -570,22 +557,15 @@
                 <!-- Table -->
                 <div class="bg-white rounded-xl card-shadow overflow-hidden">
                     <div class="overflow-x-auto">
-                        <table class="w-full min-w-[1550px] table-auto border-collapse">
+                        <table class="w-full table-auto border-collapse">
                             <thead class="bg-slate-50 border-b border-slate-200">
                                 <tr>
+                                    <th class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[40px]"></th>
                                     <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[60px]">ลำดับ</th>
-                                    <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap min-w-[280px]">ชื่อสหกรณ์</th>
+                                    <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap min-w-[200px] max-w-[350px]">ชื่อสหกรณ์</th>
                                     <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[100px]">ประเภท</th>
-                                    <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap min-w-[250px]">หัวข้อ</th>
-                                    <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">รับจากสหกรณ์</th>
-                                    <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">สนง.ดำเนินการเสร็จ</th>
-                                    <th class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[115px]">วันทำการ (สหกรณ์)</th>
-                                    <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">รับจากฝ่ายบริหาร</th>
-                                    <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">กลุ่มดำเนินการเสร็จ</th>
-                                    <th class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[115px]">วันทำการ (กลุ่ม)</th>
-                                    <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[110px]">สถานะ</th>
-                                    <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[150px]">ผู้รับผิดชอบ</th>
-                                    <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[100px]">ไฟล์แนบ</th>
+                                    <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">หัวข้อ</th>
+                                    <th class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[110px]">สถานะ</th>
                                     <th class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[100px]">จัดการ</th>
                                 </tr>
                             </thead>
@@ -2898,41 +2878,25 @@
                     `<span class="text-gray-400 text-xs">-</span>`;
 
                 return `
-          <tr class="table-row ${rowClass} transition-colors" data-id="${record.id}">
+          <!-- Main Row: คลิกแถวเพื่อเปิด-ปิดรายละเอียดได้ -->
+          <tr class="table-row ${rowClass} cursor-pointer hover:bg-slate-50/80 transition-colors" onclick="toggleRowDetails('${record.id}')" id="main-row-${record.id}">
+            <td class="px-4 py-3 text-center text-gray-400 w-[40px]">
+              <svg id="arrow-${record.id}" class="w-4 h-4 mx-auto transform transition-transform duration-200 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </td>
             <td class="px-4 py-3 text-sm text-gray-600">${startIndex + index + 1}</td>
-            <td class="px-4 py-3 text-sm font-medium text-gray-800 min-w-[280px] break-words whitespace-normal">${record.cooperative_name || '-'}</td>
+            <td class="px-4 py-3 text-sm font-medium text-gray-800 min-w-[200px] max-w-[350px] break-words whitespace-normal">${record.cooperative_name || '-'}</td>
             <td class="px-4 py-3 text-sm">
               <span class="px-2 py-1 rounded text-xs font-medium whitespace-nowrap ${record.document_type === 'ระเบียบ' ? 'bg-white text-blue-700 border border-blue-200' : 'bg-white text-purple-700 border border-purple-200'}">
                 ${record.document_type || '-'}
               </span>
             </td>
-            <td class="px-4 py-3 text-sm text-gray-600 min-w-[250px] break-words whitespace-normal">${record.document_topic || '-'}</td>
-            <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">${formatDate(record.receive_from_coop_date)}</td>
-            <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">${formatDate(record.send_back_to_coop_date)}</td>
-            <td class="px-4 py-3 text-sm text-center">${coopDaysBadge}</td>
-            <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">${formatDate(record.receive_from_admin_date)}</td>
-            <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">${formatDate(record.group_complete_date)}</td>
-            <td class="px-4 py-3 text-sm text-center">${groupDaysBadge}</td>
-            <td class="px-4 py-3 text-sm">
+            <td class="px-4 py-3 text-sm text-gray-600 break-words whitespace-normal">${record.document_topic || '-'}</td>
+            <td class="px-4 py-3 text-sm text-center">
               <span class="px-2 py-1 rounded text-xs font-medium whitespace-nowrap ${statusClass} shadow-sm border border-opacity-20 border-gray-400">${record.status || '-'}</span>
             </td>
-            <td class="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">
-                ${record.assigned_to && record.assigned_to !== record.created_by ? `
-                    <span class="text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-md border border-indigo-200 font-medium">
-                        ${getStaffName(record.assigned_to)}
-                    </span>
-                ` : '<span class="text-xs text-gray-400">-</span>'}
-            </td>
-            <td class="px-4 py-3 text-sm whitespace-nowrap">
-                ${record.attachment_file_url ?
-                        `<a href="${record.attachment_file_url}" target="_blank" class="text-blue-600 hover:text-blue-800 inline-flex items-center gap-1 group font-medium">
-                        <svg class="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
-                        เปิดไฟล์
-                    </a>` :
-                        '<span class="text-gray-400 text-xs">-</span>'
-                    }
-            </td>
-            <td class="px-4 py-3 text-sm">
+            <td class="px-4 py-3 text-sm text-center" onclick="event.stopPropagation()">
               <div class="flex gap-1 justify-center">
                 ${canManage(record) ? `
                 <button onclick="editRecord(allRecords.find(r => r.id === '${record.id}'))" class="p-1.5 text-blue-600 hover:bg-blue-200 rounded transition-colors bg-white/50" title="แก้ไข">
@@ -2949,8 +2913,109 @@
               </div>
             </td>
           </tr>
+
+          <!-- Detail Row: แถวย่อยซ่อนคอลัมน์และขยายเพื่อแสดงข้อมูลทั้งหมดได้อย่างเรียบร้อย -->
+          <tr id="detail-row-${record.id}" class="hidden bg-[#FAF9F6]/40 transition-all duration-300">
+            <td colspan="7" class="px-6 py-4 border-b border-[#E8E7E1] bg-[#FAF9F6]/20">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+                <!-- Coop Step Details -->
+                <div class="bg-white p-4 rounded-xl border border-[#E8E7E1] space-y-3 shadow-sm">
+                  <h4 class="font-bold text-gray-700 flex items-center gap-2 text-xs uppercase tracking-wider">
+                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                    ขั้นตอนระดับสหกรณ์ / สนง.
+                  </h4>
+                  <div class="space-y-2 text-xs">
+                    <div class="flex justify-between border-b border-gray-50 pb-1.5">
+                      <span class="text-gray-500">วันที่รับจากสหกรณ์:</span>
+                      <span class="font-medium text-gray-800">${formatDate(record.receive_from_coop_date)}</span>
+                    </div>
+                    <div class="flex justify-between border-b border-gray-50 pb-1.5">
+                      <span class="text-gray-500">สนง. ดำเนินการเสร็จ:</span>
+                      <span class="font-medium text-gray-800">${formatDate(record.send_back_to_coop_date)}</span>
+                    </div>
+                    <div class="flex justify-between pt-1">
+                      <span class="text-gray-500 font-medium">รวมระยะเวลาวันทำการ:</span>
+                      <span>${coopDaysBadge}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Group Step Details -->
+                <div class="bg-white p-4 rounded-xl border border-[#E8E7E1] space-y-3 shadow-sm">
+                  <h4 class="font-bold text-gray-700 flex items-center gap-2 text-xs uppercase tracking-wider">
+                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                    ขั้นตอนระดับกลุ่มจัดตั้งฯ
+                  </h4>
+                  <div class="space-y-2 text-xs">
+                    <div class="flex justify-between border-b border-gray-50 pb-1.5">
+                      <span class="text-gray-500">วันที่รับจากฝ่ายบริหาร:</span>
+                      <span class="font-medium text-gray-800">${formatDate(record.receive_from_admin_date)}</span>
+                    </div>
+                    <div class="flex justify-between border-b border-gray-50 pb-1.5">
+                      <span class="text-gray-500">กลุ่มดำเนินการเสร็จ:</span>
+                      <span class="font-medium text-gray-800">${formatDate(record.group_complete_date)}</span>
+                    </div>
+                    <div class="flex justify-between pt-1">
+                      <span class="text-gray-500 font-medium">รวมระยะเวลาวันทำการ:</span>
+                      <span>${groupDaysBadge}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Staff & Attachments -->
+                <div class="bg-white p-4 rounded-xl border border-[#E8E7E1] space-y-3 shadow-sm">
+                  <h4 class="font-bold text-gray-700 flex items-center gap-2 text-xs uppercase tracking-wider">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                    ผู้รับผิดชอบ & เอกสารแนบ
+                  </h4>
+                  <div class="space-y-3 text-xs">
+                    <div class="flex items-center justify-between border-b border-gray-50 pb-1.5">
+                      <span class="text-gray-500">ผู้รับผิดชอบ:</span>
+                      <span>
+                        ${record.assigned_to && record.assigned_to !== record.created_by ? `
+                            <span class="text-xs bg-[#FAF5EE] text-[#AE7C43] px-2 py-0.5 rounded border border-[#E8E7E1] font-semibold">
+                                ${getStaffName(record.assigned_to)}
+                            </span>
+                        ` : '<span class="text-gray-400 font-medium">-</span>'}
+                      </span>
+                    </div>
+                    <div class="flex items-center justify-between pt-1">
+                      <span class="text-gray-500">เอกสารไฟล์แนบ:</span>
+                      <span>
+                        ${record.attachment_file_url ?
+                            `<a href="${record.attachment_file_url}" target="_blank" class="text-[#AE7C43] hover:text-[#9C7844] inline-flex items-center gap-1 font-semibold group transition-colors">
+                              <svg class="w-3.5 h-3.5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                              เปิดไฟล์แนบ
+                            </a>` :
+                            '<span class="text-gray-400 font-medium">-</span>'
+                        }
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
                     `;
             }).join('');
+        }
+
+        function toggleRowDetails(id) {
+            const detailRow = document.getElementById(`detail-row-${id}`);
+            const arrow = document.getElementById(`arrow-${id}`);
+            const mainRow = document.getElementById(`main-row-${id}`);
+            if (detailRow && arrow) {
+                const isOpen = !detailRow.classList.contains('hidden');
+                if (isOpen) {
+                    detailRow.classList.add('hidden');
+                    arrow.classList.remove('rotate-90');
+                    if (mainRow) mainRow.classList.remove('bg-[#FAF9F6]/80');
+                } else {
+                    detailRow.classList.remove('hidden');
+                    arrow.classList.add('rotate-90');
+                    if (mainRow) mainRow.classList.add('bg-[#FAF9F6]/80');
+                }
+            }
         }
 
 
