@@ -1,6 +1,6 @@
 # ระบบทะเบียนคุมระเบียบข้อบังคับสหกรณ์
 
-> ระบบบันทึกและติดตามระเบียบ/ข้อบังคับของสหกรณ์ พร้อมการคำนวณวันทำการอัตโนมัติ
+> ระบบบันทึกและติดตามระเบียบ/ข้อบังคับของสหกรณ์ พร้อมระบบจัดการผู้ใช้ (Admin/User)
 
 ## ✨ ฟีเจอร์หลัก
 
@@ -8,39 +8,82 @@
 - 📅 นับวันทำการอัตโนมัติ (ไม่นับเสาร์-อาทิตย์ และวันหยุดราชการไทย)
 - 📊 สรุปทะเบียนคุมจัดกลุ่มตามสหกรณ์
 - 🔍 กรองข้อมูลตามชื่อ, ประเภท, สถานะ
+- 🔐 **ระบบ Login** (Email + Password)
+- 👤 **แยกข้อมูลตามผู้ใช้** — User เห็นเฉพาะข้อมูลตัวเอง, Admin เห็นทั้งหมด
+- ⚙️ **จัดการผู้ใช้** — Admin เพิ่ม/ลบ/แก้ไขผู้ใช้ได้เอง
 
-## 🚀 วิธีติดตั้ง
+## 🚀 วิธีติดตั้ง (สำหรับระบบใหม่)
 
-### ขั้นตอนที่ 1: ตั้งค่า SCRIPT_URL
+### ขั้นตอนที่ 1: ตั้งค่า Google Apps Script
+
+1. สร้าง Google Sheet ใหม่
+2. ไปที่ **Extensions → Apps Script**
+3. แทนที่โค้ดทั้งหมดด้วยไฟล์ `Code.gs`
+4. กด **Run → setupSheet()** (ครั้งแรกเท่านั้น)
+5. กด **Deploy → New deployment → Web app**
+   - Execute as: **Me**
+   - Who has access: **Anyone**
+6. คัดลอก Web App URL ไว้
+
+### ขั้นตอนที่ 2: ตั้งค่า Frontend
 
 1. เปิดไฟล์ `index.html`
 2. แก้ไขบรรทัด:
    ```javascript
    const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
    ```
-3. เปลี่ยนเป็น URL ของ Google Apps Script Web App
+3. เปลี่ยนเป็น URL จากขั้นตอนที่ 1
 
-### ขั้นตอนที่ 2: Push ขึ้น GitHub
+### ขั้นตอนที่ 3: Push ขึ้น GitHub Pages
 
-ใช้ GitHub Desktop:
-1. Clone repository นี้
-2. แก้ไข SCRIPT_URL
-3. Commit & Push
+1. Push โค้ดขึ้น GitHub Repository
+2. ไปที่ **Settings → Pages**
+3. เลือก Branch: `main` → Folder: `/ (root)` → Save
 
-### ขั้นตอนที่ 3: เปิด GitHub Pages
+## 🔄 วิธีอัปเกรด (จากระบบเดิม)
 
-1. ไปที่ Settings → Pages
-2. เลือก Branch: main
-3. เลือก Folder: / (root)
-4. Save
+หากมีข้อมูลอยู่แล้วใน Google Sheets:
+
+1. แทนที่โค้ด `Code.gs` ด้วยเวอร์ชันใหม่
+2. กด **Run → checkAndFixHeaders()** เพื่อเพิ่มคอลัมน์ `created_by`, `created_by_name`, `updated_by` โดยอัตโนมัติ
+3. กด **Run → setupSheet()** เพื่อสร้าง Sheet `Users` และ Admin เริ่มต้น
+4. Deploy ใหม่แล้วแก้ไข `SCRIPT_URL` ใน `index.html`
+
+## 🔐 ข้อมูลเข้าสู่ระบบเริ่มต้น
+
+| บัญชี | รหัสผ่าน | สิทธิ์ |
+|-------|----------|--------|
+| admin | admin123 | Admin |
+
+> ⚠️ **สำคัญ:** กรุณาเปลี่ยนรหัสผ่าน Admin หลังจากเข้าสู่ระบบครั้งแรก (ผ่านเมนู "จัดการผู้ใช้")
+
+## 👤 สิทธิ์ผู้ใช้
+
+| ฟีเจอร์ | Admin | User |
+|---------|-------|------|
+| เห็นข้อมูลทั้งหมด | ✅ | ❌ (เฉพาะของตัวเอง) |
+| เพิ่ม/แก้ไข/ลบข้อมูลตัวเอง | ✅ | ✅ |
+| แก้ไข/ลบข้อมูลคนอื่น | ✅ | ❌ |
+| จัดการผู้ใช้งาน | ✅ | ❌ |
+| ดู Dashboard/ปฏิทิน | ✅ | ✅ (เฉพาะของตัวเอง) |
 
 ## 📁 โครงสร้างไฟล์
 
 ```
-github-pages/
-├── index.html    # หน้าเว็บหลัก
-└── README.md     # ไฟล์นี้
+├── Code.gs          # Backend (Google Apps Script)
+├── Record/
+│   ├── index.html   # Frontend (Single Page App)
+│   └── README.md    # ไฟล์นี้
+└── DESIGN.md        # เอกสารออกแบบระบบ
 ```
+
+## 📂 โครงสร้าง Google Sheets
+
+| Sheet | คำอธิบาย |
+|-------|----------|
+| `Records` | ข้อมูลทะเบียนคุมระเบียบ/ข้อบังคับ |
+| `DailyOperations` | บันทึกการปฏิบัติงานประจำวัน |
+| `Users` | ข้อมูลผู้ใช้งาน (email, password_hash, name, role) |
 
 ## 👨‍💻 พัฒนาโดย
 

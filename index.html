@@ -89,7 +89,40 @@
 </head>
 
 <body class="h-full bg-gray-50">
-    <div id="app" class="h-full w-full overflow-auto">
+    <!-- Login Screen -->
+    <div id="login-screen" class="fixed inset-0 z-[200] bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 mx-4">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-800">ระบบทะเบียนคุมระเบียบข้อบังคับ</h1>
+                <p class="text-gray-500 mt-1">กลุ่มจัดตั้งและส่งเสริมสหกรณ์</p>
+            </div>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">อีเมล / ชื่อผู้ใช้</label>
+                    <input type="text" id="login-email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="เช่น admin">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน</label>
+                    <input type="password" id="login-password" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="••••••">
+                </div>
+                <button type="submit" id="btn-login" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                    <span>เข้าสู่ระบบ</span>
+                </button>
+            </form>
+            <div id="login-error" class="mt-4 text-red-600 text-sm text-center hidden"></div>
+            <div class="mt-6 text-center text-xs text-gray-400">
+                <p>🔐 Default Admin: admin / admin123</p>
+                <p>กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรก</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="app" class="h-full w-full overflow-auto hidden">
         <!-- Loading Overlay -->
         <div id="loading-overlay" class="fixed inset-0 z-[100] flex items-center justify-center loading-overlay hidden">
             <div class="text-center">
@@ -116,6 +149,16 @@
                         <h1 class="text-2xl font-bold">ระบบทะเบียนคุมระเบียบข้อบังคับสหกรณ์</h1>
                         <p class="text-blue-100 text-sm">กลุ่มจัดตั้งและส่งเสริมสหกรณ์</p>
                     </div>
+                </div>
+                <div class="flex items-center gap-4 ml-auto">
+                    <div class="text-right" id="user-info">
+                        <div class="text-sm font-medium" id="user-name-display">-</div>
+                        <div class="text-xs text-blue-200" id="user-role-display">-</div>
+                    </div>
+                    <button onclick="logout()" class="text-sm bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5" id="btn-logout">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        ออกจากระบบ
+                    </button>
                 </div>
             </div>
         </header>
@@ -170,6 +213,16 @@
                                 </path>
                             </svg>
                             ปฏิทิน
+                        </span>
+                    </button>
+                    <button onclick="switchView('users')"
+                        class="nav-item whitespace-nowrap border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-4 px-1 text-sm font-medium transition-colors hidden"
+                        id="nav-users">
+                        <span class="flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                            จัดการผู้ใช้
                         </span>
                     </button>
                 </div>
@@ -551,6 +604,35 @@
                 </div>
             </div>
 
+            <!-- USERS MANAGEMENT VIEW -->
+            <div id="view-users" class="hidden space-y-6 animate-fade-in">
+                <div class="flex justify-between items-center bg-white p-4 rounded-xl card-shadow">
+                    <h2 class="text-xl font-bold text-gray-800">จัดการผู้ใช้งาน</h2>
+                    <button onclick="openUserModal()"
+                        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        เพิ่มผู้ใช้
+                    </button>
+                </div>
+                <div class="bg-white rounded-xl card-shadow overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ชื่อ</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">อีเมล</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">สิทธิ์</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">จัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body" class="divide-y divide-gray-100">
+                                <tr><td colspan="4" class="p-4 text-center text-gray-500">กำลังโหลด...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
             <!-- Calendar Event Modal -->
             <div id="calendar-modal" class="fixed inset-0 z-50 hidden">
                 <div class="modal-backdrop absolute inset-0" onclick="closeCalendarModal()"></div>
@@ -852,6 +934,48 @@
             </div>
         </div>
 
+        <!-- User Modal -->
+        <div id="user-modal" class="fixed inset-0 z-50 hidden">
+            <div class="modal-backdrop absolute inset-0"></div>
+            <div class="relative flex items-center justify-center min-h-full p-4">
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg relative">
+                    <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl flex justify-between items-center">
+                        <h2 id="user-modal-title" class="text-xl font-semibold text-gray-800">เพิ่มผู้ใช้</h2>
+                        <button onclick="closeUserModal()" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+                    <form id="form-user" class="p-6 space-y-4">
+                        <input type="hidden" id="user-id">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อผู้ใช้ <span class="text-red-500">*</span></label>
+                            <input type="text" id="user-name-input" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="เช่น นายสมชาย ใจดี">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">อีเมล / ชื่อผู้ใช้ <span class="text-red-500">*</span></label>
+                            <input type="text" id="user-email-input" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="เช่น somchai">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน <span id="password-required" class="text-red-500">*</span></label>
+                            <input type="password" id="user-password-input" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <p class="text-xs text-gray-500 mt-1" id="password-hint"></p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">สิทธิ์ <span class="text-red-500">*</span></label>
+                            <select id="user-role-input" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="user">ผู้ใช้ทั่วไป (User)</option>
+                                <option value="admin">ผู้ดูแลระบบ (Admin)</option>
+                            </select>
+                        </div>
+                        <div class="flex gap-3 pt-4 border-t border-gray-200">
+                            <button type="button" onclick="closeUserModal()" class="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium transition-colors">ยกเลิก</button>
+                            <button type="submit" id="btn-save-user" class="flex-1 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors">บันทึก</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <!-- Delete Confirmation -->
         <div id="delete-modal" class="fixed inset-0 z-50 hidden">
             <div class="modal-backdrop absolute inset-0"></div>
@@ -980,14 +1104,17 @@
 
         // ==================== STATE ====================
         let allRecords = [];
-        let allDailyOps = []; // New state for Daily Operations
+        let allDailyOps = [];
         let filteredRecords = [];
         let recordToDelete = null;
         let isEditing = false;
-        let isDailyEditing = false; // New state for Daily Edit
+        let isDailyEditing = false;
         let selectedFile = null;
         let currentAttachment = null;
         let currentView = 'dashboard';
+        let currentUser = null;
+        let allUsers = [];
+        let isUserEditing = false;
 
         // Pagination state
         let currentPage = 1;
@@ -996,8 +1123,12 @@
         // ==================== NAVIGATION & VIEW LOGIC ====================
 
         function switchView(viewName) {
+            if (viewName === 'users' && (!currentUser || currentUser.role !== 'admin')) {
+                showToast('ไม่มีสิทธิ์เข้าถึง', 'error');
+                return;
+            }
             // Hide all views
-            ['dashboard', 'daily-ops', 'registry', 'calendar'].forEach(v => {
+            ['dashboard', 'daily-ops', 'registry', 'calendar', 'users'].forEach(v => {
                 document.getElementById(`view-${v}`).classList.add('hidden');
                 document.getElementById(`nav-${v}`).classList.replace('text-blue-600', 'text-gray-500');
                 document.getElementById(`nav-${v}`).classList.replace('border-blue-600', 'border-transparent');
@@ -1018,6 +1149,8 @@
                 fetchDailyOps();
             } else if (viewName === 'registry' && allRecords.length === 0) {
                 fetchAllRecords();
+            } else if (viewName === 'users') {
+                fetchUsers();
             } else if (viewName === 'calendar') {
                 // Ensure both data sources are loaded for calendar
                 Promise.all([
@@ -1239,10 +1372,11 @@
 
         // ==================== DAILY OPS LOGIC ====================
 
-        async function fetchDailyOps() {
+        async function fetchDailyOps(showLoadingState = true) {
             try {
-                showLoading(true);
-                const response = await fetch(`${SCRIPT_URL}?action=getDailyOps`, { redirect: 'follow' });
+                if (showLoadingState) showLoading(true);
+                const userParams = currentUser ? `&userEmail=${encodeURIComponent(currentUser.email)}&userRole=${encodeURIComponent(currentUser.role)}` : '';
+                const response = await fetch(`${SCRIPT_URL}?action=getDailyOps${userParams}`, { redirect: 'follow' });
                 const result = await response.json();
 
                 if (result.success) {
@@ -1256,7 +1390,7 @@
                 console.error('Error fetching daily ops:', error);
                 showToast('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์', 'error');
             } finally {
-                showLoading(false);
+                if (showLoadingState) showLoading(false);
             }
         }
 
@@ -1297,8 +1431,10 @@
                         <button onclick='viewDailyOpDetails(${JSON.stringify(op).replace(/'/g, "&#39;")})' class="text-gray-500 hover:text-blue-600 hover:underline mr-2" title="ดูรายละเอียด">
                             <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                         </button>
+                        ${canManage(op) ? `
                         <button onclick='editDailyOp(${JSON.stringify(op).replace(/'/g, "&#39;")})' class="text-blue-600 hover:underline mr-2">แก้ไข</button>
                         <button onclick="deleteDailyOp('${op.id}')" class="text-red-600 hover:underline">ลบ</button>
+                        ` : ''}
                     </td>
                 </tr>
             `).join('');
@@ -1397,7 +1533,7 @@
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     redirect: 'follow',
-                    body: JSON.stringify({ action, record })
+                    body: JSON.stringify({ action, record, currentUser })
                 });
                 const result = await response.json();
 
@@ -1425,7 +1561,7 @@
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     redirect: 'follow',
-                    body: JSON.stringify({ action: 'deleteDailyOp', id })
+                    body: JSON.stringify({ action: 'deleteDailyOp', id, currentUser })
                 });
                 const result = await response.json();
                 if (result.success) {
@@ -1437,7 +1573,7 @@
             } catch (error) {
                 showToast('เกิดข้อผิดพลาด', 'error');
             } finally {
-                showLoading(false);
+                if (showLoadingState) showLoading(false);
             }
         }
 
@@ -1964,10 +2100,11 @@
         /**
          * Fetch all records from backend
          */
-        async function fetchAllRecords() {
+        async function fetchAllRecords(showLoadingState = true) {
             try {
-                showLoading(true);
-                const response = await fetch(`${SCRIPT_URL}?action=getAll`, {
+                if (showLoadingState) showLoading(true);
+                const userParams = currentUser ? `&userEmail=${encodeURIComponent(currentUser.email)}&userRole=${encodeURIComponent(currentUser.role)}` : '';
+                const response = await fetch(`${SCRIPT_URL}?action=getAll${userParams}`, {
                     redirect: 'follow'
                 });
                 const result = await response.json();
@@ -1991,11 +2128,11 @@
         /**
          * Create new record
          */
-        async function createRecord(recordData) {
+        async function createRecord(recordData, user) {
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
                 redirect: 'follow',
-                body: JSON.stringify({ action: 'create', record: recordData })
+                body: JSON.stringify({ action: 'create', record: recordData, currentUser: user })
             });
             return await response.json();
         }
@@ -2003,11 +2140,11 @@
         /**
          * Create multiple records
          */
-        async function createRecordBatch(records) {
+        async function createRecordBatch(records, user) {
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
                 redirect: 'follow',
-                body: JSON.stringify({ action: 'createBatch', records: records })
+                body: JSON.stringify({ action: 'createBatch', records: records, currentUser: user })
             });
             return await response.json();
         }
@@ -2015,11 +2152,11 @@
         /**
          * Update existing record
          */
-        async function updateRecord(recordData) {
+        async function updateRecord(recordData, user) {
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
                 redirect: 'follow',
-                body: JSON.stringify({ action: 'update', record: recordData })
+                body: JSON.stringify({ action: 'update', record: recordData, currentUser: user })
             });
             return await response.json();
         }
@@ -2027,11 +2164,11 @@
         /**
          * Delete record
          */
-        async function deleteRecordApi(id) {
+        async function deleteRecordApi(id, user) {
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
                 redirect: 'follow',
-                body: JSON.stringify({ action: 'delete', id: id })
+                body: JSON.stringify({ action: 'delete', id: id, currentUser: user })
             });
             return await response.json();
         }
@@ -2288,9 +2425,9 @@
                 } else {
                     // Create Mode: Batch or Single
                     if (recordsToSave.length > 1) {
-                        result = await createRecordBatch(recordsToSave);
+                        result = await createRecordBatch(recordsToSave, currentUser);
                     } else {
-                        result = await createRecord(recordsToSave[0]);
+                        result = await createRecord(recordsToSave[0], currentUser);
                     }
                 }
 
@@ -2363,7 +2500,7 @@
             spinner.classList.remove('hidden');
 
             try {
-                const result = await deleteRecordApi(recordToDelete.id);
+                const result = await deleteRecordApi(recordToDelete.id, currentUser);
                 if (result && result.success) {
                     showToast('ลบรายการสำเร็จ', 'success');
                     hideDeleteModal();
@@ -2551,6 +2688,7 @@
             </td>
             <td class="px-4 py-3 text-sm">
               <div class="flex gap-1">
+                ${canManage(record) ? `
                 <button onclick="editRecord(allRecords.find(r => r.id === '${record.id}'))" class="p-1.5 text-blue-600 hover:bg-blue-200 rounded transition-colors bg-white/50" title="แก้ไข">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -2561,6 +2699,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                   </svg>
                 </button>
+                ` : ''}
               </div>
             </td>
           </tr>
@@ -2829,20 +2968,254 @@
 
         // ==================== INITIALIZE APP ====================
 
-        async function initApp() {
+        // ==================== AUTH FUNCTIONS ====================
+
+        function canManage(record) {
+            if (!currentUser) return false;
+            if (currentUser.role === 'admin') return true;
+            return record.created_by === currentUser.email;
+        }
+
+        async function login(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-login');
+            const errorDiv = document.getElementById('login-error');
+            btn.disabled = true;
+            btn.innerHTML = '<span>กำลังเข้าสู่ระบบ...</span>';
+            errorDiv.classList.add('hidden');
+
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    body: JSON.stringify({ action: 'login', email, password })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    currentUser = result.data;
+                    localStorage.setItem('regUser', JSON.stringify(currentUser));
+                    showMainApp();
+                    await initAppData();
+                    showToast('เข้าสู่ระบบสำเร็จ');
+                } else {
+                    errorDiv.textContent = result.error || 'เข้าสู่ระบบไม่สำเร็จ';
+                    errorDiv.classList.remove('hidden');
+                }
+            } catch (error) {
+                errorDiv.textContent = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้';
+                errorDiv.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span>เข้าสู่ระบบ</span>';
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('regUser');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('app').classList.add('hidden');
+            document.getElementById('login-form').reset();
+            document.getElementById('login-error').classList.add('hidden');
+            allRecords = [];
+            allDailyOps = [];
+        }
+
+        function checkAuth() {
+            const saved = localStorage.getItem('regUser');
+            if (saved) {
+                try {
+                    currentUser = JSON.parse(saved);
+                    showMainApp();
+                    return true;
+                } catch (e) {
+                    localStorage.removeItem('regUser');
+                }
+            }
+            return false;
+        }
+
+        function showMainApp() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+            updateUserDisplay();
+        }
+
+        function updateUserDisplay() {
+            if (!currentUser) return;
+            document.getElementById('user-name-display').textContent = currentUser.name || currentUser.email;
+            const roleText = currentUser.role === 'admin' ? 'ผู้ดูแลระบบ' : 'ผู้ใช้ทั่วไป';
+            document.getElementById('user-role-display').textContent = roleText;
+            
+            // Show admin menu
+            if (currentUser.role === 'admin') {
+                document.getElementById('nav-users').classList.remove('hidden');
+            } else {
+                document.getElementById('nav-users').classList.add('hidden');
+            }
+        }
+
+        // ==================== USER MANAGEMENT ====================
+
+        async function fetchUsers() {
+            if (!currentUser || currentUser.role !== 'admin') return;
+            try {
+                showLoading(true);
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    body: JSON.stringify({ action: 'getUsers', currentUser })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    allUsers = result.data;
+                    renderUsersTable();
+                }
+            } catch (error) {
+                showToast('โหลดข้อมูลผู้ใช้ไม่สำเร็จ', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function renderUsersTable() {
+            const tbody = document.getElementById('users-table-body');
+            if (allUsers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-gray-500">ไม่มีผู้ใช้งาน</td></tr>';
+                return;
+            }
+            tbody.innerHTML = allUsers.map(u => {
+                const roleBadge = u.role === 'admin' 
+                    ? '<span class="px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-700">Admin</span>'
+                    : '<span class="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700">User</span>';
+                return `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 text-sm text-gray-800">${u.name || '-'}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">${u.email}</td>
+                        <td class="px-4 py-3 text-sm">${roleBadge}</td>
+                        <td class="px-4 py-3 text-sm">
+                            <button onclick='editUser(${JSON.stringify(u).replace(/'/g, "&#39;")})' class="text-blue-600 hover:underline mr-2">แก้ไข</button>
+                            <button onclick="deleteUser('${u.id}')" class="text-red-600 hover:underline">ลบ</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function openUserModal() {
+            isUserEditing = false;
+            document.getElementById('user-modal-title').textContent = 'เพิ่มผู้ใช้';
+            document.getElementById('form-user').reset();
+            document.getElementById('user-id').value = '';
+            document.getElementById('password-required').classList.remove('hidden');
+            document.getElementById('password-hint').textContent = '';
+            document.getElementById('user-password-input').required = true;
+            document.getElementById('user-modal').classList.remove('hidden');
+        }
+
+        function closeUserModal() {
+            document.getElementById('user-modal').classList.add('hidden');
+        }
+
+        function editUser(user) {
+            isUserEditing = true;
+            document.getElementById('user-modal-title').textContent = 'แก้ไขผู้ใช้';
+            document.getElementById('user-id').value = user.id;
+            document.getElementById('user-name-input').value = user.name || '';
+            document.getElementById('user-email-input').value = user.email || '';
+            document.getElementById('user-role-input').value = user.role || 'user';
+            document.getElementById('user-password-input').value = '';
+            document.getElementById('password-required').classList.add('hidden');
+            document.getElementById('password-hint').textContent = 'เว้นว่างไว้หากไม่ต้องการเปลี่ยนรหัสผ่าน';
+            document.getElementById('user-password-input').required = false;
+            document.getElementById('user-modal').classList.remove('hidden');
+        }
+
+        async function handleUserSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save-user');
+            btn.disabled = true;
+            btn.textContent = 'กำลังบันทึก...';
+
+            const userData = {
+                id: document.getElementById('user-id').value,
+                name: document.getElementById('user-name-input').value.trim(),
+                email: document.getElementById('user-email-input').value.trim(),
+                role: document.getElementById('user-role-input').value,
+                password: document.getElementById('user-password-input').value
+            };
+
+            const action = isUserEditing ? 'updateUser' : 'createUser';
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    body: JSON.stringify({ action, userData, currentUser })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast(isUserEditing ? 'แก้ไขผู้ใช้สำเร็จ' : 'สร้างผู้ใช้สำเร็จ');
+                    closeUserModal();
+                    fetchUsers();
+                } else {
+                    showToast(result.error || 'เกิดข้อผิดพลาด', 'error');
+                }
+            } catch (error) {
+                showToast('เกิดข้อผิดพลาด', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'บันทึก';
+            }
+        }
+
+        async function deleteUser(id) {
+            if (!confirm('ยืนยันการลบผู้ใช้?')) return;
+            try {
+                showLoading(true);
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    body: JSON.stringify({ action: 'deleteUser', id, currentUser })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    showToast('ลบผู้ใช้สำเร็จ');
+                    fetchUsers();
+                } else {
+                    showToast(result.error || 'ลบไม่สำเร็จ', 'error');
+                }
+            } catch (error) {
+                showToast('เกิดข้อผิดพลาด', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ==================== APP INITIALIZATION ====================
+
+        async function initAppData() {
             setupEventListeners();
-
-            // Initialize cooperative names datalist
             initCoopNamesList();
-
-            // Load initial data
             await Promise.all([
                 fetchAllRecords(),
                 fetchDailyOps()
             ]);
-
-            // Set default view to Dashboard
             switchView('dashboard');
+        }
+
+        async function initApp() {
+            document.getElementById('login-form').addEventListener('submit', login);
+            document.getElementById('form-user').addEventListener('submit', handleUserSubmit);
+            
+            if (checkAuth()) {
+                await initAppData();
+            }
         }
 
         // Start the app
