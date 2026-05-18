@@ -2096,6 +2096,15 @@
         }
 
         /**
+         * Get staff name from email using the loaded staffList
+         */
+        function getStaffName(email) {
+            if (!email) return '-';
+            const staff = staffList.find(u => u.email === email);
+            return staff ? (staff.name || email) : email;
+        }
+
+        /**
          * Show/hide loading overlay
          */
         function showLoading(show = true) {
