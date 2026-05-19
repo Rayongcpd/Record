@@ -800,6 +800,27 @@
                     <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-lg p-4 mb-6">
                         <p class="font-medium text-sm">การตรวจสอบการแก้ไขเพิ่มเติมข้อบังคับ ปรังปรุงตามกฎกระทรวง กำหนดลักษณะ วัตถุประสงค์ และขอบเขตแห่งการดำเนินกิจการของสหกรณ์แต่ละประเภทที่จะรับจดทะเบียน พ.ศ.2567</p>
                     </div>
+
+                    <!-- Filters -->
+                    <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                        <div class="flex-1 relative">
+                            <input type="text" id="search-coop-input" oninput="renderBylaws()" placeholder="ค้นหาชื่อสหกรณ์..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                        <select id="filter-coop-group" onchange="renderBylaws()" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 bg-white sm:w-48">
+                            <option value="">กลุ่มทั้งหมด</option>
+                            <option value="กลุ่มส่งเสริมสหกรณ์ 1">กลุ่มส่งเสริมสหกรณ์ 1</option>
+                            <option value="กลุ่มส่งเสริมสหกรณ์ 2">กลุ่มส่งเสริมสหกรณ์ 2</option>
+                            <option value="กลุ่มส่งเสริมสหกรณ์ 3">กลุ่มส่งเสริมสหกรณ์ 3</option>
+                            <option value="นิคมสหกรณ์ชะแวะ">นิคมสหกรณ์ชะแวะ</option>
+                        </select>
+                        <select id="filter-coop-status" onchange="renderBylaws()" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 bg-white sm:w-48">
+                            <option value="">ทุกสถานะ</option>
+                            <option value="รอดำเนินการ">รอดำเนินการ</option>
+                            <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                            <option value="แก้ไขแล้ว">แก้ไขแล้ว</option>
+                        </select>
+                    </div>
                     
                     <div class="overflow-x-auto border border-gray-200 rounded-lg">
                         <table class="w-full text-left border-collapse">
@@ -843,6 +864,27 @@
                     </div>
                     <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-lg p-4 mb-6">
                         <p class="font-medium text-sm">การตรวจสอบการแก้ไขเพิ่มเติมข้อบังคับ ปรังปรุงตามกฎกระทรวง กำหนดลักษณะ วัตถุประสงค์ และขอบเขตแห่งการดำเนินกิจการของกลุ่มเกษตรกร (อนุโลมตามกฎกระทรวงสหกรณ์ พ.ศ.2567)</p>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                        <div class="flex-1 relative">
+                            <input type="text" id="search-farmer-input" oninput="renderBylaws()" placeholder="ค้นหาชื่อกลุ่มเกษตรกร..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                        <select id="filter-farmer-group" onchange="renderBylaws()" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-700 bg-white sm:w-48">
+                            <option value="">กลุ่มทั้งหมด</option>
+                            <option value="กลุ่มส่งเสริมสหกรณ์ 1">กลุ่มส่งเสริมสหกรณ์ 1</option>
+                            <option value="กลุ่มส่งเสริมสหกรณ์ 2">กลุ่มส่งเสริมสหกรณ์ 2</option>
+                            <option value="กลุ่มส่งเสริมสหกรณ์ 3">กลุ่มส่งเสริมสหกรณ์ 3</option>
+                            <option value="นิคมสหกรณ์ชะแวะ">นิคมสหกรณ์ชะแวะ</option>
+                        </select>
+                        <select id="filter-farmer-status" onchange="renderBylaws()" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-700 bg-white sm:w-48">
+                            <option value="">ทุกสถานะ</option>
+                            <option value="รอดำเนินการ">รอดำเนินการ</option>
+                            <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                            <option value="แก้ไขแล้ว">แก้ไขแล้ว</option>
+                        </select>
                     </div>
                     
                     <div class="overflow-x-auto border border-gray-200 rounded-lg">
@@ -3869,9 +3911,32 @@
             const farmerBody = document.getElementById('bylaw-farmer-tbody');
             
             if(!coopBody || !farmerBody) return;
+
+            // Get Coop Filters
+            const searchCoop = (document.getElementById('search-coop-input')?.value || '').toLowerCase();
+            const groupCoop = document.getElementById('filter-coop-group')?.value || '';
+            const statusCoop = document.getElementById('filter-coop-status')?.value || '';
+
+            // Get Farmer Filters
+            const searchFarmer = (document.getElementById('search-farmer-input')?.value || '').toLowerCase();
+            const groupFarmer = document.getElementById('filter-farmer-group')?.value || '';
+            const statusFarmer = document.getElementById('filter-farmer-status')?.value || '';
             
-            const coops = allBylaws.filter(b => b.entity_type === 'สหกรณ์');
-            const farmers = allBylaws.filter(b => b.entity_type === 'กลุ่มเกษตรกร');
+            const coops = allBylaws.filter(b => {
+                if(b.entity_type !== 'สหกรณ์') return false;
+                const matchSearch = b.entity_name.toLowerCase().includes(searchCoop) || (b.notes || '').toLowerCase().includes(searchCoop);
+                const matchGroup = groupCoop === '' || (b.notes || '').includes(groupCoop);
+                const matchStatus = statusCoop === '' || b.status === statusCoop;
+                return matchSearch && matchGroup && matchStatus;
+            });
+
+            const farmers = allBylaws.filter(b => {
+                if(b.entity_type !== 'กลุ่มเกษตรกร') return false;
+                const matchSearch = b.entity_name.toLowerCase().includes(searchFarmer) || (b.notes || '').toLowerCase().includes(searchFarmer);
+                const matchGroup = groupFarmer === '' || (b.notes || '').includes(groupFarmer);
+                const matchStatus = statusFarmer === '' || b.status === statusFarmer;
+                return matchSearch && matchGroup && matchStatus;
+            });
             
             const renderRows = (records) => {
                 if(records.length === 0) return `<tr><td colspan="5" class="p-8 text-center text-gray-400 text-sm">ไม่มีข้อมูล</td></tr>`;
