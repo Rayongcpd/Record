@@ -190,6 +190,53 @@
             <div id="login-error" class="mt-4 text-red-600 text-sm text-center hidden"></div>
             <div class="mt-6 text-center text-xs text-gray-400">
                 <p>🔐 หากลืมรหัสผ่าน กรุณาติดต่อผู้ดูแลระบบ</p>
+                <p class="mt-4"><a href="#" onclick="showRegisterScreen(); return false;" class="text-blue-500 hover:text-blue-600 font-medium text-sm">ลงทะเบียนผู้ใช้งานใหม่</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Screen -->
+    <div id="register-screen"
+        class="fixed inset-0 z-[200] bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 mx-4">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z">
+                        </path>
+                    </svg>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-800">ลงทะเบียนผู้ใช้งาน</h1>
+                <p class="text-gray-500 mt-1">ระบบทะเบียนคุมระเบียบข้อบังคับ</p>
+            </div>
+            <form id="register-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อ-นามสกุล</label>
+                    <input type="text" id="register-name" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="ชื่อ นามสกุล">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">อีเมล / ชื่อผู้ใช้</label>
+                    <input type="text" id="register-email" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="User Email">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน</label>
+                    <input type="password" id="register-password" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="••••••">
+                </div>
+                <button type="submit" id="btn-register"
+                    class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                    <span>ลงทะเบียน</span>
+                </button>
+            </form>
+            <div id="register-error" class="mt-4 text-red-600 text-sm text-center hidden"></div>
+            <div class="mt-6 text-center text-sm text-gray-500">
+                <p>มีบัญชีผู้ใช้แล้ว? <a href="#" onclick="showLoginScreen(); return false;" class="text-blue-500 hover:text-blue-600 font-medium">เข้าสู่ระบบ</a></p>
             </div>
         </div>
     </div>
@@ -323,6 +370,18 @@
                         </svg>
                         <span>จัดการผู้ใช้</span>
                     </button>
+
+                    <button
+                        onclick="switchView('manual'); document.getElementById('topbar-title').innerText = 'คู่มือการใช้งาน';"
+                        class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
+                        id="nav-manual">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                            </path>
+                        </svg>
+                        <span>คู่มือการใช้งาน</span>
+                    </button>
                 </div>
 
                 <!-- Sidebar Footer (User Info display & logout) -->
@@ -445,6 +504,18 @@
                             </path>
                         </svg>
                         <span>จัดการผู้ใช้</span>
+                    </button>
+
+                    <button
+                        onclick="switchView('manual'); document.getElementById('topbar-title').innerText = 'คู่มือการใช้งาน'; toggleMobileSidebar();"
+                        class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
+                        id="nav-manual-mobile">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                            </path>
+                        </svg>
+                        <span>คู่มือการใช้งาน</span>
                     </button>
                 </div>
 
@@ -1152,6 +1223,68 @@
                             </div>
                         </div>
                     </div>
+                    <!-- MANUAL VIEW -->
+                    <div id="view-manual" class="hidden space-y-6 animate-fade-in">
+                        <div class="bg-white rounded-2xl p-8 card-shadow border border-gray-100">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                                <span class="bg-blue-100 p-2 rounded-lg text-blue-600">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                </span>
+                                คู่มือการใช้งานระบบ
+                            </h2>
+                            <div class="prose prose-blue max-w-none text-gray-600">
+                                <p class="text-lg mb-8">ยินดีต้อนรับสู่ <strong>ระบบทะเบียนคุมระเบียบข้อบังคับ</strong> คู่มือฉบับนี้จัดทำขึ้นเพื่อให้ผู้ใช้งานเข้าใจขั้นตอนการทำงานและสามารถใช้งานระบบได้อย่างรวดเร็ว</p>
+
+                                <div class="bg-slate-50 rounded-xl p-6 mb-8 border border-slate-100">
+                                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                        <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                        1. การลงทะเบียนและการเข้าสู่ระบบ
+                                    </h3>
+                                    <ul class="space-y-2 list-disc list-inside">
+                                        <li>คลิกที่ลิงก์ <strong>"ลงทะเบียนผู้ใช้งานใหม่"</strong> ด้านล่างปุ่มเข้าสู่ระบบ</li>
+                                        <li>กรอก <strong>ชื่อ-นามสกุล</strong>, <strong>อีเมล/ชื่อผู้ใช้</strong>, และ <strong>รหัสผ่าน</strong></li>
+                                        <li>ระบบจะแยกข้อมูลการทำงานตามบัญชีผู้ใช้ คุณจะเห็นเฉพาะรายการที่คุณเป็นผู้บันทึกหรือได้รับมอบหมายเท่านั้น</li>
+                                    </ul>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                    <div class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow">
+                                        <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2"><span class="text-2xl">🏠</span> หน้าหลัก (Dashboard)</h4>
+                                        <p class="text-sm">แสดงสรุปการปฏิบัติงานล่าสุดของคุณ และสถานะทะเบียนคุม พร้อมกราฟแท่งความคืบหน้าเพื่อให้เห็นภาพรวมของงาน</p>
+                                    </div>
+                                    <div class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow">
+                                        <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2"><span class="text-2xl">📝</span> บันทึกปฏิบัติงานประจำวัน</h4>
+                                        <p class="text-sm">บันทึกกิจกรรมหรือการลงพื้นที่ในแต่ละวัน สามารถค้นหาย้อนหลังได้ตามวันที่</p>
+                                    </div>
+                                    <div class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow">
+                                        <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2"><span class="text-2xl">📚</span> ทะเบียนคุมระเบียบข้อบังคับ</h4>
+                                        <p class="text-sm">บันทึกและติดตามสถานะของระเบียบ/ข้อบังคับ ระบบช่วยนับวันทำงานให้อัตโนมัติ (หักวันหยุด) และรองรับการแนบไฟล์</p>
+                                    </div>
+                                    <div class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow">
+                                        <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2"><span class="text-2xl">📅</span> ปฏิทินปฏิบัติงาน</h4>
+                                        <p class="text-sm">แสดงภาพรวมของงานและบันทึกประจำวันในรูปแบบปฏิทิน คลิกที่จุดเพื่อดูรายละเอียดได้ทันที</p>
+                                    </div>
+                                </div>
+
+                                <div class="bg-blue-50 rounded-xl p-6 border border-blue-100">
+                                    <h3 class="text-lg font-bold text-blue-800 mb-3 flex items-center gap-2">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        เคล็ดลับการใช้งาน (Tips)
+                                    </h3>
+                                    <ul class="space-y-3 text-sm text-blue-900">
+                                        <li class="flex items-start gap-2">
+                                            <svg class="w-5 h-5 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            <strong>การอัปเดตสถานะรวดเร็ว:</strong> เมื่อดำเนินการเสร็จแล้ว ให้แก้ไขสถานะเป็น "ดำเนินการแล้ว" ทันที เพื่อให้ Dashboard แสดงผลถูกต้อง
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <svg class="w-5 h-5 text-blue-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            <strong>การค้นหา:</strong> ใช้กล่องค้นหาและตัวกรองเพื่อหาเอกสารที่ยัง "รอดำเนินการ"
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </main>
             </div> <!-- End Main Workspace Area -->
         </div> <!-- End Flex Layout ครอบ -->
@@ -1722,7 +1855,7 @@
                 return;
             }
             // Hide all views and reset nav highlights for both Desktop and Mobile
-            ['dashboard', 'daily-ops', 'registry', 'calendar', 'users', 'coop-info', 'farmer-group-info'].forEach(v => {
+            ['dashboard', 'daily-ops', 'registry', 'calendar', 'users', 'coop-info', 'farmer-group-info', 'manual'].forEach(v => {
                 document.getElementById(`view-${v}`).classList.add('hidden');
 
                 // Desktop Sidebar Reset
@@ -3951,6 +4084,53 @@
             }
         }
 
+        function showRegisterScreen() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('register-screen').classList.remove('hidden');
+        }
+
+        function showLoginScreen() {
+            document.getElementById('register-screen').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        async function register(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-register');
+            const errorDiv = document.getElementById('register-error');
+            btn.disabled = true;
+            btn.innerHTML = '<span>กำลังลงทะเบียน...</span>';
+            errorDiv.classList.add('hidden');
+
+            const name = document.getElementById('register-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    body: JSON.stringify({ action: 'register', userData: { name, email, password } })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast('ลงทะเบียนสำเร็จ สามารถเข้าสู่ระบบได้ทันที');
+                    document.getElementById('register-form').reset();
+                    showLoginScreen();
+                } else {
+                    errorDiv.textContent = result.error || 'ลงทะเบียนไม่สำเร็จ';
+                    errorDiv.classList.remove('hidden');
+                }
+            } catch (error) {
+                errorDiv.textContent = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้';
+                errorDiv.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span>ลงทะเบียน</span>';
+            }
+        }
+
         function logout() {
             currentUser = null;
             localStorage.removeItem('regUser');
@@ -4372,6 +4552,7 @@
 
         async function initApp() {
             document.getElementById('login-form').addEventListener('submit', login);
+            document.getElementById('register-form').addEventListener('submit', register);
             document.getElementById('form-user').addEventListener('submit', handleUserSubmit);
             document.getElementById('form-bylaw').addEventListener('submit', handleBylawSubmit);
 
