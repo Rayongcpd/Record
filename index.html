@@ -7,7 +7,9 @@
     <title>ระบบทะเบียนคุมระเบียบข้อบังคับสหกรณ์</title>
     <meta name="description" content="ระบบบันทึกและติดตามระเบียบ/ข้อบังคับของสหกรณ์ กลุ่มจัดตั้งและส่งเสริมสหกรณ์">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         /* Claude Aesthetic Style System */
         :root {
@@ -31,21 +33,29 @@
         .text-blue-600 {
             color: var(--color-claude-primary) !important;
         }
+
         .border-blue-600 {
             border-color: var(--color-claude-primary) !important;
         }
+
         .bg-blue-600 {
             background-color: var(--color-claude-primary) !important;
         }
-        .hover\:bg-blue-700:hover, .bg-blue-700:hover, .bg-blue-600:hover {
+
+        .hover\:bg-blue-700:hover,
+        .bg-blue-700:hover,
+        .bg-blue-600:hover {
             background-color: var(--color-claude-primary-hover) !important;
         }
+
         .bg-blue-50 {
             background-color: #FAF5EE !important;
         }
+
         .text-blue-700 {
             color: var(--color-claude-primary-hover) !important;
         }
+
         .text-blue-100 {
             color: #FAF5EE !important;
         }
@@ -120,19 +130,22 @@
             transition: all 0.2s ease-in-out;
             border-left-width: 4px;
         }
+
         .nav-item.border-blue-600 {
             background-color: #FAF5EE;
             border-left-color: var(--color-claude-primary) !important;
         }
+
         .nav-item.border-transparent {
             border-left-color: transparent !important;
         }
-        
+
         /* Custom Table Style for Claude */
         table thead {
             background-color: #FAF9F6 !important;
             border-bottom: 1px solid var(--color-claude-border) !important;
         }
+
         table thead th {
             color: var(--color-claude-text-muted) !important;
             font-weight: 600 !important;
@@ -142,12 +155,15 @@
 
 <body class="h-full bg-gray-50">
     <!-- Login Screen -->
-    <div id="login-screen" class="fixed inset-0 z-[200] bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center">
+    <div id="login-screen"
+        class="fixed inset-0 z-[200] bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 mx-4">
             <div class="text-center mb-8">
                 <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
                     </svg>
                 </div>
                 <h1 class="text-2xl font-bold text-gray-800">ระบบทะเบียนคุมระเบียบข้อบังคับ</h1>
@@ -156,19 +172,73 @@
             <form id="login-form" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">อีเมล / ชื่อผู้ใช้</label>
-                    <input type="text" id="login-email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="เช่น admin">
+                    <input type="text" id="login-email" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="User">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน</label>
-                    <input type="password" id="login-password" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="••••••">
+                    <input type="password" id="login-password" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="••••••">
                 </div>
-                <button type="submit" id="btn-login" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                <button type="submit" id="btn-login"
+                    class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
                     <span>เข้าสู่ระบบ</span>
                 </button>
             </form>
             <div id="login-error" class="mt-4 text-red-600 text-sm text-center hidden"></div>
             <div class="mt-6 text-center text-xs text-gray-400">
                 <p>🔐 หากลืมรหัสผ่าน กรุณาติดต่อผู้ดูแลระบบ</p>
+                <p class="mt-4"><a href="#" onclick="showRegisterScreen(); return false;"
+                        class="text-blue-500 hover:text-blue-600 font-medium text-sm">ลงทะเบียนผู้ใช้งานใหม่</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Screen -->
+    <div id="register-screen"
+        class="fixed inset-0 z-[200] bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 mx-4">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z">
+                        </path>
+                    </svg>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-800">ลงทะเบียนผู้ใช้งาน</h1>
+                <p class="text-gray-500 mt-1">ระบบทะเบียนคุมระเบียบข้อบังคับ</p>
+            </div>
+            <form id="register-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อ-นามสกุล</label>
+                    <input type="text" id="register-name" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="ชื่อ นามสกุล">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">อีเมล / ชื่อผู้ใช้</label>
+                    <input type="text" id="register-email" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="User Email">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน</label>
+                    <input type="password" id="register-password" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="••••••">
+                </div>
+                <button type="submit" id="btn-register"
+                    class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                    <span>ลงทะเบียน</span>
+                </button>
+            </form>
+            <div id="register-error" class="mt-4 text-red-600 text-sm text-center hidden"></div>
+            <div class="mt-6 text-center text-sm text-gray-500">
+                <p>มีบัญชีผู้ใช้แล้ว? <a href="#" onclick="showLoginScreen(); return false;"
+                        class="text-blue-500 hover:text-blue-600 font-medium">เข้าสู่ระบบ</a></p>
             </div>
         </div>
     </div>
@@ -204,61 +274,115 @@
 
         <div class="flex h-screen overflow-hidden bg-[#FAF9F6] font-sans">
             <!-- 1. MAIN SIDEBAR (Desktop - ฝั่งซ้าย) -->
-            <aside id="main-sidebar" class="hidden lg:flex flex-col w-64 bg-white border-r border-[#E8E7E1] h-full shrink-0">
+            <aside id="main-sidebar"
+                class="hidden lg:flex flex-col w-64 bg-white border-r border-[#E8E7E1] h-full shrink-0">
                 <!-- Sidebar Header -->
                 <div class="p-6 border-b border-[#E8E7E1] flex items-center gap-3">
-                    <img src="https://cpd.go.th/images2/0template/logo/logo_cpd.png" class="w-10 h-10 object-contain" alt="CPD Logo">
+                    <img src="https://cpd.go.th/images2/0template/logo/logo_cpd.png" class="w-10 h-10 object-contain"
+                        alt="CPD Logo">
                     <div>
                         <h2 class="text-sm font-bold text-gray-800 leading-tight">ทะเบียนคุมระเบียบข้อบังคับ</h2>
-                        <p class="text-[10px] text-gray-500 font-medium leading-none mt-1">กลุ่มจัดตั้งและส่งเสริมสหกรณ์</p>
+                        <p class="text-[10px] text-gray-500 font-medium leading-none mt-1">กลุ่มจัดตั้งและส่งเสริมสหกรณ์
+                        </p>
                     </div>
                 </div>
 
                 <!-- Sidebar Navigation links -->
                 <div class="flex-1 py-6 px-4 space-y-1.5 overflow-y-auto">
-                    <button onclick="switchView('dashboard'); document.getElementById('topbar-title').innerText = 'หน้าหลัก';"
+                    <button
+                        onclick="switchView('dashboard'); document.getElementById('topbar-title').innerText = 'หน้าหลัก';"
                         class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-blue-600 text-blue-600 hover:bg-[#FAF5EE] w-full text-left"
                         id="nav-dashboard">
                         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                            </path>
                         </svg>
                         <span>หน้าหลัก</span>
                     </button>
 
-                    <button onclick="switchView('daily-ops'); document.getElementById('topbar-title').innerText = 'บันทึกปฏิบัติงานประจำวัน';"
+                    <button
+                        onclick="switchView('daily-ops'); document.getElementById('topbar-title').innerText = 'บันทึกปฏิบัติงานประจำวัน';"
                         class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
                         id="nav-daily-ops">
                         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+                            </path>
                         </svg>
                         <span>บันทึกปฏิบัติงาน</span>
                     </button>
 
-                    <button onclick="switchView('registry'); document.getElementById('topbar-title').innerText = 'ทะเบียนคุมระเบียบข้อบังคับ';"
+                    <button
+                        onclick="switchView('registry'); document.getElementById('topbar-title').innerText = 'ทะเบียนคุมระเบียบข้อบังคับ';"
                         class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
                         id="nav-registry">
                         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
                         </svg>
                         <span>ทะเบียนคุม</span>
                     </button>
 
-                    <button onclick="switchView('calendar'); document.getElementById('topbar-title').innerText = 'ปฏิทินปฏิบัติงาน';"
+                    <button
+                        onclick="switchView('calendar'); document.getElementById('topbar-title').innerText = 'ปฏิทินปฏิบัติงาน';"
                         class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
                         id="nav-calendar">
                         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
                         </svg>
                         <span>ปฏิทิน</span>
                     </button>
 
-                    <button onclick="switchView('users'); document.getElementById('topbar-title').innerText = 'จัดการผู้ใช้งาน';"
+                    <button
+                        onclick="switchView('coop-info'); document.getElementById('topbar-title').innerText = 'ข้อมูลสหกรณ์';"
+                        class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
+                        id="nav-coop-info">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                            </path>
+                        </svg>
+                        <span>ข้อมูลสหกรณ์</span>
+                    </button>
+
+                    <button
+                        onclick="switchView('farmer-group-info'); document.getElementById('topbar-title').innerText = 'ข้อมูลกลุ่มเกษตรกร';"
+                        class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
+                        id="nav-farmer-group-info">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                            </path>
+                        </svg>
+                        <span>ข้อมูลกลุ่มเกษตรกร</span>
+                    </button>
+
+                    <button
+                        onclick="switchView('users'); document.getElementById('topbar-title').innerText = 'จัดการผู้ใช้งาน';"
                         class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left hidden"
                         id="nav-users">
                         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                            </path>
                         </svg>
                         <span>จัดการผู้ใช้</span>
+                    </button>
+
+                    <button
+                        onclick="switchView('manual'); document.getElementById('topbar-title').innerText = 'คู่มือการใช้งาน';"
+                        class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
+                        id="nav-manual">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                            </path>
+                        </svg>
+                        <span>คู่มือการใช้งาน</span>
                     </button>
                 </div>
 
@@ -269,70 +393,131 @@
                         <div class="text-sm font-semibold text-gray-800 truncate" id="user-name-display-sidebar">-</div>
                         <div class="text-[10px] text-gray-500 font-medium mt-0.5" id="user-role-display-sidebar">-</div>
                     </div>
-                    <button onclick="logout()" class="w-full text-xs font-semibold bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2 border border-red-100">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    <button onclick="logout()"
+                        class="w-full text-xs font-semibold bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2 border border-red-100">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                            </path>
+                        </svg>
                         ออกจากระบบ
                     </button>
                 </div>
             </aside>
 
             <!-- 2. MOBILE SIDEBAR DRAWER OVERLAY & PANEL -->
-            <div id="sidebar-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden transition-opacity duration-300" onclick="toggleMobileSidebar()"></div>
-            <aside id="mobile-sidebar" class="fixed top-0 bottom-0 left-0 w-64 bg-white border-r border-[#E8E7E1] z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+            <div id="sidebar-overlay"
+                class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden transition-opacity duration-300"
+                onclick="toggleMobileSidebar()"></div>
+            <aside id="mobile-sidebar"
+                class="fixed top-0 bottom-0 left-0 w-64 bg-white border-r border-[#E8E7E1] z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
                 <!-- Mobile Sidebar Header -->
                 <div class="p-6 border-b border-[#E8E7E1] flex items-center gap-3">
-                    <img src="https://cpd.go.th/images2/0template/logo/logo_cpd.png" class="w-10 h-10 object-contain" alt="CPD Logo">
+                    <img src="https://cpd.go.th/images2/0template/logo/logo_cpd.png" class="w-10 h-10 object-contain"
+                        alt="CPD Logo">
                     <div>
                         <h2 class="text-sm font-bold text-gray-800 leading-tight">ทะเบียนคุมระเบียบข้อบังคับ</h2>
-                        <p class="text-[10px] text-gray-500 font-medium leading-none mt-1">กลุ่มจัดตั้งและส่งเสริมสหกรณ์</p>
+                        <p class="text-[10px] text-gray-500 font-medium leading-none mt-1">กลุ่มจัดตั้งและส่งเสริมสหกรณ์
+                        </p>
                     </div>
                 </div>
 
                 <!-- Mobile Navigation links -->
                 <div class="flex-1 py-6 px-4 space-y-1.5 overflow-y-auto">
-                    <button onclick="switchView('dashboard'); document.getElementById('topbar-title').innerText = 'หน้าหลัก'; toggleMobileSidebar();"
+                    <button
+                        onclick="switchView('dashboard'); document.getElementById('topbar-title').innerText = 'หน้าหลัก'; toggleMobileSidebar();"
                         class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-blue-600 text-blue-600 hover:bg-[#FAF5EE] w-full text-left"
                         id="nav-dashboard-mobile">
                         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                            </path>
                         </svg>
                         <span>หน้าหลัก</span>
                     </button>
 
-                    <button onclick="switchView('daily-ops'); document.getElementById('topbar-title').innerText = 'บันทึกปฏิบัติงานประจำวัน'; toggleMobileSidebar();"
+                    <button
+                        onclick="switchView('daily-ops'); document.getElementById('topbar-title').innerText = 'บันทึกปฏิบัติงานประจำวัน'; toggleMobileSidebar();"
                         class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
                         id="nav-daily-ops-mobile">
                         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+                            </path>
                         </svg>
                         <span>บันทึกปฏิบัติงาน</span>
                     </button>
 
-                    <button onclick="switchView('registry'); document.getElementById('topbar-title').innerText = 'ทะเบียนคุมระเบียบข้อบังคับ'; toggleMobileSidebar();"
+                    <button
+                        onclick="switchView('registry'); document.getElementById('topbar-title').innerText = 'ทะเบียนคุมระเบียบข้อบังคับ'; toggleMobileSidebar();"
                         class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
                         id="nav-registry-mobile">
                         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
                         </svg>
                         <span>ทะเบียนคุม</span>
                     </button>
 
-                    <button onclick="switchView('calendar'); document.getElementById('topbar-title').innerText = 'ปฏิทินปฏิบัติงาน'; toggleMobileSidebar();"
+                    <button
+                        onclick="switchView('calendar'); document.getElementById('topbar-title').innerText = 'ปฏิทินปฏิบัติงาน'; toggleMobileSidebar();"
                         class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
                         id="nav-calendar-mobile">
                         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
                         </svg>
                         <span>ปฏิทิน</span>
                     </button>
 
-                    <button onclick="switchView('users'); document.getElementById('topbar-title').innerText = 'จัดการผู้ใช้งาน'; toggleMobileSidebar();"
+                    <button
+                        onclick="switchView('coop-info'); document.getElementById('topbar-title').innerText = 'ข้อมูลสหกรณ์'; toggleMobileSidebar();"
+                        class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
+                        id="nav-coop-info-mobile">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                            </path>
+                        </svg>
+                        <span>ข้อมูลสหกรณ์</span>
+                    </button>
+
+                    <button
+                        onclick="switchView('farmer-group-info'); document.getElementById('topbar-title').innerText = 'ข้อมูลกลุ่มเกษตรกร'; toggleMobileSidebar();"
+                        class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
+                        id="nav-farmer-group-info-mobile">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                            </path>
+                        </svg>
+                        <span>ข้อมูลกลุ่มเกษตรกร</span>
+                    </button>
+
+                    <button
+                        onclick="switchView('users'); document.getElementById('topbar-title').innerText = 'จัดการผู้ใช้งาน'; toggleMobileSidebar();"
                         class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left hidden"
                         id="nav-users-mobile">
                         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                            </path>
                         </svg>
                         <span>จัดการผู้ใช้</span>
+                    </button>
+
+                    <button
+                        onclick="switchView('manual'); document.getElementById('topbar-title').innerText = 'คู่มือการใช้งาน'; toggleMobileSidebar();"
+                        class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
+                        id="nav-manual-mobile">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                            </path>
+                        </svg>
+                        <span>คู่มือการใช้งาน</span>
                     </button>
                 </div>
 
@@ -340,11 +525,18 @@
                 <div class="p-4 border-t border-[#E8E7E1] bg-[#FAF9F6]">
                     <div class="mb-3 px-2">
                         <div class="text-xs text-gray-400 font-medium">เข้าสู่ระบบโดย</div>
-                        <div class="text-sm font-semibold text-gray-800 truncate" id="user-name-display-sidebar-mobile">-</div>
-                        <div class="text-[10px] text-gray-500 font-medium mt-0.5" id="user-role-display-sidebar-mobile">-</div>
+                        <div class="text-sm font-semibold text-gray-800 truncate" id="user-name-display-sidebar-mobile">
+                            -</div>
+                        <div class="text-[10px] text-gray-500 font-medium mt-0.5" id="user-role-display-sidebar-mobile">
+                            -</div>
                     </div>
-                    <button onclick="logout()" class="w-full text-xs font-semibold bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2 border border-red-100">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    <button onclick="logout()"
+                        class="w-full text-xs font-semibold bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2 border border-red-100">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                            </path>
+                        </svg>
                         ออกจากระบบ
                     </button>
                 </div>
@@ -356,21 +548,23 @@
                 <header class="bg-white border-b border-[#E8E7E1] px-6 py-4 flex items-center justify-between shrink-0">
                     <div class="flex items-center gap-3">
                         <!-- Hamburger button (แสดงเฉพาะบน Mobile) -->
-                        <button onclick="toggleMobileSidebar()" class="lg:hidden p-2 text-gray-600 hover:bg-[#FAF5EE] rounded-xl transition-colors border border-[#E8E7E1]">
+                        <button onclick="toggleMobileSidebar()"
+                            class="lg:hidden p-2 text-gray-600 hover:bg-[#FAF5EE] rounded-xl transition-colors border border-[#E8E7E1]">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h16M4 18h16"></path>
                             </svg>
                         </button>
                         <div class="flex items-center gap-2">
-                            <img src="https://cpd.go.th/images2/0template/logo/logo_cpd.png" class="w-8 h-8 object-contain lg:hidden" alt="CPD Logo">
-                            <h1 id="topbar-title" class="text-base md:text-lg font-bold text-gray-800 leading-tight">หน้าหลัก</h1>
+                            <img src="https://cpd.go.th/images2/0template/logo/logo_cpd.png"
+                                class="w-8 h-8 object-contain lg:hidden" alt="CPD Logo">
+                            <h1 id="topbar-title" class="text-base md:text-lg font-bold text-gray-800 leading-tight">
+                                หน้าหลัก</h1>
                         </div>
                     </div>
                 </header>
 
                 <!-- Scrollable Main Workspace Area -->
-                <main class="flex-1 overflow-auto p-4 md:p-6 lg:p-8 space-y-6">
-
             <!-- DASHBOARD VIEW -->
             <div id="view-dashboard" class="space-y-6 animate-fade-in">
                 <!-- Alerts Section -->
@@ -487,6 +681,28 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Bylaw Stats Section -->
+                <div class="mt-8 animate-fade-in delay-100">
+                    <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2 mb-4">
+                        <span class="bg-purple-100 p-2 rounded-lg text-purple-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                                </path>
+                            </svg>
+                        </span>
+                        สรุปความคืบหน้าการแก้ไขข้อบังคับ
+                    </h3>
+
+                    <div id="dashboard-bylaw-stats" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <!-- Injected by JS -->
+                        <div
+                            class="col-span-2 md:col-span-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-center">
+                            <span class="text-gray-400">กำลังโหลดข้อมูล...</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- DAILY OPS VIEW -->
@@ -497,7 +713,8 @@
                     <button onclick="openDailyOpModal()"
                         class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4v16m8-8H4">
                             </path>
                         </svg>
                         บันทึกงานใหม่
@@ -518,11 +735,21 @@
                                 <table class="w-full table-auto border-collapse">
                                     <thead class="bg-slate-50 border-b border-slate-200">
                                         <tr>
-                                            <th class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[40px]"></th>
-                                            <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[150px]">เวลา & วันที่</th>
-                                            <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">กิจกรรม</th>
-                                            <th class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider w-[120px]">สถานะ</th>
-                                            <th class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider w-[120px]">จัดการ</th>
+                                            <th
+                                                class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[40px]">
+                                            </th>
+                                            <th
+                                                class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[150px]">
+                                                เวลา & วันที่</th>
+                                            <th
+                                                class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                                                กิจกรรม</th>
+                                            <th
+                                                class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider w-[120px]">
+                                                สถานะ</th>
+                                            <th
+                                                class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider w-[120px]">
+                                                จัดการ</th>
                                         </tr>
                                     </thead>
                                     <tbody id="daily-ops-table-body" class="divide-y divide-gray-100">
@@ -535,7 +762,8 @@
                                 </table>
                             </div>
                             <!-- Daily Ops Pagination: แถบเปลี่ยนหน้ารายงานสว่างสไตล์ Claude -->
-                            <div id="daily-pagination-container" class="px-4 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-4">
+                            <div id="daily-pagination-container"
+                                class="px-4 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-4">
                                 <div class="text-xs text-gray-500 font-medium" id="daily-pagination-info">
                                     แสดงรายการ 0 จาก 0
                                 </div>
@@ -545,7 +773,8 @@
                                         ก่อนหน้า
                                     </button>
                                     <span class="text-xs font-bold text-gray-700">
-                                        หน้า <span id="daily-current-page">1</span> / <span id="daily-total-pages">1</span>
+                                        หน้า <span id="daily-current-page">1</span> / <span
+                                            id="daily-total-pages">1</span>
                                     </span>
                                     <button id="btn-daily-next" onclick="changeDailyPage(1)"
                                         class="px-2.5 py-1.5 border border-[#E8E7E1] rounded-lg hover:bg-white text-xs font-semibold text-gray-600 bg-white/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
@@ -554,287 +783,452 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- REGISTRY VIEW (Existing Content Wrapped) -->
-            <div id="view-registry" class="hidden">
-                <!-- Stats Cards -->
-
-                <!-- Stats Cards Removed as per user request -->
-
-
-                <!-- Add New Button -->
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-semibold text-gray-800">ทะเบียนคุมระเบียบ/ข้อบังคับ</h2>
-                    <button id="btn-add-new"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
-                            </path>
-                        </svg>
-                        เพิ่มรายการใหม่
-                    </button>
-                </div>
-
-                <!-- Filter -->
-                <div class="bg-white rounded-xl p-4 card-shadow mb-4">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-600 mb-1">ค้นหาสหกรณ์</label>
-                            <input type="text" id="filter-search" placeholder="พิมพ์ชื่อสหกรณ์..."
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 19l-7-7 7-7">
+                                        </path>
+                                    </svg>
+                                </button>
+                                <span class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg font-medium text-sm">
+                                    หน้า <span id="current-page">1</span> / <span id="total-pages">1</span>
+                                </span>
+                                <button id="btn-next-page"
+                                    class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    title="ถัดไป">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7">
+                                        </path>
+                                    </svg>
+                                </button>
+                                <button id="btn-last-page"
+                                    class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    title="หน้าสุดท้าย">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-600 mb-1">ประเภทเอกสาร</label>
-                            <select id="filter-type"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">ทั้งหมด</option>
-                                <option value="ระเบียบ">ระเบียบ</option>
-                                <option value="ข้อบังคับ">ข้อบังคับ</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-600 mb-1">สถานะ</label>
-                            <select id="filter-status"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">ทั้งหมด</option>
-                                <option value="รอดำเนินการ">รอดำเนินการ</option>
-                                <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
-                                <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
-                            </select>
-                        </div>
-                        <div class="flex items-end">
-                            <button id="btn-clear-filter"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">ล้างตัวกรอง</button>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Table -->
-                <div class="bg-white rounded-xl card-shadow overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full table-auto border-collapse">
-                            <thead class="bg-slate-50 border-b border-slate-200">
-                                <tr>
-                                    <th class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[40px]"></th>
-                                    <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[60px]">ลำดับ</th>
-                                    <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap min-w-[200px] max-w-[350px]">ชื่อสหกรณ์</th>
-                                    <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[100px]">ประเภท</th>
-                                    <th class="px-4 py-3.5 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">หัวข้อ</th>
-                                    <th class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[110px]">สถานะ</th>
-                                    <th class="px-4 py-3.5 text-center text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap w-[100px]">จัดการ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table-body" class="divide-y divide-gray-100">
-                                <tr>
-                                    <td colspan="14" class="px-4 py-12 text-center text-gray-500">
-                                        <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                            </path>
-                                        </svg>
-                                        <p>กำลังโหลดข้อมูล...</p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Pagination -->
-                <div id="pagination-container"
-                    class="mt-4 bg-white rounded-xl p-4 card-shadow flex flex-col sm:flex-row items-center justify-between gap-4 hidden">
-                    <div class="flex items-center gap-2 text-sm text-gray-600">
-                        <span>แสดง:</span>
-                        <select id="page-size"
-                            class="px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                        <span>รายการต่อหน้า</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span id="pagination-info" class="text-sm text-gray-600 mr-2">รายการ 1-10 จาก 100</span>
-                        <button id="btn-first-page"
-                            class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                            title="หน้าแรก">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
-                            </svg>
-                        </button>
-                        <button id="btn-prev-page"
-                            class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                            title="ก่อนหน้า">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 19l-7-7 7-7">
-                                </path>
-                            </svg>
-                        </button>
-                        <span class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg font-medium text-sm">
-                            หน้า <span id="current-page">1</span> / <span id="total-pages">1</span>
-                        </span>
-                        <button id="btn-next-page"
-                            class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                            title="ถัดไป">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
-                                </path>
-                            </svg>
-                        </button>
-                        <button id="btn-last-page"
-                            class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                            title="หน้าสุดท้าย">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Summary Section -->
-                <div id="summary-section" class="mt-6 bg-white rounded-xl p-6 card-shadow hidden">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                            </path>
-                        </svg>
-                        สรุปทะเบียนคุม
-                    </h3>
-                    <div id="summary-content" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-                </div>
-            </div> <!-- End view-registry -->
-
-            <!-- CALENDAR VIEW -->
-            <div id="view-calendar" class="hidden space-y-6 animate-fade-in">
-                <div class="bg-white rounded-xl card-shadow p-6">
-                    <!-- Calendar Header -->
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                            <span class="bg-indigo-100 p-2 rounded-lg text-indigo-600">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <!-- Summary Section -->
+                        <div id="summary-section" class="mt-6 bg-white rounded-xl p-6 card-shadow hidden">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                     </path>
                                 </svg>
-                            </span>
-                            <span id="calendar-month-year">...</span>
-                        </h2>
-                        <div class="flex items-center gap-2">
-                            <button onclick="changeMonth(-1)"
-                                class="p-2 hover:bg-gray-100 rounded-lg text-gray-600 transition-colors">
+                                สรุปทะเบียนคุม
+                            </h3>
+                            <div id="summary-content" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                        </div>
+                    </div> <!-- End view-registry -->
+
+                    <!-- CALENDAR VIEW -->
+                    <div id="view-calendar" class="hidden space-y-6 animate-fade-in">
+                        <div class="bg-white rounded-xl card-shadow p-6">
+                            <!-- Calendar Header -->
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                                    <span class="bg-indigo-100 p-2 rounded-lg text-indigo-600">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    <span id="calendar-month-year">...</span>
+                                </h2>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="changeMonth(-1)"
+                                        class="p-2 hover:bg-gray-100 rounded-lg text-gray-600 transition-colors">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 19l-7-7 7-7"></path>
+                                        </svg>
+                                    </button>
+                                    <button onclick="goToToday()"
+                                        class="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-lg font-medium hover:bg-blue-100 transition-colors">
+                                        วันนี้
+                                    </button>
+                                    <button onclick="changeMonth(1)"
+                                        class="p-2 hover:bg-gray-100 rounded-lg text-gray-600 transition-colors">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Calendar Grid -->
+                            <div
+                                class="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden border border-gray-200">
+                                <!-- Days Header -->
+                                <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">อา.</div>
+                                <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">จ.</div>
+                                <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">อ.</div>
+                                <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">พ.</div>
+                                <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">พฤ.</div>
+                                <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">ศ.</div>
+                                <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">ส.</div>
+
+                                <!-- Calendar Days will be injected here -->
+                                <div id="calendar-grid" class="col-span-7 grid grid-cols-7 gap-px bg-gray-200">
+                                    <!-- JS will populate this -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Legend -->
+                        <div class="flex flex-wrap gap-4 text-sm text-gray-600 px-2 justify-center">
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded-full bg-blue-500"></span> รับจากสหกรณ์
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded-full bg-green-500"></span> สนง-กลุ่ม ดำเนินการเสร็จ
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded-full bg-orange-500"></span> รับจากฝ่ายบริหาร
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded-full bg-gray-500"></span> ปฏิบัติงาน
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COOP INFO VIEW -->
+                    <div id="view-coop-info" class="hidden space-y-6 animate-fade-in">
+                        <div class="bg-white p-6 rounded-xl card-shadow">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                                    <span class="bg-blue-100 p-2 rounded-lg text-blue-600">
+                                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    ข้อมูลสหกรณ์
+                                </h2>
+                                <button onclick="openBylawModal('สหกรณ์')"
+                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 4v16m8-8H4"></path>
+                                    </svg>
+                                    เพิ่มข้อมูล
+                                </button>
+                            </div>
+                            <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-lg p-4 mb-6">
+                                <p class="font-medium text-sm">การตรวจสอบการแก้ไขเพิ่มเติมข้อบังคับ ปรังปรุงตามกฎกระทรวง
+                                    กำหนดลักษณะ วัตถุประสงค์
+                                    และขอบเขตแห่งการดำเนินกิจการของสหกรณ์แต่ละประเภทที่จะรับจดทะเบียน พ.ศ.2567</p>
+                            </div>
+
+                            <!-- Filters -->
+                            <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                                <div class="flex-1 relative">
+                                    <input type="text" id="search-coop-input" oninput="renderBylaws()"
+                                        placeholder="ค้นหาชื่อสหกรณ์..."
+                                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </div>
+                                <select id="filter-coop-group" onchange="renderBylaws()"
+                                    class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 bg-white sm:w-48">
+                                    <option value="">กลุ่มทั้งหมด</option>
+                                    <option value="กลุ่มส่งเสริมสหกรณ์ 1">กลุ่มส่งเสริมสหกรณ์ 1</option>
+                                    <option value="กลุ่มส่งเสริมสหกรณ์ 2">กลุ่มส่งเสริมสหกรณ์ 2</option>
+                                    <option value="กลุ่มส่งเสริมสหกรณ์ 3">กลุ่มส่งเสริมสหกรณ์ 3</option>
+                                    <option value="นิคมสหกรณ์ชะแวะ">นิคมสหกรณ์ชะแวะ</option>
+                                </select>
+                                <select id="filter-coop-status" onchange="renderBylaws()"
+                                    class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 bg-white sm:w-48">
+                                    <option value="">ทุกสถานะ</option>
+                                    <option value="รอดำเนินการ">รอดำเนินการ</option>
+                                    <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                                    <option value="แก้ไขแล้ว">แก้ไขแล้ว</option>
+                                </select>
+                            </div>
+
+                            <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-gray-50 border-b border-gray-200">
+                                            <th class="p-3 text-sm font-semibold text-gray-700 w-16 text-center">ลำดับ
+                                            </th>
+                                            <th class="p-3 text-sm font-semibold text-gray-700">ชื่อสหกรณ์</th>
+                                            <th class="p-3 text-sm font-semibold text-gray-700 text-center">
+                                                สถานะการแก้ไขข้อบังคับ</th>
+                                            <th class="p-3 text-sm font-semibold text-gray-700">หมายเหตุ</th>
+                                            <th class="p-3 text-sm font-semibold text-gray-700 w-32 text-center">จัดการ
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bylaw-coop-tbody">
+                                        <tr>
+                                            <td colspan="5" class="p-8 text-center text-gray-400 text-sm">
+                                                กำลังโหลดข้อมูล...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FARMER GROUP INFO VIEW -->
+                    <div id="view-farmer-group-info" class="hidden space-y-6 animate-fade-in">
+                        <div class="bg-white p-6 rounded-xl card-shadow">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                                    <span class="bg-green-100 p-2 rounded-lg text-green-600">
+                                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    ข้อมูลกลุ่มเกษตรกร
+                                </h2>
+                                <button onclick="openBylawModal('กลุ่มเกษตรกร')"
+                                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 4v16m8-8H4"></path>
+                                    </svg>
+                                    เพิ่มข้อมูล
+                                </button>
+                            </div>
+                            <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-lg p-4 mb-6">
+                                <p class="font-medium text-sm">การตรวจสอบการแก้ไขเพิ่มเติมข้อบังคับ ปรังปรุงตามกฎกระทรวง
+                                    กำหนดลักษณะ วัตถุประสงค์ และขอบเขตแห่งการดำเนินกิจการของกลุ่มเกษตรกร
+                                    (อนุโลมตามกฎกระทรวงสหกรณ์ พ.ศ.2567)</p>
+                            </div>
+
+                            <!-- Filters -->
+                            <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                                <div class="flex-1 relative">
+                                    <input type="text" id="search-farmer-input" oninput="renderBylaws()"
+                                        placeholder="ค้นหาชื่อกลุ่มเกษตรกร..."
+                                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </div>
+                                <select id="filter-farmer-group" onchange="renderBylaws()"
+                                    class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-700 bg-white sm:w-48">
+                                    <option value="">กลุ่มทั้งหมด</option>
+                                    <option value="กลุ่มส่งเสริมสหกรณ์ 1">กลุ่มส่งเสริมสหกรณ์ 1</option>
+                                    <option value="กลุ่มส่งเสริมสหกรณ์ 2">กลุ่มส่งเสริมสหกรณ์ 2</option>
+                                    <option value="กลุ่มส่งเสริมสหกรณ์ 3">กลุ่มส่งเสริมสหกรณ์ 3</option>
+                                    <option value="นิคมสหกรณ์ชะแวะ">นิคมสหกรณ์ชะแวะ</option>
+                                </select>
+                                <select id="filter-farmer-status" onchange="renderBylaws()"
+                                    class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-700 bg-white sm:w-48">
+                                    <option value="">ทุกสถานะ</option>
+                                    <option value="รอดำเนินการ">รอดำเนินการ</option>
+                                    <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                                    <option value="แก้ไขแล้ว">แก้ไขแล้ว</option>
+                                </select>
+                            </div>
+
+                            <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-gray-50 border-b border-gray-200">
+                                            <th class="p-3 text-sm font-semibold text-gray-700 w-16 text-center">ลำดับ
+                                            </th>
+                                            <th class="p-3 text-sm font-semibold text-gray-700">ชื่อกลุ่มเกษตรกร</th>
+                                            <th class="p-3 text-sm font-semibold text-gray-700 text-center">
+                                                สถานะการแก้ไขข้อบังคับ</th>
+                                            <th class="p-3 text-sm font-semibold text-gray-700">หมายเหตุ</th>
+                                            <th class="p-3 text-sm font-semibold text-gray-700 w-32 text-center">จัดการ
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bylaw-farmer-tbody">
+                                        <tr>
+                                            <td colspan="5" class="p-8 text-center text-gray-400 text-sm">
+                                                กำลังโหลดข้อมูล...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- USERS MANAGEMENT VIEW -->
+                    <div id="view-users" class="hidden space-y-6 animate-fade-in">
+                        <div class="flex justify-between items-center bg-white p-4 rounded-xl card-shadow">
+                            <h2 class="text-xl font-bold text-gray-800">จัดการผู้ใช้งาน</h2>
+                            <button onclick="openUserModal()"
+                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 19l-7-7 7-7"></path>
+                                        d="M12 4v16m8-8H4"></path>
                                 </svg>
+                                เพิ่มผู้ใช้
                             </button>
-                            <button onclick="goToToday()"
-                                class="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-lg font-medium hover:bg-blue-100 transition-colors">
-                                วันนี้
-                            </button>
-                            <button onclick="changeMonth(1)"
-                                class="p-2 hover:bg-gray-100 rounded-lg text-gray-600 transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </button>
+                        </div>
+                        <div class="bg-white rounded-xl card-shadow overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead class="bg-gray-50 border-b border-gray-200">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ชื่อ
+                                            </th>
+                                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">อีเมล
+                                            </th>
+                                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">สิทธิ์
+                                            </th>
+                                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">จัดการ
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="users-table-body" class="divide-y divide-gray-100">
+                                        <tr>
+                                            <td colspan="4" class="p-4 text-center text-gray-500">กำลังโหลด...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Calendar Grid -->
-                    <div class="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden border border-gray-200">
-                        <!-- Days Header -->
-                        <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">อา.</div>
-                        <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">จ.</div>
-                        <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">อ.</div>
-                        <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">พ.</div>
-                        <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">พฤ.</div>
-                        <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">ศ.</div>
-                        <div class="bg-gray-50 p-2 text-center text-sm font-semibold text-gray-700">ส.</div>
-
-                        <!-- Calendar Days will be injected here -->
-                        <div id="calendar-grid" class="col-span-7 grid grid-cols-7 gap-px bg-gray-200">
-                            <!-- JS will populate this -->
+                    <!-- Calendar Event Modal -->
+                    <div id="calendar-modal" class="fixed inset-0 z-50 hidden">
+                        <div class="modal-backdrop absolute inset-0" onclick="closeCalendarModal()"></div>
+                        <div class="relative flex items-center justify-center min-h-full p-4">
+                            <div
+                                class="bg-white rounded-xl shadow-2xl w-full max-w-md relative max-h-[80vh] overflow-y-auto">
+                                <div
+                                    class="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 rounded-t-xl flex justify-between items-center">
+                                    <h3 id="calendar-modal-date" class="font-bold text-gray-800 text-lg">รายละเอียด</h3>
+                                    <button onclick="closeCalendarModal()" class="text-gray-400 hover:text-gray-600">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div id="calendar-modal-content" class="p-6 space-y-3">
+                                    <!-- Events injected here -->
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <!-- MANUAL VIEW -->
+                    <div id="view-manual" class="hidden space-y-6 animate-fade-in">
+                        <div class="bg-white rounded-2xl p-8 card-shadow border border-gray-100">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                                <span class="bg-blue-100 p-2 rounded-lg text-blue-600">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                                        </path>
+                                    </svg>
+                                </span>
+                                คู่มือการใช้งานระบบ
+                            </h2>
+                            <div class="prose prose-blue max-w-none text-gray-600">
+                                <p class="text-lg mb-8">ยินดีต้อนรับสู่ <strong>ระบบทะเบียนคุมระเบียบข้อบังคับ</strong>
+                                    คู่มือฉบับนี้จัดทำขึ้นเพื่อให้ผู้ใช้งานเข้าใจขั้นตอนการทำงานและสามารถใช้งานระบบได้อย่างรวดเร็ว
+                                </p>
 
-                <!-- Legend -->
-                <div class="flex flex-wrap gap-4 text-sm text-gray-600 px-2 justify-center">
-                    <div class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-full bg-blue-500"></span> รับจากสหกรณ์
-                    </div>
-                    <div class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-full bg-green-500"></span> สนง-กลุ่ม ดำเนินการเสร็จ
-                    </div>
-                    <div class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-full bg-orange-500"></span> รับจากฝ่ายบริหาร
-                    </div>
-                    <div class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-full bg-gray-500"></span> ปฏิบัติงาน
-                    </div>
-                </div>
-            </div>
+                                <div class="bg-slate-50 rounded-xl p-6 mb-8 border border-slate-100">
+                                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                        <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                        </svg>
+                                        1. การลงทะเบียนและการเข้าสู่ระบบ
+                                    </h3>
+                                    <ul class="space-y-2 list-disc list-inside">
+                                        <li>คลิกที่ลิงก์ <strong>"ลงทะเบียนผู้ใช้งานใหม่"</strong>
+                                            ด้านล่างปุ่มเข้าสู่ระบบ</li>
+                                        <li>กรอก <strong>ชื่อ-นามสกุล</strong>, <strong>อีเมล/ชื่อผู้ใช้</strong>, และ
+                                            <strong>รหัสผ่าน</strong></li>
+                                        <li>ระบบจะแยกข้อมูลการทำงานตามบัญชีผู้ใช้
+                                            คุณจะเห็นเฉพาะรายการที่คุณเป็นผู้บันทึกหรือได้รับมอบหมายเท่านั้น</li>
+                                    </ul>
+                                </div>
 
-            <!-- USERS MANAGEMENT VIEW -->
-            <div id="view-users" class="hidden space-y-6 animate-fade-in">
-                <div class="flex justify-between items-center bg-white p-4 rounded-xl card-shadow">
-                    <h2 class="text-xl font-bold text-gray-800">จัดการผู้ใช้งาน</h2>
-                    <button onclick="openUserModal()"
-                        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                        เพิ่มผู้ใช้
-                    </button>
-                </div>
-                <div class="bg-white rounded-xl card-shadow overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead class="bg-gray-50 border-b border-gray-200">
-                                <tr>
-                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">ชื่อ</th>
-                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">อีเมล</th>
-                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">สิทธิ์</th>
-                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">จัดการ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="users-table-body" class="divide-y divide-gray-100">
-                                <tr><td colspan="4" class="p-4 text-center text-gray-500">กำลังโหลด...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                    <div
+                                        class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow">
+                                        <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2"><span
+                                                class="text-2xl">🏠</span> หน้าหลัก (Dashboard)</h4>
+                                        <p class="text-sm">แสดงสรุปการปฏิบัติงานล่าสุดของคุณ และสถานะทะเบียนคุม
+                                            พร้อมกราฟแท่งความคืบหน้าเพื่อให้เห็นภาพรวมของงาน</p>
+                                    </div>
+                                    <div
+                                        class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow">
+                                        <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2"><span
+                                                class="text-2xl">📝</span> บันทึกปฏิบัติงานประจำวัน</h4>
+                                        <p class="text-sm">บันทึกกิจกรรมหรือการลงพื้นที่ในแต่ละวัน
+                                            สามารถค้นหาย้อนหลังได้ตามวันที่</p>
+                                    </div>
+                                    <div
+                                        class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow">
+                                        <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2"><span
+                                                class="text-2xl">📚</span> ทะเบียนคุมระเบียบข้อบังคับ</h4>
+                                        <p class="text-sm">บันทึกและติดตามสถานะของระเบียบ/ข้อบังคับ
+                                            ระบบช่วยนับวันทำงานให้อัตโนมัติ (หักวันหยุด) และรองรับการแนบไฟล์</p>
+                                    </div>
+                                    <div
+                                        class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow">
+                                        <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2"><span
+                                                class="text-2xl">📅</span> ปฏิทินปฏิบัติงาน</h4>
+                                        <p class="text-sm">แสดงภาพรวมของงานและบันทึกประจำวันในรูปแบบปฏิทิน
+                                            คลิกที่จุดเพื่อดูรายละเอียดได้ทันที</p>
+                                    </div>
+                                </div>
 
-            <!-- Calendar Event Modal -->
-            <div id="calendar-modal" class="fixed inset-0 z-50 hidden">
-                <div class="modal-backdrop absolute inset-0" onclick="closeCalendarModal()"></div>
-                <div class="relative flex items-center justify-center min-h-full p-4">
-                    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md relative max-h-[80vh] overflow-y-auto">
-                        <div
-                            class="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 rounded-t-xl flex justify-between items-center">
-                            <h3 id="calendar-modal-date" class="font-bold text-gray-800 text-lg">รายละเอียด</h3>
-                            <button onclick="closeCalendarModal()" class="text-gray-400 hover:text-gray-600">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                            </button>
+                                <div class="bg-blue-50 rounded-xl p-6 border border-blue-100">
+                                    <h3 class="text-lg font-bold text-blue-800 mb-3 flex items-center gap-2">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        เคล็ดลับการใช้งาน (Tips)
+                                    </h3>
+                                    <ul class="space-y-3 text-sm text-blue-900">
+                                        <li class="flex items-start gap-2">
+                                            <svg class="w-5 h-5 text-blue-500 shrink-0 mt-0.5" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <strong>การอัปเดตสถานะรวดเร็ว:</strong> เมื่อดำเนินการเสร็จแล้ว
+                                            ให้แก้ไขสถานะเป็น "ดำเนินการแล้ว" ทันที เพื่อให้ Dashboard แสดงผลถูกต้อง
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <svg class="w-5 h-5 text-blue-500 shrink-0 mt-0.5" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <strong>การค้นหา:</strong> ใช้กล่องค้นหาและตัวกรองเพื่อหาเอกสารที่ยัง
+                                            "รอดำเนินการ"
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                        <div id="calendar-modal-content" class="p-6 space-y-3">
-                            <!-- Events injected here -->
-                        </div>
                     </div>
-                </div>
-            </div>
                 </main>
             </div> <!-- End Main Workspace Area -->
         </div> <!-- End Flex Layout ครอบ -->
@@ -1139,42 +1533,111 @@
             </div>
         </div>
 
+        <!-- Bylaw Modal -->
+        <div id="bylaw-modal" class="fixed inset-0 z-50 hidden">
+            <div class="modal-backdrop absolute inset-0"></div>
+            <div class="relative flex items-center justify-center min-h-full p-4">
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg relative">
+                    <div
+                        class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl flex justify-between items-center">
+                        <h2 id="bylaw-modal-title" class="text-xl font-semibold text-gray-800">
+                            เพิ่มข้อมูลการแก้ไขข้อบังคับ</h2>
+                        <button onclick="closeBylawModal()" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <form id="form-bylaw" class="p-6 space-y-4">
+                        <input type="hidden" id="bylaw-id">
+                        <input type="hidden" id="bylaw-entity-type">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อสถาบัน <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text" id="bylaw-entity-name" required
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="ระบุชื่อสหกรณ์/กลุ่มเกษตรกร">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">สถานะ <span
+                                    class="text-red-500">*</span></label>
+                            <select id="bylaw-status" required
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="รอดำเนินการ">รอดำเนินการ</option>
+                                <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                                <option value="แก้ไขแล้ว">แก้ไขแล้ว</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">หมายเหตุ</label>
+                            <textarea id="bylaw-notes" rows="3"
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="เพิ่มเติม (ถ้ามี)"></textarea>
+                        </div>
+                        <div class="flex gap-3 pt-4 border-t border-gray-200">
+                            <button type="button" onclick="closeBylawModal()"
+                                class="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium transition-colors">ยกเลิก</button>
+                            <button type="submit" id="btn-save-bylaw"
+                                class="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">บันทึก</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <!-- User Modal -->
         <div id="user-modal" class="fixed inset-0 z-50 hidden">
             <div class="modal-backdrop absolute inset-0"></div>
             <div class="relative flex items-center justify-center min-h-full p-4">
                 <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg relative">
-                    <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl flex justify-between items-center">
+                    <div
+                        class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl flex justify-between items-center">
                         <h2 id="user-modal-title" class="text-xl font-semibold text-gray-800">เพิ่มผู้ใช้</h2>
                         <button onclick="closeUserModal()" class="text-gray-400 hover:text-gray-600">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
                         </button>
                     </div>
                     <form id="form-user" class="p-6 space-y-4">
                         <input type="hidden" id="user-id">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อผู้ใช้ <span class="text-red-500">*</span></label>
-                            <input type="text" id="user-name-input" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="เช่น นายสมชาย ใจดี">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อผู้ใช้ <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text" id="user-name-input" required
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="เช่น นายสมชาย ใจดี">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">อีเมล / ชื่อผู้ใช้ <span class="text-red-500">*</span></label>
-                            <input type="text" id="user-email-input" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="เช่น somchai">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">อีเมล / ชื่อผู้ใช้ <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text" id="user-email-input" required
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="เช่น somchai">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน <span id="password-required" class="text-red-500">*</span></label>
-                            <input type="password" id="user-password-input" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน <span
+                                    id="password-required" class="text-red-500">*</span></label>
+                            <input type="password" id="user-password-input"
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                             <p class="text-xs text-gray-500 mt-1" id="password-hint"></p>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">สิทธิ์ <span class="text-red-500">*</span></label>
-                            <select id="user-role-input" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">สิทธิ์ <span
+                                    class="text-red-500">*</span></label>
+                            <select id="user-role-input" required
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 <option value="user">ผู้ใช้ทั่วไป (User)</option>
                                 <option value="admin">ผู้ดูแลระบบ (Admin)</option>
                             </select>
                         </div>
                         <div class="flex gap-3 pt-4 border-t border-gray-200">
-                            <button type="button" onclick="closeUserModal()" class="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium transition-colors">ยกเลิก</button>
-                            <button type="submit" id="btn-save-user" class="flex-1 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors">บันทึก</button>
+                            <button type="button" onclick="closeUserModal()"
+                                class="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium transition-colors">ยกเลิก</button>
+                            <button type="submit" id="btn-save-user"
+                                class="flex-1 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors">บันทึก</button>
                         </div>
                     </form>
                 </div>
@@ -1319,7 +1782,9 @@
         let currentView = 'dashboard';
         let currentUser = null;
         let allUsers = [];
+        let allBylaws = [];
         let isUserEditing = false;
+        let isBylawEditing = false;
         let staffList = []; // รายชื่อเจ้าหน้าที่สำหรับ Dropdown
 
         // Pagination state
@@ -1334,16 +1799,16 @@
                 return;
             }
             // Hide all views and reset nav highlights for both Desktop and Mobile
-            ['dashboard', 'daily-ops', 'registry', 'calendar', 'users'].forEach(v => {
+            ['dashboard', 'daily-ops', 'registry', 'calendar', 'users', 'coop-info', 'farmer-group-info', 'manual'].forEach(v => {
                 document.getElementById(`view-${v}`).classList.add('hidden');
-                
+
                 // Desktop Sidebar Reset
                 const desktopNav = document.getElementById(`nav-${v}`);
                 if (desktopNav) {
                     desktopNav.classList.replace('text-blue-600', 'text-gray-500');
                     desktopNav.classList.replace('border-blue-600', 'border-transparent');
                 }
-                
+
                 // Mobile Sidebar Reset
                 const mobileNav = document.getElementById(`nav-${v}-mobile`);
                 if (mobileNav) {
@@ -1354,14 +1819,14 @@
 
             // Show selected view
             document.getElementById(`view-${viewName}`).classList.remove('hidden');
-            
+
             // Highlight Desktop Nav
             const navBtn = document.getElementById(`nav-${viewName}`);
             if (navBtn) {
                 navBtn.classList.replace('text-gray-500', 'text-blue-600');
                 navBtn.classList.replace('border-transparent', 'border-blue-600');
             }
-            
+
             // Highlight Mobile Nav
             const navBtnMobile = document.getElementById(`nav-${viewName}-mobile`);
             if (navBtnMobile) {
@@ -1831,13 +2296,13 @@
             document.getElementById('daily-location').value = op.location;
             document.getElementById('daily-status').value = op.status;
             document.getElementById('daily-notes').value = op.notes || '';
-            
+
             // Show assigned_to field for Admin
             showAssignedToField(currentUser && currentUser.role === 'admin');
             if (currentUser && currentUser.role === 'admin') {
                 document.getElementById('daily-assigned-to').value = op.assigned_to || op.created_by || '';
             }
-            
+
             document.getElementById('daily-ops-modal').classList.remove('hidden');
         }
 
@@ -2234,6 +2699,59 @@
                     </div>
                 </div>
             `;
+
+            // Bylaw Stats
+            const bylawTotal = allBylaws.length;
+            const bylawPending = allBylaws.filter(b => b.status === 'รอดำเนินการ').length;
+            const bylawProcess = allBylaws.filter(b => b.status === 'กำลังดำเนินการ').length;
+            const bylawDone = allBylaws.filter(b => b.status === 'แก้ไขแล้ว').length;
+            const bylawPercent = bylawTotal > 0 ? Math.round((bylawDone / bylawTotal) * 100) : 0;
+
+            const bylawStatsContainer = document.getElementById('dashboard-bylaw-stats');
+            if (bylawStatsContainer) {
+                bylawStatsContainer.innerHTML = `
+                    <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-5 text-white shadow-lg shadow-purple-200 relative overflow-hidden group col-span-2 md:col-span-1">
+                        <div class="absolute right-0 top-0 w-24 h-24 bg-white opacity-10 rounded-full -mr-6 -mt-6 group-hover:scale-110 transition-transform duration-500"></div>
+                        <div class="relative z-10">
+                            <div class="text-purple-100 text-sm font-medium mb-1">ทั้งหมด</div>
+                            <div class="text-4xl font-bold tracking-tight">${bylawTotal}</div>
+                            <div class="mt-2 text-xs text-purple-100 opacity-80">แห่ง</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 rounded-lg bg-yellow-100 text-yellow-600 flex items-center justify-center mb-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div class="text-2xl font-bold text-gray-800">${bylawPending}</div>
+                        <div class="text-xs text-gray-500">รอดำเนินการ</div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mb-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        </div>
+                        <div class="text-2xl font-bold text-gray-800">${bylawProcess}</div>
+                        <div class="text-xs text-gray-500">กำลังดำเนินการ</div>
+                    </div>
+
+                    <div class="bg-green-50 rounded-2xl p-4 border border-green-100 relative overflow-hidden flex flex-col justify-center">
+                        <div class="absolute bottom-0 left-0 w-full h-1 bg-gray-200">
+                            <div class="h-full bg-green-500 transition-all duration-1000" style="width: ${bylawPercent}%"></div>
+                        </div>
+                        <div class="flex items-center justify-between mb-2">
+                            <div>
+                                <div class="text-green-800 font-bold text-xl">${bylawDone}</div>
+                                <div class="text-green-600 text-xs">แก้ไขแล้ว</div>
+                            </div>
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                        </div>
+                        <div class="text-xs text-green-700 font-medium text-right">${bylawPercent}% สำเร็จ</div>
+                    </div>
+                `;
+            }
         }
 
         // Helper to format date for dashboard calendar icon
@@ -2824,7 +3342,7 @@
             document.getElementById('modal-title').textContent = 'แก้ไขรายการ';
             document.getElementById('record-id').value = record.id;
             document.getElementById('input-coop-name').value = record.cooperative_name || '';
-            
+
             // Show assigned_to field for Admin
             showAssignedToField(currentUser && currentUser.role === 'admin');
             if (currentUser && currentUser.role === 'admin') {
@@ -3034,12 +3552,12 @@
                 else if (record.status === 'กำลังดำเนินการ') rowClass = 'row-processing';
                 else rowClass = 'row-pending';
 
-                const coopDaysBadge = coopDays !== null ? 
-                    `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-700/10 whitespace-nowrap">${coopDays} วัน</span>` : 
+                const coopDaysBadge = coopDays !== null ?
+                    `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-700/10 whitespace-nowrap">${coopDays} วัน</span>` :
                     `<span class="text-gray-400 text-xs">-</span>`;
 
-                const groupDaysBadge = groupDays !== null ? 
-                    `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-50 text-green-700 ring-1 ring-inset ring-green-700/10 whitespace-nowrap">${groupDays} วัน</span>` : 
+                const groupDaysBadge = groupDays !== null ?
+                    `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-50 text-green-700 ring-1 ring-inset ring-green-700/10 whitespace-nowrap">${groupDays} วัน</span>` :
                     `<span class="text-gray-400 text-xs">-</span>`;
 
                 return `
@@ -3148,12 +3666,12 @@
                       <span class="text-gray-500">เอกสารไฟล์แนบ:</span>
                       <span>
                         ${record.attachment_file_url ?
-                            `<a href="${record.attachment_file_url}" target="_blank" class="text-[#AE7C43] hover:text-[#9C7844] inline-flex items-center gap-1 font-semibold group transition-colors">
+                        `<a href="${record.attachment_file_url}" target="_blank" class="text-[#AE7C43] hover:text-[#9C7844] inline-flex items-center gap-1 font-semibold group transition-colors">
                               <svg class="w-3.5 h-3.5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
                               เปิดไฟล์แนบ
                             </a>` :
-                            '<span class="text-gray-400 font-medium">-</span>'
-                        }
+                        '<span class="text-gray-400 font-medium">-</span>'
+                    }
                       </span>
                     </div>
                   </div>
@@ -3476,11 +3994,11 @@
         function populateStaffDropdowns() {
             const registrySelect = document.getElementById('input-assigned-to');
             const dailySelect = document.getElementById('daily-assigned-to');
-            
+
             if (!registrySelect || !dailySelect) return;
-            
+
             const options = staffList.map(u => `<option value="${u.email}">${u.name || u.email}</option>`).join('');
-            
+
             registrySelect.innerHTML = '<option value="">-- เลือกเจ้าหน้าที่ --</option>' + options;
             dailySelect.innerHTML = '<option value="">-- เลือกเจ้าหน้าที่ --</option>' + options;
         }
@@ -3530,6 +4048,53 @@
             }
         }
 
+        function showRegisterScreen() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('register-screen').classList.remove('hidden');
+        }
+
+        function showLoginScreen() {
+            document.getElementById('register-screen').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        async function register(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-register');
+            const errorDiv = document.getElementById('register-error');
+            btn.disabled = true;
+            btn.innerHTML = '<span>กำลังลงทะเบียน...</span>';
+            errorDiv.classList.add('hidden');
+
+            const name = document.getElementById('register-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    body: JSON.stringify({ action: 'register', userData: { name, email, password } })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast('ลงทะเบียนสำเร็จ สามารถเข้าสู่ระบบได้ทันที');
+                    document.getElementById('register-form').reset();
+                    showLoginScreen();
+                } else {
+                    errorDiv.textContent = result.error || 'ลงทะเบียนไม่สำเร็จ';
+                    errorDiv.classList.remove('hidden');
+                }
+            } catch (error) {
+                errorDiv.textContent = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้';
+                errorDiv.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span>ลงทะเบียน</span>';
+            }
+        }
+
         function logout() {
             currentUser = null;
             localStorage.removeItem('regUser');
@@ -3565,7 +4130,7 @@
             if (!currentUser) return;
             const userName = currentUser.name || currentUser.email;
             const roleText = currentUser.role === 'admin' ? 'ผู้ดูแลระบบ' : 'ผู้ใช้ทั่วไป';
-            
+
             // Update Topbar
             if (document.getElementById('user-name-display')) {
                 document.getElementById('user-name-display').textContent = userName;
@@ -3573,7 +4138,7 @@
             if (document.getElementById('user-role-display')) {
                 document.getElementById('user-role-display').textContent = roleText;
             }
-            
+
             // Update Desktop Sidebar
             if (document.getElementById('user-name-display-sidebar')) {
                 document.getElementById('user-name-display-sidebar').textContent = userName;
@@ -3589,7 +4154,7 @@
             if (document.getElementById('user-role-display-sidebar-mobile')) {
                 document.getElementById('user-role-display-sidebar-mobile').textContent = roleText;
             }
-            
+
             // Show admin menu for both desktop and mobile sidebars
             if (currentUser.role === 'admin') {
                 if (document.getElementById('nav-users')) {
@@ -3638,7 +4203,7 @@
                 return;
             }
             tbody.innerHTML = allUsers.map(u => {
-                const roleBadge = u.role === 'admin' 
+                const roleBadge = u.role === 'admin'
                     ? '<span class="px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-700">Admin</span>'
                     : '<span class="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700">User</span>';
                 return `
@@ -3746,6 +4311,195 @@
             }
         }
 
+        // ==================== BYLAW MANAGEMENT ====================
+        async function fetchBylaws() {
+            try {
+                const response = await fetch(SCRIPT_URL + '?action=getBylaws', { redirect: 'follow' });
+                const result = await response.json();
+                if (result.success) {
+                    allBylaws = result.data;
+                    renderBylaws();
+                    if (currentView === 'dashboard') {
+                        renderDashboard();
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching bylaws:', error);
+            }
+        }
+
+        function renderBylaws() {
+            const coopBody = document.getElementById('bylaw-coop-tbody');
+            const farmerBody = document.getElementById('bylaw-farmer-tbody');
+
+            if (!coopBody || !farmerBody) return;
+
+            // Get Coop Filters
+            const searchCoop = (document.getElementById('search-coop-input')?.value || '').toLowerCase();
+            const groupCoop = document.getElementById('filter-coop-group')?.value || '';
+            const statusCoop = document.getElementById('filter-coop-status')?.value || '';
+
+            // Get Farmer Filters
+            const searchFarmer = (document.getElementById('search-farmer-input')?.value || '').toLowerCase();
+            const groupFarmer = document.getElementById('filter-farmer-group')?.value || '';
+            const statusFarmer = document.getElementById('filter-farmer-status')?.value || '';
+
+            const coops = allBylaws.filter(b => {
+                if (b.entity_type !== 'สหกรณ์') return false;
+                const matchSearch = b.entity_name.toLowerCase().includes(searchCoop) || (b.notes || '').toLowerCase().includes(searchCoop);
+                const matchGroup = groupCoop === '' || (b.notes || '').includes(groupCoop);
+                const matchStatus = statusCoop === '' || b.status === statusCoop;
+                return matchSearch && matchGroup && matchStatus;
+            });
+
+            const farmers = allBylaws.filter(b => {
+                if (b.entity_type !== 'กลุ่มเกษตรกร') return false;
+                const matchSearch = b.entity_name.toLowerCase().includes(searchFarmer) || (b.notes || '').toLowerCase().includes(searchFarmer);
+                const matchGroup = groupFarmer === '' || (b.notes || '').includes(groupFarmer);
+                const matchStatus = statusFarmer === '' || b.status === statusFarmer;
+                return matchSearch && matchGroup && matchStatus;
+            });
+
+            const statusOrder = {
+                'รอดำเนินการ': 1,
+                'กำลังดำเนินการ': 2,
+                'แก้ไขแล้ว': 3
+            };
+
+            const sortBylaws = (a, b) => {
+                const orderA = statusOrder[a.status] || 99;
+                const orderB = statusOrder[b.status] || 99;
+                if (orderA !== orderB) return orderA - orderB;
+                if (a.notes !== b.notes) return (a.notes || '').localeCompare(b.notes || '', 'th');
+                return a.entity_name.localeCompare(b.entity_name, 'th');
+            };
+
+            coops.sort(sortBylaws);
+            farmers.sort(sortBylaws);
+
+            const renderRows = (records) => {
+                if (records.length === 0) return `<tr><td colspan="5" class="p-8 text-center text-gray-400 text-sm">ไม่มีข้อมูล</td></tr>`;
+                return records.map((r, index) => {
+                    let statusColor = 'bg-yellow-100 text-yellow-700';
+                    if (r.status === 'แก้ไขแล้ว') statusColor = 'bg-green-100 text-green-700';
+                    else if (r.status === 'กำลังดำเนินการ') statusColor = 'bg-blue-100 text-blue-700';
+
+                    return `
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                            <td class="p-3 text-sm text-gray-600 text-center">${index + 1}</td>
+                            <td class="p-3 text-sm font-medium text-gray-800">${r.entity_name}</td>
+                            <td class="p-3 text-center">
+                                <span class="px-2 py-1 rounded-full text-xs font-semibold ${statusColor}">${r.status}</span>
+                            </td>
+                            <td class="p-3 text-sm text-gray-600">${r.notes || '-'}</td>
+                            <td class="p-3 text-center whitespace-nowrap">
+                                <button onclick='editBylaw(${JSON.stringify(r).replace(/'/g, "&#39;")})' class="text-blue-600 hover:underline mr-2 text-sm">แก้ไข</button>
+                                <button onclick="deleteBylaw('${r.id}')" class="text-red-600 hover:underline text-sm">ลบ</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            };
+
+            coopBody.innerHTML = renderRows(coops);
+            farmerBody.innerHTML = renderRows(farmers);
+        }
+
+        function openBylawModal(entityType) {
+            if (!currentUser) {
+                showToast('กรุณาเข้าสู่ระบบก่อน', 'error');
+                return;
+            }
+            isBylawEditing = false;
+            document.getElementById('form-bylaw').reset();
+            document.getElementById('bylaw-id').value = '';
+            document.getElementById('bylaw-entity-type').value = entityType;
+            document.getElementById('bylaw-modal-title').textContent = `เพิ่มข้อมูล (${entityType})`;
+            document.getElementById('bylaw-modal').classList.remove('hidden');
+        }
+
+        function closeBylawModal() {
+            document.getElementById('bylaw-modal').classList.add('hidden');
+        }
+
+        function editBylaw(record) {
+            if (!currentUser) {
+                showToast('กรุณาเข้าสู่ระบบก่อน', 'error');
+                return;
+            }
+            isBylawEditing = true;
+            document.getElementById('form-bylaw').reset();
+            document.getElementById('bylaw-id').value = record.id;
+            document.getElementById('bylaw-entity-type').value = record.entity_type;
+            document.getElementById('bylaw-entity-name').value = record.entity_name;
+            document.getElementById('bylaw-status').value = record.status;
+            document.getElementById('bylaw-notes').value = record.notes || '';
+            document.getElementById('bylaw-modal-title').textContent = `แก้ไขข้อมูล (${record.entity_type})`;
+            document.getElementById('bylaw-modal').classList.remove('hidden');
+        }
+
+        async function handleBylawSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save-bylaw');
+            btn.disabled = true;
+            btn.textContent = 'กำลังบันทึก...';
+
+            const record = {
+                id: document.getElementById('bylaw-id').value,
+                entity_type: document.getElementById('bylaw-entity-type').value,
+                entity_name: document.getElementById('bylaw-entity-name').value.trim(),
+                status: document.getElementById('bylaw-status').value,
+                notes: document.getElementById('bylaw-notes').value.trim()
+            };
+
+            const action = isBylawEditing ? 'updateBylaw' : 'createBylaw';
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    body: JSON.stringify({ action, record, currentUser })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast('บันทึกสำเร็จ');
+                    closeBylawModal();
+                    fetchBylaws();
+                } else {
+                    showToast(result.error || 'บันทึกไม่สำเร็จ', 'error');
+                }
+            } catch (error) {
+                showToast('เชื่อมต่อล้มเหลว', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'บันทึก';
+            }
+        }
+
+        async function deleteBylaw(id) {
+            if (!confirm('ยืนยันการลบข้อมูลนี้?')) return;
+            try {
+                showLoading(true);
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    body: JSON.stringify({ action: 'deleteBylaw', id, currentUser })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    showToast('ลบข้อมูลสำเร็จ');
+                    fetchBylaws();
+                } else {
+                    showToast(result.error || 'ลบไม่สำเร็จ', 'error');
+                }
+            } catch (error) {
+                showToast('เชื่อมต่อล้มเหลว', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
         // ==================== APP INITIALIZATION ====================
 
         async function initAppData() {
@@ -3754,15 +4508,18 @@
             await loadStaffList(); // โหลดรายชื่อเจ้าหน้าที่สำหรับ Dropdown
             await Promise.all([
                 fetchAllRecords(),
-                fetchDailyOps()
+                fetchDailyOps(),
+                fetchBylaws()
             ]);
             switchView('dashboard');
         }
 
         async function initApp() {
             document.getElementById('login-form').addEventListener('submit', login);
+            document.getElementById('register-form').addEventListener('submit', register);
             document.getElementById('form-user').addEventListener('submit', handleUserSubmit);
-            
+            document.getElementById('form-bylaw').addEventListener('submit', handleBylawSubmit);
+
             if (checkAuth()) {
                 await initAppData();
             }
