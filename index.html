@@ -3938,6 +3938,23 @@
                 return matchSearch && matchGroup && matchStatus;
             });
             
+            const statusOrder = {
+                'รอดำเนินการ': 1,
+                'กำลังดำเนินการ': 2,
+                'แก้ไขแล้ว': 3
+            };
+            
+            const sortBylaws = (a, b) => {
+                const orderA = statusOrder[a.status] || 99;
+                const orderB = statusOrder[b.status] || 99;
+                if (orderA !== orderB) return orderA - orderB;
+                if (a.notes !== b.notes) return (a.notes || '').localeCompare(b.notes || '', 'th');
+                return a.entity_name.localeCompare(b.entity_name, 'th');
+            };
+
+            coops.sort(sortBylaws);
+            farmers.sort(sortBylaws);
+            
             const renderRows = (records) => {
                 if(records.length === 0) return `<tr><td colspan="5" class="p-8 text-center text-gray-400 text-sm">ไม่มีข้อมูล</td></tr>`;
                 return records.map((r, index) => {
