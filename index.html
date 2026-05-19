@@ -252,6 +252,24 @@
                         <span>ปฏิทิน</span>
                     </button>
 
+                    <button onclick="switchView('coop-info'); document.getElementById('topbar-title').innerText = 'ข้อมูลสหกรณ์';"
+                        class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
+                        id="nav-coop-info">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                        <span>ข้อมูลสหกรณ์</span>
+                    </button>
+
+                    <button onclick="switchView('farmer-group-info'); document.getElementById('topbar-title').innerText = 'ข้อมูลกลุ่มเกษตรกร';"
+                        class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
+                        id="nav-farmer-group-info">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        <span>ข้อมูลกลุ่มเกษตรกร</span>
+                    </button>
+
                     <button onclick="switchView('users'); document.getElementById('topbar-title').innerText = 'จัดการผู้ใช้งาน';"
                         class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left hidden"
                         id="nav-users">
@@ -324,6 +342,24 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                         </svg>
                         <span>ปฏิทิน</span>
+                    </button>
+
+                    <button onclick="switchView('coop-info'); document.getElementById('topbar-title').innerText = 'ข้อมูลสหกรณ์'; toggleMobileSidebar();"
+                        class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
+                        id="nav-coop-info-mobile">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                        <span>ข้อมูลสหกรณ์</span>
+                    </button>
+
+                    <button onclick="switchView('farmer-group-info'); document.getElementById('topbar-title').innerText = 'ข้อมูลกลุ่มเกษตรกร'; toggleMobileSidebar();"
+                        class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 font-semibold text-sm transition-all duration-200 border-transparent text-gray-500 hover:bg-[#FAF5EE] w-full text-left"
+                        id="nav-farmer-group-info-mobile">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        <span>ข้อมูลกลุ่มเกษตรกร</span>
                     </button>
 
                     <button onclick="switchView('users'); document.getElementById('topbar-title').innerText = 'จัดการผู้ใช้งาน'; toggleMobileSidebar();"
@@ -744,6 +780,94 @@
                 </div>
             </div>
 
+            <!-- COOP INFO VIEW -->
+            <div id="view-coop-info" class="hidden space-y-6 animate-fade-in">
+                <div class="bg-white p-6 rounded-xl card-shadow">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                            <span class="bg-blue-100 p-2 rounded-lg text-blue-600">
+                                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                            </span>
+                            ข้อมูลสหกรณ์
+                        </h2>
+                        <button onclick="openBylawModal('สหกรณ์')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            เพิ่มข้อมูล
+                        </button>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-lg p-4 mb-6">
+                        <p class="font-medium text-sm">การตรวจสอบการแก้ไขเพิ่มเติมข้อบังคับ ปรังปรุงตามกฎกระทรวง กำหนดลักษณะ วัตถุประสงค์ และขอบเขตแห่งการดำเนินกิจการของสหกรณ์แต่ละประเภทที่จะรับจดทะเบียน พ.ศ.2567</p>
+                    </div>
+                    
+                    <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 border-b border-gray-200">
+                                    <th class="p-3 text-sm font-semibold text-gray-700 w-16 text-center">ลำดับ</th>
+                                    <th class="p-3 text-sm font-semibold text-gray-700">ชื่อสหกรณ์</th>
+                                    <th class="p-3 text-sm font-semibold text-gray-700 text-center">สถานะการแก้ไขข้อบังคับ</th>
+                                    <th class="p-3 text-sm font-semibold text-gray-700">หมายเหตุ</th>
+                                    <th class="p-3 text-sm font-semibold text-gray-700 w-32 text-center">จัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bylaw-coop-tbody">
+                                <tr>
+                                    <td colspan="5" class="p-8 text-center text-gray-400 text-sm">
+                                        กำลังโหลดข้อมูล...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FARMER GROUP INFO VIEW -->
+            <div id="view-farmer-group-info" class="hidden space-y-6 animate-fade-in">
+                <div class="bg-white p-6 rounded-xl card-shadow">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                            <span class="bg-green-100 p-2 rounded-lg text-green-600">
+                                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                            </span>
+                            ข้อมูลกลุ่มเกษตรกร
+                        </h2>
+                        <button onclick="openBylawModal('กลุ่มเกษตรกร')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            เพิ่มข้อมูล
+                        </button>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-lg p-4 mb-6">
+                        <p class="font-medium text-sm">การตรวจสอบการแก้ไขเพิ่มเติมข้อบังคับ ปรังปรุงตามกฎกระทรวง กำหนดลักษณะ วัตถุประสงค์ และขอบเขตแห่งการดำเนินกิจการของกลุ่มเกษตรกร (อนุโลมตามกฎกระทรวงสหกรณ์ พ.ศ.2567)</p>
+                    </div>
+                    
+                    <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 border-b border-gray-200">
+                                    <th class="p-3 text-sm font-semibold text-gray-700 w-16 text-center">ลำดับ</th>
+                                    <th class="p-3 text-sm font-semibold text-gray-700">ชื่อกลุ่มเกษตรกร</th>
+                                    <th class="p-3 text-sm font-semibold text-gray-700 text-center">สถานะการแก้ไขข้อบังคับ</th>
+                                    <th class="p-3 text-sm font-semibold text-gray-700">หมายเหตุ</th>
+                                    <th class="p-3 text-sm font-semibold text-gray-700 w-32 text-center">จัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bylaw-farmer-tbody">
+                                <tr>
+                                    <td colspan="5" class="p-8 text-center text-gray-400 text-sm">
+                                        กำลังโหลดข้อมูล...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
             <!-- USERS MANAGEMENT VIEW -->
             <div id="view-users" class="hidden space-y-6 animate-fade-in">
                 <div class="flex justify-between items-center bg-white p-4 rounded-xl card-shadow">
@@ -1098,6 +1222,45 @@
             </div>
         </div>
 
+        <!-- Bylaw Modal -->
+        <div id="bylaw-modal" class="fixed inset-0 z-50 hidden">
+            <div class="modal-backdrop absolute inset-0"></div>
+            <div class="relative flex items-center justify-center min-h-full p-4">
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg relative">
+                    <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl flex justify-between items-center">
+                        <h2 id="bylaw-modal-title" class="text-xl font-semibold text-gray-800">เพิ่มข้อมูลการแก้ไขข้อบังคับ</h2>
+                        <button onclick="closeBylawModal()" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+                    <form id="form-bylaw" class="p-6 space-y-4">
+                        <input type="hidden" id="bylaw-id">
+                        <input type="hidden" id="bylaw-entity-type">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อสถาบัน <span class="text-red-500">*</span></label>
+                            <input type="text" id="bylaw-entity-name" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="ระบุชื่อสหกรณ์/กลุ่มเกษตรกร">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">สถานะ <span class="text-red-500">*</span></label>
+                            <select id="bylaw-status" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="รอดำเนินการ">รอดำเนินการ</option>
+                                <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                                <option value="แก้ไขแล้ว">แก้ไขแล้ว</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">หมายเหตุ</label>
+                            <textarea id="bylaw-notes" rows="3" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="เพิ่มเติม (ถ้ามี)"></textarea>
+                        </div>
+                        <div class="flex gap-3 pt-4 border-t border-gray-200">
+                            <button type="button" onclick="closeBylawModal()" class="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium transition-colors">ยกเลิก</button>
+                            <button type="submit" id="btn-save-bylaw" class="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">บันทึก</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <!-- User Modal -->
         <div id="user-modal" class="fixed inset-0 z-50 hidden">
             <div class="modal-backdrop absolute inset-0"></div>
@@ -1278,7 +1441,9 @@
         let currentView = 'dashboard';
         let currentUser = null;
         let allUsers = [];
+        let allBylaws = [];
         let isUserEditing = false;
+        let isBylawEditing = false;
         let staffList = []; // รายชื่อเจ้าหน้าที่สำหรับ Dropdown
 
         // Pagination state
@@ -1293,7 +1458,7 @@
                 return;
             }
             // Hide all views and reset nav highlights for both Desktop and Mobile
-            ['dashboard', 'daily-ops', 'registry', 'calendar', 'users'].forEach(v => {
+            ['dashboard', 'daily-ops', 'registry', 'calendar', 'users', 'coop-info', 'farmer-group-info'].forEach(v => {
                 document.getElementById(`view-${v}`).classList.add('hidden');
                 
                 // Desktop Sidebar Reset
@@ -3685,6 +3850,152 @@
             }
         }
 
+        // ==================== BYLAW MANAGEMENT ====================
+        async function fetchBylaws() {
+            try {
+                const response = await fetch(SCRIPT_URL + '?action=getBylaws', { redirect: 'follow' });
+                const result = await response.json();
+                if (result.success) {
+                    allBylaws = result.data;
+                    renderBylaws();
+                }
+            } catch (error) {
+                console.error('Error fetching bylaws:', error);
+            }
+        }
+
+        function renderBylaws() {
+            const coopBody = document.getElementById('bylaw-coop-tbody');
+            const farmerBody = document.getElementById('bylaw-farmer-tbody');
+            
+            if(!coopBody || !farmerBody) return;
+            
+            const coops = allBylaws.filter(b => b.entity_type === 'สหกรณ์');
+            const farmers = allBylaws.filter(b => b.entity_type === 'กลุ่มเกษตรกร');
+            
+            const renderRows = (records) => {
+                if(records.length === 0) return `<tr><td colspan="5" class="p-8 text-center text-gray-400 text-sm">ไม่มีข้อมูล</td></tr>`;
+                return records.map((r, index) => {
+                    let statusColor = 'bg-yellow-100 text-yellow-700';
+                    if(r.status === 'แก้ไขแล้ว') statusColor = 'bg-green-100 text-green-700';
+                    else if(r.status === 'กำลังดำเนินการ') statusColor = 'bg-blue-100 text-blue-700';
+                    
+                    return `
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                            <td class="p-3 text-sm text-gray-600 text-center">${index + 1}</td>
+                            <td class="p-3 text-sm font-medium text-gray-800">${r.entity_name}</td>
+                            <td class="p-3 text-center">
+                                <span class="px-2 py-1 rounded-full text-xs font-semibold ${statusColor}">${r.status}</span>
+                            </td>
+                            <td class="p-3 text-sm text-gray-600">${r.notes || '-'}</td>
+                            <td class="p-3 text-center whitespace-nowrap">
+                                <button onclick='editBylaw(${JSON.stringify(r).replace(/'/g, "&#39;")})' class="text-blue-600 hover:underline mr-2 text-sm">แก้ไข</button>
+                                <button onclick="deleteBylaw('${r.id}')" class="text-red-600 hover:underline text-sm">ลบ</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            };
+            
+            coopBody.innerHTML = renderRows(coops);
+            farmerBody.innerHTML = renderRows(farmers);
+        }
+
+        function openBylawModal(entityType) {
+            if (!currentUser) {
+                showToast('กรุณาเข้าสู่ระบบก่อน', 'error');
+                return;
+            }
+            isBylawEditing = false;
+            document.getElementById('form-bylaw').reset();
+            document.getElementById('bylaw-id').value = '';
+            document.getElementById('bylaw-entity-type').value = entityType;
+            document.getElementById('bylaw-modal-title').textContent = `เพิ่มข้อมูล (${entityType})`;
+            document.getElementById('bylaw-modal').classList.remove('hidden');
+        }
+
+        function closeBylawModal() {
+            document.getElementById('bylaw-modal').classList.add('hidden');
+        }
+
+        function editBylaw(record) {
+            if (!currentUser) {
+                showToast('กรุณาเข้าสู่ระบบก่อน', 'error');
+                return;
+            }
+            isBylawEditing = true;
+            document.getElementById('form-bylaw').reset();
+            document.getElementById('bylaw-id').value = record.id;
+            document.getElementById('bylaw-entity-type').value = record.entity_type;
+            document.getElementById('bylaw-entity-name').value = record.entity_name;
+            document.getElementById('bylaw-status').value = record.status;
+            document.getElementById('bylaw-notes').value = record.notes || '';
+            document.getElementById('bylaw-modal-title').textContent = `แก้ไขข้อมูล (${record.entity_type})`;
+            document.getElementById('bylaw-modal').classList.remove('hidden');
+        }
+
+        async function handleBylawSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save-bylaw');
+            btn.disabled = true;
+            btn.textContent = 'กำลังบันทึก...';
+
+            const record = {
+                id: document.getElementById('bylaw-id').value,
+                entity_type: document.getElementById('bylaw-entity-type').value,
+                entity_name: document.getElementById('bylaw-entity-name').value.trim(),
+                status: document.getElementById('bylaw-status').value,
+                notes: document.getElementById('bylaw-notes').value.trim()
+            };
+
+            const action = isBylawEditing ? 'updateBylaw' : 'createBylaw';
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    body: JSON.stringify({ action, record, currentUser })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast('บันทึกสำเร็จ');
+                    closeBylawModal();
+                    fetchBylaws();
+                } else {
+                    showToast(result.error || 'บันทึกไม่สำเร็จ', 'error');
+                }
+            } catch (error) {
+                showToast('เชื่อมต่อล้มเหลว', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'บันทึก';
+            }
+        }
+
+        async function deleteBylaw(id) {
+            if (!confirm('ยืนยันการลบข้อมูลนี้?')) return;
+            try {
+                showLoading(true);
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    body: JSON.stringify({ action: 'deleteBylaw', id, currentUser })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    showToast('ลบข้อมูลสำเร็จ');
+                    fetchBylaws();
+                } else {
+                    showToast(result.error || 'ลบไม่สำเร็จ', 'error');
+                }
+            } catch (error) {
+                showToast('เชื่อมต่อล้มเหลว', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
         // ==================== APP INITIALIZATION ====================
 
         async function initAppData() {
@@ -3693,7 +4004,8 @@
             await loadStaffList(); // โหลดรายชื่อเจ้าหน้าที่สำหรับ Dropdown
             await Promise.all([
                 fetchAllRecords(),
-                fetchDailyOps()
+                fetchDailyOps(),
+                fetchBylaws()
             ]);
             switchView('dashboard');
         }
@@ -3701,6 +4013,7 @@
         async function initApp() {
             document.getElementById('login-form').addEventListener('submit', login);
             document.getElementById('form-user').addEventListener('submit', handleUserSubmit);
+            document.getElementById('form-bylaw').addEventListener('submit', handleBylawSubmit);
             
             if (checkAuth()) {
                 await initAppData();
