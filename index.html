@@ -786,48 +786,9 @@
                                 </div>
                             </div>
                         </div>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15 19l-7-7 7-7">
-                                        </path>
-                                    </svg>
-                                </button>
-                                <span class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg font-medium text-sm">
-                                    หน้า <span id="current-page">1</span> / <span id="total-pages">1</span>
-                                </span>
-                                <button id="btn-next-page"
-                                    class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    title="ถัดไป">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 5l7 7-7 7">
-                                        </path>
-                                    </svg>
-                                </button>
-                                <button id="btn-last-page"
-                                    class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    title="หน้าสุดท้าย">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Summary Section -->
-                        <div id="summary-section" class="mt-6 bg-white rounded-xl p-6 card-shadow hidden">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                    </path>
-                                </svg>
-                                สรุปทะเบียนคุม
-                            </h3>
-                            <div id="summary-content" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-                        </div>
-                    </div> <!-- End view-registry -->
+                    </div>
+                </div>
+            </div>
 
                     <!-- CALENDAR VIEW -->
 
@@ -1907,7 +1868,7 @@
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygBTVqnvvc7cTwf8YIQCQpJ5xLKU7Z4TEuycKCcQP4UPfo6uXeONMUBwMxRRhD7C6xtQ/exec';
 
         // Thai Public Holidays 2024-2026 (สำหรับคำนวณวันทำการใน Frontend)
-        const PUBLIC_HOLIDAYS = [
+        let PUBLIC_HOLIDAYS = [
             // 2024
             '2024-01-01', '2024-01-02', '2024-02-26', '2024-04-06', '2024-04-08',
             '2024-04-13', '2024-04-14', '2024-04-15', '2024-04-16', '2024-05-01',
@@ -1927,6 +1888,15 @@
             '2026-08-12', '2026-10-13', '2026-10-23', '2026-12-05', '2026-12-07',
             '2026-12-10', '2026-12-31'
         ];
+
+        // Helper function to get date string in local timezone (YYYY-MM-DD)
+        function getLocalISOString(date) {
+            const d = date ? new Date(date) : new Date();
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
 
         // ==================== STATE ====================
         let allRecords = [];
@@ -2155,7 +2125,7 @@
         }
 
         function isDateToday(dateStr) {
-            const today = new Date().toISOString().split('T')[0];
+            const today = getLocalISOString();
             return dateStr === today;
         }
 
@@ -2255,8 +2225,18 @@
         const dailyPageSize = 5;
 
         function changeDailyPage(direction) {
-            dailyCurrentPage += direction;
-            renderDailyOpsTable();
+            const filterDate = document.getElementById('daily-filter-date').value;
+            let displayData = allDailyOps;
+            if (filterDate) {
+                displayData = allDailyOps.filter(op => op.date === filterDate);
+            }
+            const totalDailyPages = Math.ceil(displayData.length / dailyPageSize) || 1;
+            
+            const newPage = dailyCurrentPage + direction;
+            if (newPage >= 1 && newPage <= totalDailyPages) {
+                dailyCurrentPage = newPage;
+                renderDailyOpsTable();
+            }
         }
 
         function toggleDailyRowDetails(id) {
@@ -2293,6 +2273,7 @@
             });
 
             const totalDailyPages = Math.ceil(displayData.length / dailyPageSize) || 1;
+            if (dailyCurrentPage < 1) dailyCurrentPage = 1;
             if (dailyCurrentPage > totalDailyPages) dailyCurrentPage = totalDailyPages;
 
             const startIndex = (dailyCurrentPage - 1) * dailyPageSize;
@@ -2330,11 +2311,11 @@
                     </td>
                     <td class="px-4 py-3 text-sm text-center" onclick="event.stopPropagation()">
                         <div class="flex gap-1 justify-center">
-                            <button onclick='viewDailyOpDetails(${JSON.stringify(op).replace(/'/g, "&#39;")})' class="p-1.5 text-gray-500 hover:bg-slate-200 rounded transition-colors bg-white/50" title="ดูรายละเอียด">
+                            <button onclick="viewDailyOpDetails(allDailyOps.find(o => o.id === '${op.id}'))" class="p-1.5 text-gray-500 hover:bg-slate-200 rounded transition-colors bg-white/50" title="ดูรายละเอียด">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                             </button>
                             ${canManage(op) ? `
-                            <button onclick='editDailyOp(${JSON.stringify(op).replace(/'/g, "&#39;")})' class="p-1.5 text-blue-600 hover:bg-blue-200 rounded transition-colors bg-white/50" title="แก้ไข">
+                            <button onclick="editDailyOp(allDailyOps.find(o => o.id === '${op.id}'))" class="p-1.5 text-blue-600 hover:bg-blue-200 rounded transition-colors bg-white/50" title="แก้ไข">
                               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                               </svg>
@@ -2400,7 +2381,7 @@
 
             // Set default date/time
             const now = new Date();
-            document.getElementById('daily-date').value = dateStr || now.toISOString().split('T')[0];
+            document.getElementById('daily-date').value = dateStr || getLocalISOString(now);
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             document.getElementById('daily-time').value = `${hours}:${minutes}`;
@@ -2529,7 +2510,7 @@
             } catch (error) {
                 showToast('เกิดข้อผิดพลาด', 'error');
             } finally {
-                if (showLoadingState) showLoading(false);
+                showLoading(false);
             }
         }
 
@@ -2755,7 +2736,7 @@
                     ${summaryInfo}
                     <div class="space-y-3">
                         ${sortedOps.map(op => `
-                            <div class="group flex items-center justify-between p-4 bg-white hover:bg-[#FAF9F6] rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all duration-200 cursor-pointer" onclick='viewDailyOpDetails(${JSON.stringify(op).replace(/'/g, "&#39;")})'>
+                            <div class="group flex items-center justify-between p-4 bg-white hover:bg-[#FAF9F6] rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all duration-200 cursor-pointer" onclick="viewDailyOpDetails(allDailyOps.find(o => o.id === '${op.id}'))">
                                 <div class="flex items-center gap-4 min-w-0 flex-1">
                                     <div class="flex flex-col items-center justify-center w-14 h-14 bg-gray-50 rounded-xl border border-gray-100 group-hover:bg-blue-50 group-hover:border-blue-100 transition-colors shrink-0">
                                         <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-blue-400">${formatDateShort(op.date).month || '-'}</div>
@@ -3063,7 +3044,7 @@
 
             while (current <= end) {
                 const dayOfWeek = current.getDay();
-                const dateStr = current.toISOString().split('T')[0];
+                const dateStr = getLocalISOString(current);
 
                 // Skip weekends (0 = Sunday, 6 = Saturday) and public holidays
                 if (dayOfWeek !== 0 && dayOfWeek !== 6 && !PUBLIC_HOLIDAYS.includes(dateStr)) {
@@ -4370,7 +4351,7 @@
                         <td class="px-4 py-3 text-sm text-gray-600">${u.email}</td>
                         <td class="px-4 py-3 text-sm">${roleBadge}</td>
                         <td class="px-4 py-3 text-sm">
-                            <button onclick='editUser(${JSON.stringify(u).replace(/'/g, "&#39;")})' class="text-blue-600 hover:underline mr-2">แก้ไข</button>
+                            <button onclick="editUser(allUsers.find(user => user.id === '${u.id}'))" class="text-blue-600 hover:underline mr-2">แก้ไข</button>
                             <button onclick="deleteUser('${u.id}')" class="text-red-600 hover:underline">ลบ</button>
                         </td>
                     </tr>
@@ -4551,7 +4532,7 @@
                             </td>
                             <td class="p-3 text-sm text-gray-600">${r.notes || '-'}</td>
                             <td class="p-3 text-center whitespace-nowrap">
-                                <button onclick='editBylaw(${JSON.stringify(r).replace(/'/g, "&#39;")})' class="text-blue-600 hover:underline mr-2 text-sm">แก้ไข</button>
+                                <button onclick="editBylaw(allBylaws.find(b => b.id === '${r.id}'))" class="text-blue-600 hover:underline mr-2 text-sm">แก้ไข</button>
                                 <button onclick="deleteBylaw('${r.id}')" class="text-red-600 hover:underline text-sm">ลบ</button>
                             </td>
                         </tr>
@@ -4658,6 +4639,19 @@
             }
         }
 
+        async function fetchHolidays() {
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=getHolidays`, { redirect: 'follow' });
+                const result = await response.json();
+                if (result.success && Array.isArray(result.data)) {
+                    PUBLIC_HOLIDAYS = result.data;
+                }
+            } catch (error) {
+                console.error('Error fetching holidays:', error);
+                // Keep the hardcoded PUBLIC_HOLIDAYS as fallback
+            }
+        }
+
         // ==================== APP INITIALIZATION ====================
 
         async function initAppData() {
@@ -4667,7 +4661,8 @@
             await Promise.all([
                 fetchAllRecords(),
                 fetchDailyOps(),
-                fetchBylaws()
+                fetchBylaws(),
+                fetchHolidays()
             ]);
             switchView('dashboard');
         }
