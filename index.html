@@ -1867,27 +1867,8 @@
         // 🔴 สำคัญ: เปลี่ยน URL นี้เป็น Web App URL ของคุณหลังจาก Deploy
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygBTVqnvvc7cTwf8YIQCQpJ5xLKU7Z4TEuycKCcQP4UPfo6uXeONMUBwMxRRhD7C6xtQ/exec';
 
-        // Thai Public Holidays 2024-2026 (สำหรับคำนวณวันทำการใน Frontend)
-        let PUBLIC_HOLIDAYS = [
-            // 2024
-            '2024-01-01', '2024-01-02', '2024-02-26', '2024-04-06', '2024-04-08',
-            '2024-04-13', '2024-04-14', '2024-04-15', '2024-04-16', '2024-05-01',
-            '2024-05-04', '2024-05-06', '2024-05-22', '2024-06-03', '2024-07-20',
-            '2024-07-21', '2024-07-22', '2024-07-28', '2024-07-29', '2024-08-12',
-            '2024-10-13', '2024-10-14', '2024-10-23', '2024-12-05', '2024-12-10',
-            '2024-12-31',
-            // 2025
-            '2025-01-01', '2025-02-14', '2025-04-06', '2025-04-07', '2025-04-13',
-            '2025-04-14', '2025-04-15', '2025-05-01', '2025-05-04', '2025-05-11',
-            '2025-05-12', '2025-06-03', '2025-07-10', '2025-07-28', '2025-08-12',
-            '2025-10-13', '2025-10-23', '2025-12-05', '2025-12-10', '2025-12-31',
-            // 2026
-            '2026-01-01', '2026-01-02', '2026-03-03', '2026-04-06', '2026-04-13',
-            '2026-04-14', '2026-04-15', '2026-05-04', '2026-05-13', '2026-05-31',
-            '2026-06-01', '2026-06-03', '2026-07-28', '2026-07-29', '2026-07-30',
-            '2026-08-12', '2026-10-13', '2026-10-23', '2026-12-05', '2026-12-07',
-            '2026-12-10', '2026-12-31'
-        ];
+        // Thai Public Holidays - จะโหลดจาก Server ผ่าน fetchHolidays()
+        let PUBLIC_HOLIDAYS = [];
 
         // Helper function to get date string in local timezone (YYYY-MM-DD)
         function getLocalISOString(date) {
@@ -2202,8 +2183,8 @@
         async function fetchDailyOps(showLoadingState = true) {
             try {
                 if (showLoadingState) showLoading(true);
-                const userParams = currentUser ? `&userEmail=${encodeURIComponent(currentUser.email)}&userRole=${encodeURIComponent(currentUser.role)}` : '';
-                const response = await fetch(`${SCRIPT_URL}?action=getDailyOps${userParams}`, { redirect: 'follow' });
+                const tokenParam = currentUser && currentUser.token ? `&token=${encodeURIComponent(currentUser.token)}` : '';
+                const response = await fetch(`${SCRIPT_URL}?action=getDailyOps${tokenParam}`, { redirect: 'follow' });
                 const result = await response.json();
 
                 if (result.success) {
@@ -2449,7 +2430,7 @@
             e.preventDefault();
             const btn = document.getElementById('btn-save-daily');
             btn.disabled = true;
-            btn.textContent = 'กำลงบันทึก...';
+            btn.textContent = 'กำลังบันทึก...';
 
             const dailyAssignedEl = document.getElementById('daily-assigned-to');
             const record = {
@@ -2470,7 +2451,7 @@
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     redirect: 'follow',
-                    body: JSON.stringify({ action, record, currentUser })
+                    body: JSON.stringify({ action, record, token: currentUser ? currentUser.token : '' })
                 });
                 const result = await response.json();
 
@@ -2498,7 +2479,7 @@
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     redirect: 'follow',
-                    body: JSON.stringify({ action: 'deleteDailyOp', id, currentUser })
+                    body: JSON.stringify({ action: 'deleteDailyOp', id, token: currentUser ? currentUser.token : '' })
                 });
                 const result = await response.json();
                 if (result.success) {
@@ -3122,8 +3103,8 @@
         async function fetchAllRecords(showLoadingState = true) {
             try {
                 if (showLoadingState) showLoading(true);
-                const userParams = currentUser ? `&userEmail=${encodeURIComponent(currentUser.email)}&userRole=${encodeURIComponent(currentUser.role)}` : '';
-                const response = await fetch(`${SCRIPT_URL}?action=getAll${userParams}`, {
+                const tokenParam = currentUser && currentUser.token ? `&token=${encodeURIComponent(currentUser.token)}` : '';
+                const response = await fetch(`${SCRIPT_URL}?action=getAll${tokenParam}`, {
                     redirect: 'follow'
                 });
                 const result = await response.json();
@@ -3140,7 +3121,7 @@
                 showToast('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้', 'error');
                 renderEmptyState();
             } finally {
-                showLoading(false);
+                if (showLoadingState) showLoading(false);
             }
         }
 
@@ -3151,7 +3132,7 @@
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
                 redirect: 'follow',
-                body: JSON.stringify({ action: 'create', record: recordData, currentUser: user })
+                body: JSON.stringify({ action: 'create', record: recordData, token: user ? user.token : '' })
             });
             return await response.json();
         }
@@ -3163,7 +3144,7 @@
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
                 redirect: 'follow',
-                body: JSON.stringify({ action: 'createBatch', records: records, currentUser: user })
+                body: JSON.stringify({ action: 'createBatch', records: records, token: user ? user.token : '' })
             });
             return await response.json();
         }
@@ -3175,7 +3156,7 @@
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
                 redirect: 'follow',
-                body: JSON.stringify({ action: 'update', record: recordData, currentUser: user })
+                body: JSON.stringify({ action: 'update', record: recordData, token: user ? user.token : '' })
             });
             return await response.json();
         }
@@ -3187,7 +3168,7 @@
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
                 redirect: 'follow',
-                body: JSON.stringify({ action: 'delete', id: id, currentUser: user })
+                body: JSON.stringify({ action: 'delete', id: id, token: user ? user.token : '' })
             });
             return await response.json();
         }
@@ -3422,9 +3403,9 @@
                     }
                 } else if (currentAttachment) {
                     // Keep existing attachment info
-                    recordData.attachment_file_id = currentAttachment.id;
-                    recordData.attachment_file_name = currentAttachment.name;
-                    recordData.attachment_file_url = currentAttachment.url;
+                    baseRecordData.attachment_file_id = currentAttachment.id;
+                    baseRecordData.attachment_file_name = currentAttachment.name;
+                    baseRecordData.attachment_file_url = currentAttachment.url;
                 }
 
                 const recordId = document.getElementById('record-id').value;
@@ -3448,7 +3429,7 @@
                     // Edit Mode: Update single record (take the first item, as edit mode forces 1 item)
                     const recordData = recordsToSave[0];
                     recordData.id = recordId;
-                    result = await updateRecord(recordData);
+                    result = await updateRecord(recordData, currentUser);
                 } else {
                     // Create Mode: Batch or Single
                     if (recordsToSave.length > 1) {
@@ -4118,7 +4099,7 @@
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     redirect: 'follow',
-                    body: JSON.stringify({ action: 'getUsers', currentUser })
+                    body: JSON.stringify({ action: 'getUsers', token: currentUser ? currentUser.token : '' })
                 });
                 const result = await response.json();
                 if (result.success) {
@@ -4234,7 +4215,18 @@
             }
         }
 
-        function logout() {
+        async function logout() {
+            if (currentUser && currentUser.token) {
+                try {
+                    await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        redirect: 'follow',
+                        body: JSON.stringify({ action: 'logout', token: currentUser.token })
+                    });
+                } catch (e) {
+                    console.error('Logout error:', e);
+                }
+            }
             currentUser = null;
             localStorage.removeItem('regUser');
             document.getElementById('login-screen').classList.remove('hidden');
@@ -4243,6 +4235,7 @@
             document.getElementById('login-error').classList.add('hidden');
             allRecords = [];
             allDailyOps = [];
+            eventListenersSetup = false;
         }
 
         function checkAuth() {
@@ -4269,14 +4262,6 @@
             if (!currentUser) return;
             const userName = currentUser.name || currentUser.email;
             const roleText = currentUser.role === 'admin' ? 'ผู้ดูแลระบบ' : 'ผู้ใช้ทั่วไป';
-
-            // Update Topbar
-            if (document.getElementById('user-name-display')) {
-                document.getElementById('user-name-display').textContent = userName;
-            }
-            if (document.getElementById('user-role-display')) {
-                document.getElementById('user-role-display').textContent = roleText;
-            }
 
             // Update Desktop Sidebar
             if (document.getElementById('user-name-display-sidebar')) {
@@ -4321,7 +4306,7 @@
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     redirect: 'follow',
-                    body: JSON.stringify({ action: 'getUsers', currentUser })
+                    body: JSON.stringify({ action: 'getUsers', token: currentUser ? currentUser.token : '' })
                 });
                 const result = await response.json();
                 if (result.success) {
@@ -4408,7 +4393,7 @@
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     redirect: 'follow',
-                    body: JSON.stringify({ action, userData, currentUser })
+                    body: JSON.stringify({ action, userData, token: currentUser ? currentUser.token : '' })
                 });
                 const result = await response.json();
 
@@ -4434,7 +4419,7 @@
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     redirect: 'follow',
-                    body: JSON.stringify({ action: 'deleteUser', id, currentUser })
+                    body: JSON.stringify({ action: 'deleteUser', id, token: currentUser ? currentUser.token : '' })
                 });
                 const result = await response.json();
                 if (result.success) {
@@ -4453,7 +4438,8 @@
         // ==================== BYLAW MANAGEMENT ====================
         async function fetchBylaws() {
             try {
-                const response = await fetch(SCRIPT_URL + '?action=getBylaws', { redirect: 'follow' });
+                const tokenParam = currentUser && currentUser.token ? `&token=${encodeURIComponent(currentUser.token)}` : '';
+                const response = await fetch(SCRIPT_URL + '?action=getBylaws' + tokenParam, { redirect: 'follow' });
                 const result = await response.json();
                 if (result.success) {
                     allBylaws = result.data;
@@ -4597,7 +4583,7 @@
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     redirect: 'follow',
-                    body: JSON.stringify({ action, record, currentUser })
+                    body: JSON.stringify({ action, record, token: currentUser ? currentUser.token : '' })
                 });
                 const result = await response.json();
 
@@ -4623,7 +4609,7 @@
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     redirect: 'follow',
-                    body: JSON.stringify({ action: 'deleteBylaw', id, currentUser })
+                    body: JSON.stringify({ action: 'deleteBylaw', id, token: currentUser ? currentUser.token : '' })
                 });
                 const result = await response.json();
                 if (result.success) {
@@ -4648,14 +4634,26 @@
                 }
             } catch (error) {
                 console.error('Error fetching holidays:', error);
-                // Keep the hardcoded PUBLIC_HOLIDAYS as fallback
+                // Fallback: minimal Thai holidays if server fails
+                PUBLIC_HOLIDAYS = [
+                    '2024-01-01', '2024-04-13', '2024-04-14', '2024-04-15', '2024-05-01',
+                    '2024-06-03', '2024-07-28', '2024-08-12', '2024-10-13', '2024-10-23', '2024-12-05', '2024-12-10',
+                    '2025-01-01', '2025-04-13', '2025-04-14', '2025-04-15', '2025-05-01',
+                    '2025-06-03', '2025-07-28', '2025-08-12', '2025-10-13', '2025-10-23', '2025-12-05', '2025-12-10',
+                    '2026-01-01', '2026-04-13', '2026-04-14', '2026-04-15', '2026-05-01',
+                    '2026-06-03', '2026-07-28', '2026-08-12', '2026-10-13', '2026-10-23', '2026-12-05', '2026-12-10'
+                ];
             }
         }
 
         // ==================== APP INITIALIZATION ====================
 
+        let eventListenersSetup = false;
         async function initAppData() {
-            setupEventListeners();
+            if (!eventListenersSetup) {
+                setupEventListeners();
+                eventListenersSetup = true;
+            }
             initCoopNamesList();
             await loadStaffList(); // โหลดรายชื่อเจ้าหน้าที่สำหรับ Dropdown
             await Promise.all([
