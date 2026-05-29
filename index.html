@@ -3775,9 +3775,9 @@
                     <div class="flex items-center justify-between border-b border-gray-50 pb-1.5">
                       <span class="text-gray-500">ผู้รับผิดชอบ:</span>
                       <span>
-                        ${record.assigned_to && record.assigned_to !== record.created_by ? `
+                        ${(record.assigned_to || record.created_by) ? `
                             <span class="text-xs bg-[#FAF5EE] text-[#AE7C43] px-2 py-0.5 rounded border border-[#E8E7E1] font-semibold">
-                                ${getStaffName(record.assigned_to)}
+                                ${getStaffName(record.assigned_to || record.created_by)}
                             </span>
                         ` : '<span class="text-gray-400 font-medium">-</span>'}
                       </span>
